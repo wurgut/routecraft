@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "npx playwright test tests/e2e/",
+    "test:legacy": "node tests/pricing.test.js && node tests/dates.test.js && node tests/flights.test.js && node tests/data-integrity.test.js"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2",
+    "puppeteer": "^24.37.2"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  }
+}
