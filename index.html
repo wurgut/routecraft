@@ -10123,6 +10123,22 @@
     }, { threshold: 0.5 });
     document.querySelectorAll('[data-count]').forEach(function (el) { statObs.observe(el); });
 
+    // Close all modals/overlays (route detail, experience, feature gate)
+    function closeAllModals() {
+      var rd = document.getElementById('rdModal');
+      if (rd && rd.classList.contains('active')) { rd.classList.remove('active'); }
+      var exp = document.getElementById('experience-overlay');
+      if (exp && exp.classList.contains('active')) { exp.classList.remove('active'); }
+      var fm = document.getElementById('fmGate');
+      if (fm && fm.classList.contains('active')) { fm.classList.remove('active'); }
+      document.body.style.overflow = '';
+    }
+
+    // Nav links close any open modal so the target section is visible
+    document.querySelectorAll('#topnav .nav-links a[href^="#"], .mobile-nav a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', closeAllModals);
+    });
+
     // Mobile nav
     function setMobileNav(el) {
       document.querySelectorAll('.mnav-item').forEach(function (m) { m.classList.remove('active'); });
