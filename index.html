@@ -9290,7 +9290,15 @@
     var prevMouse = { x: 0, y: 0 }, mouseNDC;
     var raycaster;
 
-    // latLngToVec3() defined in app.js (returns plain {x,y,z} — compatible with THREE.Vector3.copy())
+    function latLngToVec3(lat, lng, r) {
+      var phi = (90 - lat) * (Math.PI / 180);
+      var theta = (lng + 180) * (Math.PI / 180);
+      return new THREE.Vector3(
+        -r * Math.sin(phi) * Math.cos(theta),
+        r * Math.cos(phi),
+        r * Math.sin(phi) * Math.sin(theta)
+      );
+    }
 
     function createEarthCanvas() {
       var c = document.createElement('canvas');

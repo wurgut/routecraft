@@ -3,7 +3,6 @@ import {
   findById,
   buildLookupMap,
   _vi,
-  latLngToVec3,
   difficultyBar,
   trafficDot,
   cfgGetBikeFee,
@@ -61,34 +60,6 @@ describe('_vi', () => {
   it('wraps SVG data in svg tags', () => {
     var result = _vi('<circle r="5"/>');
     expect(result).toBe('<svg class="vx-i" viewBox="0 0 24 24"><circle r="5"/></svg>');
-  });
-});
-
-describe('latLngToVec3', () => {
-  it('converts lat/lng to 3D coordinates', () => {
-    var result = latLngToVec3(0, 0, 1);
-    expect(result).toHaveProperty('x');
-    expect(result).toHaveProperty('y');
-    expect(result).toHaveProperty('z');
-  });
-
-  it('north pole has y ~= r', () => {
-    var result = latLngToVec3(90, 0, 1);
-    expect(result.y).toBeCloseTo(1, 5);
-    expect(result.x).toBeCloseTo(0, 5);
-  });
-
-  it('south pole has y ~= -r', () => {
-    var result = latLngToVec3(-90, 0, 1);
-    expect(result.y).toBeCloseTo(-1, 5);
-  });
-
-  it('scales with radius', () => {
-    var r1 = latLngToVec3(45, 90, 1);
-    var r2 = latLngToVec3(45, 90, 2);
-    expect(r2.x).toBeCloseTo(r1.x * 2, 5);
-    expect(r2.y).toBeCloseTo(r1.y * 2, 5);
-    expect(r2.z).toBeCloseTo(r1.z * 2, 5);
   });
 });
 

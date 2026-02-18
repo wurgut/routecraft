@@ -44,15 +44,7 @@ function monthName(m) {
   return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1] || '';
 }
 
-function latLngToVec3(lat, lng, r) {
-  var phi = (90 - lat) * (Math.PI / 180);
-  var theta = (lng + 180) * (Math.PI / 180);
-  return {
-    x: -r * Math.sin(phi) * Math.cos(theta),
-    y: r * Math.cos(phi),
-    z: r * Math.sin(phi) * Math.sin(theta)
-  };
-}
+// latLngToVec3 intentionally kept in index.html (depends on THREE.Vector3)
 
 // ── Icon Helper ──────────────────────────────
 
@@ -288,7 +280,6 @@ if (typeof module !== 'undefined' && module.exports) {
     formatDateForKiwi: formatDateForKiwi,
     addDays: addDays,
     monthName: monthName,
-    latLngToVec3: latLngToVec3,
     _vi: _vi,
     getRoutePartners: getRoutePartners,
     getFilteredRoutes: getFilteredRoutes,
