@@ -2222,6 +2222,8 @@
           var pos = latLngToVec3(region.lat, region.lng, 1.005);
           var col = new THREE.Color(region.color);
 
+
+
           // Dot
           var dot = new THREE.Mesh(new THREE.SphereGeometry(props.dotSize, 16, 16), new THREE.MeshBasicMaterial({ color: col }));
           dot.position.copy(pos);
@@ -2388,6 +2390,8 @@
         clearTimeout(fallbackTimer);
         setTimeout(function () {
           document.getElementById('globe-loading').classList.add('hidden');
+          // trigger initial season rendering
+          if (window.updateGlobeSeason) window.updateGlobeSeason();
         }, 800);
 
       } catch (e) {
@@ -2414,6 +2418,169 @@
       }
       anim();
     }
+
+    // --- GLOBE SEASONAL LOGIC & QUICK IDEAS ---
+    window.flyToRegionAndOpen = function (id) {
+      document.getElementById('world-tours').scrollIntoView({ behavior: 'smooth' });
+      var reg = REGION_BY_ID[id];
+      if (reg) {
+         flyTo(reg);
+         setTimeout(function () { openRegion(id); }, 600);
+      }
+    };
+
+    window.updateGlobeSeason = function () {
+      if (!isGlobeInit || typeof globeMarkers === 'undefined') return;
+      var monthSelect = document.getElementById('globe-month-select');
+      var seasonToggle = document.getElementById('globe-season-checkbox');
+      if (!monthSelect || !seasonToggle) return;
+
+      var monthVal = monthSelect.value;
+      var curMonth = monthVal === 'auto' ? new Date().getMonth() + 1 : parseInt(monthVal);
+      var useSeason = seasonToggle.checked;
+
+      // Update globe markers opacity based on season
+      globeMarkers.forEach(function (marker) {
+        var region = REGION_BY_ID[marker.regionId];
+        var isActive = true;
+        
+        if (useSeason && region && region.destinations) {
+          // A region is active if ANY of its destinations are in peak season
+          var activeCount = region.destinations.filter(function(dId) {
+             var d = DESTINATION_BY_ID[dId];
+             return d && d.season && d.season.peak && d.season.peak.includes(curMonth);
+          }).length;
+          isActive = activeCount > 0;
+        }
+
+        var mtlOpacityMult = isActive ? 1.0 : 0.15;
+        var props = intensityToMarkerProps(marker.intensity);
+        
+        ['dot', 'glow', 'ring', 'stem'].forEach(function(key) {
+           var mesh = marker[key];
+           if (mesh && mesh.material) {
+              mesh.material.transparent = true;
+              var baseOp = { dot: 1, glow: props.glowOpacity, ring: props.ringOpacity, stem: props.stemOpacity }[key];
+              mesh.material.opacity = baseOp * mtlOpacityMult;
+           }
+        });
+      });
+
+      renderQuickIdeas(curMonth, useSeason);
+    };
+
+    function renderQuickIdeas(month, useSeason) {
+      var container = document.getElementById('quick-ideas-container');
+      if (!container) return;
+
+      if (!useSeason) {
+        container.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:12px;grid-column:1/-1;">Turn on Seasonal Heatmap to view Quick Ideas based on the selected month.</div>';
+        return;
+      }
+
+      // Filter regions where month is in peak season for any destination
+      var activeRegions = REGIONS.filter(function (r) {
+        if (!r.destinations) return false;
+        return r.destinations.some(function(dId) {
+           var d = DESTINATION_BY_ID[dId];
+           return d && d.season && d.season.peak && d.season.peak.includes(month);
+        });
+      });
+
+      if (activeRegions.length === 0) {
+        container.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:12px;grid-column:1/-1;">No peak destinations found for this month. Try browsing the raw heatmap or select another month.</div>';
+        return;
+      }
+
+      activeRegions = activeRegions.slice(0, 3);
+      var monthNames = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+      var html = activeRegions.map(function (reg) {
+        return '<div class="qi-card" onclick="flyToRegionAndOpen(\'' + reg.id + '\')">' +
+          '<div class="qi-card-img">' +
+          '<img src="' + (reg.images && reg.images.length > 0 ? reg.images[0] : '') + '" alt="">' +
+          '<div class="qi-card-overlay"></div>' +
+          '<div class="qi-card-title">' + reg.name + '</div>' +
+          '</div>' +
+          '<div class="qi-card-body">' +
+          '<div class="qi-stat-row" style="color:#c9a96e; font-family:\'Cormorant Garamond\', serif; font-size:16px;">' + (reg.tagline || 'Explore Region') + '</div>' +
+          '<div class="qi-cta">Explore Region →</div>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+
+      container.innerHTML = html;
+    }
+
+    // --- GLOBE CUSTOM DROPDOWN LOGIC ---
+    document.addEventListener('DOMContentLoaded', function() {
+      var dropdown = document.getElementById('month-dropdown');
+      var selected = document.getElementById('month-selected');
+      var options = document.getElementById('month-options');
+      var hiddenInput = document.getElementById('globe-month-select');
+      var selectedText = document.getElementById('month-selected-text');
+
+      if (!dropdown) return;
+
+      selected.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+        }
+      });
+
+      var opts = options.querySelectorAll('.vx-option');
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].addEventListener('click', function(e) {
+          e.stopPropagation();
+          for (var j = 0; j < opts.length; j++) { opts[j].classList.remove('active'); }
+          this.classList.add('active');
+          selectedText.textContent = this.textContent;
+          hiddenInput.value = this.getAttribute('data-value');
+          dropdown.classList.remove('open');
+          if (window.updateGlobeSeason) window.updateGlobeSeason();
+        });
+      }
+    });
+
+    // --- GLOBE CUSTOM DROPDOWN LOGIC ---
+    document.addEventListener('DOMContentLoaded', function() {
+      var dropdown = document.getElementById('month-dropdown');
+      var selected = document.getElementById('month-selected');
+      var options = document.getElementById('month-options');
+      var hiddenInput = document.getElementById('globe-month-select');
+      var selectedText = document.getElementById('month-selected-text');
+
+      if (!dropdown) return;
+
+      selected.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+        }
+      });
+
+      var opts = options.querySelectorAll('.vx-option');
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].addEventListener('click', function(e) {
+          e.stopPropagation();
+          for (var j = 0; j < opts.length; j++) { opts[j].classList.remove('active'); }
+          this.classList.add('active');
+          selectedText.textContent = this.textContent;
+          hiddenInput.value = this.getAttribute('data-value');
+          dropdown.classList.remove('open');
+          if (window.updateGlobeSeason) window.updateGlobeSeason();
+        });
+      }
+    });
 
     /* ═══════════════════════════════════════════
        5. EXPERIENCE OVERLAY — Section builders
