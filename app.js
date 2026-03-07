@@ -50,6 +50,36 @@ function monthName(m) {
 
 function _vi(d) { return '<svg class="vx-i" viewBox="0 0 24 24">' + d + '</svg>'; }
 
+// ── Season Helpers ──────────────────────────
+
+function isRouteRideableInMonth(route, month) {
+  if (!route || !route.season || !month) return false;
+  var s = route.season.start, e = route.season.end;
+  if (s <= e) return month >= s && month <= e;
+  // Wrap-around (e.g. Nov–Mar: start=11, end=3)
+  return month >= s || month <= e;
+}
+
+function isRoutePeakInMonth(route, month) {
+  if (!route || !route.season || !route.season.peak || !month) return false;
+  if (!isRouteRideableInMonth(route, month)) return false;
+  return route.season.peak.indexOf(month) > -1;
+}
+
+function seasonRangeStr(season) {
+  if (!season) return '';
+  return monthName(season.start) + '\u2013' + monthName(season.end);
+}
+
+function seasonRangeWithPeak(season) {
+  if (!season) return '';
+  var range = seasonRangeStr(season);
+  if (season.peak && season.peak.length) {
+    range += ' (peak: ' + season.peak.map(monthName).join(', ') + ')';
+  }
+  return range;
+}
+
 // ── Route & Partner Helpers ──────────────────
 
 function getRoutePartners(route) {
@@ -63,6 +93,7 @@ function getFilteredRoutes() {
     if (s.dest !== 'all' && r.destinationId !== s.dest) return false;
     if (r.difficulty > s.maxDiff) return false;
     if (r.distance > s.maxDist) return false;
+    if (s.month && !isRouteRideableInMonth(r, s.month)) return false;
     return true;
   });
   switch (s.sort) {
@@ -71,6 +102,11 @@ function getFilteredRoutes() {
     case 'distance-asc': routes.sort(function (a, b) { return a.distance - b.distance }); break;
     case 'distance-desc': routes.sort(function (a, b) { return b.distance - a.distance }); break;
     case 'elevation-desc': routes.sort(function (a, b) { return b.elevationGain - a.elevationGain }); break;
+    case 'season': routes.sort(function (a, b) {
+      var aP = s.month && isRoutePeakInMonth(a, s.month) ? 2 : (s.month && isRouteRideableInMonth(a, s.month) ? 1 : 0);
+      var bP = s.month && isRoutePeakInMonth(b, s.month) ? 2 : (s.month && isRouteRideableInMonth(b, s.month) ? 1 : 0);
+      return bP - aP;
+    }); break;
     default: routes.sort(function (a, b) { return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0) }); break;
   }
   return routes;
@@ -281,6 +317,10 @@ if (typeof module !== 'undefined' && module.exports) {
     addDays: addDays,
     monthName: monthName,
     _vi: _vi,
+    isRouteRideableInMonth: isRouteRideableInMonth,
+    isRoutePeakInMonth: isRoutePeakInMonth,
+    seasonRangeStr: seasonRangeStr,
+    seasonRangeWithPeak: seasonRangeWithPeak,
     getRoutePartners: getRoutePartners,
     getFilteredRoutes: getFilteredRoutes,
     buildMiniElevSvg: buildMiniElevSvg,

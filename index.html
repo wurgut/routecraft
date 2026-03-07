@@ -57,14 +57,11 @@
   <nav id="topnav">
     <div class="nav-logo" onclick="goHome()">VELO<span class="accent">X</span></div>
     <div class="nav-links">
+      <a href="#home">Destinations</a>
       <a href="#routes">Routes</a>
       <a href="#trip-builder">Configurator</a>
-      <a href="#canary-islands" class="desktop-only">Canary Islands</a>
-      <a href="#romania">Romania</a>
-      <a href="#crete" class="desktop-only">Crete</a>
       <a href="#calendar">Races</a>
       <a href="#checklist">Checklist</a>
-      <a href="#world-tours" class="desktop-only">Globe</a>
       <a href="#membership" class="nav-membership">Membership</a>
       <a href="#become-partner" class="nav-cta">List Property</a>
     </div>
@@ -106,35 +103,65 @@
         </svg>
         <span>Config</span>
       </a>
-      <a href="#canary-islands" class="mnav-item" data-section="canary-islands" onclick="setMobileNav(this)"
-        aria-label="Explore destinations">
+      <a href="#home" class="mnav-item" data-section="home" onclick="setMobileNav(this)"
+        aria-label="Explore globe">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-          <circle cx="12" cy="9" r="2.5" />
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
         </svg>
-        <span>Explore</span>
+        <span>Globe</span>
       </a>
     </div>
   </div>
 
-  <!-- ═══════ HERO ═══════ -->
-  <section class="hero" id="home">
-    <div class="hero-img"><img src="https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=1920&q=85"
-        alt="Road cyclist climbing through mountain switchbacks at golden hour" fetchpriority="high"></div>
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-eyebrow"><span class="dot"></span> Curated Cycling Experiences</div>
-      <h1>THE CYCLIST'S<br><em>Encyclopedia</em><span class="line2">+ TRIP CONFIGURATOR</span></h1>
-      <p class="hero-sub">16 routes. 18 partners. 3 destinations. Deep intelligence meets <strong>door-to-door trip
-          building</strong>. Research every climb, configure every detail — flights to physio. <span
-          style="color:var(--gold)">Golden Key</span> for zero-worry.</p>
-      <div class="hero-actions">
-        <a href="#routes" class="btn btn-primary">Discover Routes →</a>
-        <a href="#trip-builder" class="btn btn-secondary">Trip Configurator</a>
+  <!-- ═══════ GLOBE (L1 Entry Point) ═══════ -->
+  <section id="home">
+    <div id="globe-container"></div>
+    <div class="globe-header">
+      <div>
+        <div class="globe-title">CYCLING DESTINATIONS</div>
+        <div class="globe-subtitle">Interactive Globe</div>
       </div>
+      <div class="globe-live-stat"><span class="globe-live-dot"></span><span id="globe-stat-text">11 Regions · 16 Routes</span></div>
     </div>
-    <div class="hero-scroll desktop-only">Scroll</div>
+    <div class="globe-sidebar" id="globe-sidebar"></div>
+    <div class="globe-controls" id="globe-controls">
+      <div class="globe-month-bar" id="globe-month-bar"></div>
+      <label class="globe-season-toggle" id="globe-season-toggle">
+        <input type="checkbox" checked onchange="toggleGlobeSeasonality(this.checked)">
+        <span class="globe-toggle-label">Seasonality</span>
+      </label>
+      <button class="qi-toggle" id="qi-toggle-btn" onclick="toggleQuickIdeas()">Trip Ideas</button>
+    </div>
+    <div class="qi-panel" id="quick-ideas-panel"></div>
+    <div class="globe-footer">
+      <div class="globe-footer-tagline">Click a region to explore cycling destinations</div>
+      <div class="globe-footer-hint">Drag to rotate · Scroll to zoom · Click marker to explore</div>
+    </div>
+    <div class="globe-tooltip" id="globe-tooltip">
+      <div id="tooltip-name"></div>
+      <div id="tooltip-country"></div>
+    </div>
+    <div class="globe-loading" id="globe-loading">
+      <div class="spinner"></div>
+      <div class="globe-loading-title">LOADING GLOBE</div>
+      <div class="globe-loading-sub">Mapping cycling destinations...</div>
+    </div>
   </section>
+
+  <!-- EXPERIENCE OVERLAY -->
+  <div id="experience-overlay"><button class="exp-back" onclick="closeExperience()"><span
+        style="font-size:15px">←</span> Back to Globe</button>
+    <div id="exp-content"></div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox"><button class="lb-close" onclick="closeLightbox()"
+      aria-label="Close lightbox">✕</button><button class="lb-nav" style="left:12px" onclick="lbPrev(event)"
+      aria-label="Previous image">←</button><img id="lb-img" src="" alt="Gallery"><button class="lb-nav"
+      style="right:12px" onclick="lbNext(event)" aria-label="Next image">→</button>
+    <div class="lb-counter" id="lb-counter"></div>
+  </div>
 
   <!-- ═══════ STATS ═══════ -->
   <div class="stats-ribbon">
@@ -193,6 +220,13 @@
         </div>
       </div>
       <div class="re-filter-group">
+        <label>Season</label>
+        <label class="re-season-toggle">
+          <input type="checkbox" id="reSeasonToggle">
+          <span id="reSeasonPill">Any Season</span>
+        </label>
+      </div>
+      <div class="re-filter-group">
         <label>Sort</label>
         <select id="reFilterSort" class="re-select">
           <option value="featured">Featured</option>
@@ -201,12 +235,13 @@
           <option value="distance-asc">Shortest First</option>
           <option value="distance-desc">Longest First</option>
           <option value="elevation-desc">Most Climbing</option>
+          <option value="season">Best Season Match</option>
         </select>
       </div>
-      <div class="re-results-count" id="reResultsCount">16 routes</div>
+      <div class="re-results-count" id="reResultsCount" aria-live="polite">16 routes</div>
     </div>
     <div class="route-cards" id="routeCardsGrid"></div>
-    <div style="text-align:center;margin-top:2rem" class="reveal"><a href="#world-tours" class="btn btn-ghost"
+    <div style="text-align:center;margin-top:2rem" class="reveal"><a href="#home" class="btn btn-ghost"
         style="color:var(--obsidian)">Explore All Routes on the Globe →</a></div>
   </section>
 
@@ -310,6 +345,16 @@
     </div>
   </section>
 
+  <!-- Hidden Netlify form for bot detection -->
+  <form name="booking-request" netlify netlify-honeypot="bot-field" hidden>
+    <input name="bot-field">
+    <input name="name"><input name="email"><input name="phone">
+    <input name="destination"><input name="base"><input name="dates">
+    <input name="mode"><input name="routes"><input name="accommodation">
+    <input name="guide"><input name="rental"><input name="addons">
+    <input name="flight"><input name="total">
+  </form>
+
   <!-- ═══════ TRIP CONFIGURATOR ═══════ -->
   <section class="trip-builder-section" id="trip-builder">
     <div class="cfg-container reveal">
@@ -408,90 +453,6 @@
         </ul>
         <button class="mem-btn" style="background:var(--golden);color:var(--obsidian)">Go Golden</button>
       </div>
-    </div>
-  </section>
-
-  <!-- ═══════ ROMANIA DEEP DIVE ═══════ -->
-  <section class="romania-section" id="romania">
-    <div class="dd-hero reveal">
-      <div class="section-tag" style="color:var(--gold)">Deep Dive Destination</div>
-      <div class="section-title" style="color:var(--chalk)">ROMANIA<br><span
-          style="font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:.62em;letter-spacing:0">Cycling's
-          Last Great Secret</span></div>
-      <p class="section-desc" style="color:rgba(255,255,255,0.5);max-width:640px" id="roIntro"></p>
-    </div>
-    <div class="dd-routes-grid" id="roRoutesGrid"></div>
-    <div class="dd-season reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Season Calendar</h3>
-      <div class="dd-season-bar" id="roSeasonBar"></div>
-    </div>
-    <div class="dd-cost reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Cost Comparison — 7-Day Trip</h3>
-      <div class="dd-cost-table" id="roCostTable"></div>
-    </div>
-    <div class="dd-culture-grid" id="roCultureGrid"></div>
-    <div class="dd-gk-callout reveal" id="roGkCallout"></div>
-    <div style="text-align:center;margin-top:2rem" class="reveal">
-      <a href="#trip-builder" class="btn btn-primary"
-        onclick="setTimeout(function(){selectTripById('romania')},300)">Build Romania Trip →</a>
-      <a href="#routes" class="btn btn-ghost"
-        style="color:var(--chalk);border-color:rgba(255,255,255,0.2);margin-left:.7rem">All Romania Routes →</a>
-    </div>
-  </section>
-
-  <!-- ═══════ CANARY ISLANDS DEEP DIVE ═══════ -->
-  <section class="canary-section" id="canary-islands">
-    <div class="dd-hero reveal">
-      <div class="section-tag" style="color:var(--ember)">Deep Dive Destination</div>
-      <div class="section-title" style="color:var(--chalk)">CANARY ISLANDS<br><span
-          style="font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:.62em;letter-spacing:0">Volcanic
-          Fire, Year-Round Sun</span></div>
-      <p class="section-desc" style="color:rgba(255,255,255,0.5);max-width:640px" id="ciIntro"></p>
-    </div>
-    <div class="dd-routes-grid" id="ciRoutesGrid"></div>
-    <div class="dd-season reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Season Calendar</h3>
-      <div class="dd-season-bar" id="ciSeasonBar"></div>
-    </div>
-    <div class="dd-cost reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Cost Comparison — 7-Day Trip</h3>
-      <div class="dd-cost-table" id="ciCostTable"></div>
-    </div>
-    <div class="dd-culture-grid" id="ciCultureGrid"></div>
-    <div class="dd-gk-callout reveal" id="ciGkCallout"></div>
-    <div style="text-align:center;margin-top:2rem" class="reveal">
-      <a href="#trip-builder" class="btn btn-primary"
-        onclick="setTimeout(function(){selectTripById('fuerteventura')},300)">Build Canary Trip →</a>
-      <a href="#routes" class="btn btn-ghost"
-        style="color:var(--chalk);border-color:rgba(255,255,255,0.2);margin-left:.7rem">All Canary Routes →</a>
-    </div>
-  </section>
-
-  <!-- ═══════ CRETE DEEP DIVE ═══════ -->
-  <section class="crete-section" id="crete">
-    <div class="dd-hero reveal">
-      <div class="section-tag" style="color:#3B82F6">Deep Dive Destination</div>
-      <div class="section-title" style="color:var(--chalk)">CRETE<br><span
-          style="font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:.62em;letter-spacing:0">Where
-          Mountains Meet the Libyan Sea</span></div>
-      <p class="section-desc" style="color:rgba(255,255,255,0.5);max-width:640px" id="crIntro"></p>
-    </div>
-    <div class="dd-routes-grid" id="crRoutesGrid"></div>
-    <div class="dd-season reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Season Calendar</h3>
-      <div class="dd-season-bar" id="crSeasonBar"></div>
-    </div>
-    <div class="dd-cost reveal">
-      <h3 style="color:var(--chalk);margin-bottom:1rem">Cost Comparison — 7-Day Trip</h3>
-      <div class="dd-cost-table" id="crCostTable"></div>
-    </div>
-    <div class="dd-culture-grid" id="crCultureGrid"></div>
-    <div class="dd-gk-callout reveal" id="crGkCallout"></div>
-    <div style="text-align:center;margin-top:2rem" class="reveal">
-      <a href="#trip-builder" class="btn btn-primary"
-        onclick="setTimeout(function(){selectTripById('crete')},300)">Build Crete Trip →</a>
-      <a href="#routes" class="btn btn-ghost"
-        style="color:var(--chalk);border-color:rgba(255,255,255,0.2);margin-left:.7rem">All Crete Routes →</a>
     </div>
   </section>
 
@@ -642,60 +603,6 @@
     </div>
   </section>
 
-  <!-- ═══════ 3D GLOBE ═══════ -->
-  <section id="world-tours">
-    <div id="globe-container"></div>
-    <div class="globe-header">
-      <div>
-        <div
-          style="font-family:'Bebas Neue',sans-serif;font-size:clamp(16px,3vw,22px);letter-spacing:4px;color:#c9a96e">
-          CYCLING DESTINATIONS</div>
-        <div
-          style="font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:2px">
-          Interactive Globe</div>
-      </div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px"><span
-          style="width:5px;height:5px;border-radius:50%;background:#44D62C;display:inline-block"></span>10 Destinations
-        · 47 Routes</div>
-    </div>
-    <div class="globe-sidebar" id="globe-sidebar"></div>
-    <div class="globe-footer">
-      <div
-        style="font-family:'Cormorant Garamond',serif;font-size:clamp(14px,2.5vw,17px);color:#e8e4dd;margin-bottom:3px;font-style:italic">
-        Click a destination to explore cycling routes</div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.35)">Drag to rotate · Scroll to zoom · Click marker to explore
-      </div>
-    </div>
-    <div class="globe-tooltip" id="globe-tooltip">
-      <div id="tooltip-name"
-        style="font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:#c9a96e;margin-bottom:1px">
-      </div>
-      <div id="tooltip-country"
-        style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px"></div>
-    </div>
-    <div class="globe-loading" id="globe-loading">
-      <div class="spinner"></div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:4px;color:#c9a96e">LOADING GLOBE
-      </div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:5px">Mapping cycling destinations...</div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE OVERLAY -->
-  <div id="experience-overlay"><button class="exp-back" onclick="closeExperience()"><span
-        style="font-size:15px">←</span> Back to Globe</button>
-    <div id="exp-content"></div>
-  </div>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox"><button class="lb-close" onclick="closeLightbox()"
-      aria-label="Close lightbox">✕</button><button class="lb-nav" style="left:12px" onclick="lbPrev(event)"
-      aria-label="Previous image">←</button><img id="lb-img" src="" alt="Gallery"><button class="lb-nav"
-      style="right:12px" onclick="lbNext(event)" aria-label="Next image">→</button>
-    <div class="lb-counter" id="lb-counter"></div>
-  </div>
-
-
   <!-- BECOME A PARTNER -->
   <section class="become-partner" id="become-partner">
     <div class="reveal">
@@ -747,8 +654,8 @@
       <div>
         <h4>ROUTES</h4>
         <ul>
-          <li><a href="#canary-islands">Fuerteventura</a></li>
-          <li><a href="#romania">Transfăgărășan</a></li>
+          <li><a href="#routes">Fuerteventura</a></li>
+          <li><a href="#routes">Transfăgărășan</a></li>
           <li><a href="#routes">Mallorca</a></li>
           <li><a href="#routes">Tuscany</a></li>
           <li><a href="#routes">Alpe d'Huez</a></li>

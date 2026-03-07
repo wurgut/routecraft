@@ -1,26 +1,409 @@
     /* ═══════════════════════════════════════════
-       1. LOCATIONS DATA — 10 Cycling Destinations
+       1. REGIONS — Geographic macro-regions (L2)
        ═══════════════════════════════════════════ */
-    const LOCATIONS = [
+    var REGIONS = [
       {
-        id: 'fuerteventura', name: 'Fuerteventura', country: 'Spain', continent: 'Europe',
-        lat: 28.36, lng: -14.05, tagline: 'Volcanic roads & eternal wind', color: '#e8491d',
-        desc: 'Europe\'s secret winter training ground. Year-round 17–24°C, volcanic terrain with minimal traffic, and costs lower than Tenerife or Lanzarote. The Betancuria Loop delivers 1,180m of climbing through ancient volcanic spine with Atlantic panoramas.',
-        stats: { dur: '5–10 days', diff: 'Intermediate', season: 'Oct–Apr', price: '€800–1,500', group: '2–12', routes: 5 },
-        highlights: ['Year-round 17–24°C riding', 'Volcanic landscapes with zero traffic', 'Wind-training paradise for time trialists', 'Cheapest Canary Island for cycling', 'Playitas Resort: Olympic-grade facilities'],
+        id: 'canary-islands', name: 'Canary Islands', country: 'Spain', continent: 'Europe',
+        lat: 28.1, lng: -15.4, color: '#e8491d',
+        tagline: 'Volcanic fire, year-round sun',
+        character: 'Seven volcanic islands off Africa\'s northwest coast. Year-round cycling with trade winds, dramatic volcanic terrain, and costs below mainland Spain.',
+        vibes: ['pro-training', 'year-round', 'volcanic', 'wind-training'],
+        seasonalWindow: 'Year-round. Best: Feb–May, Oct–Nov.',
+        socialProof: { ridersLastMonth: 3200, period: 'March 2025' },
+        image: 'https://images.unsplash.com/photo-1548025146-ed39dc5f04e4?w=1600&q=85',
+        subGeoIds: ['fuerteventura']
+      },
+      {
+        id: 'balearics', name: 'Balearic Islands', country: 'Spain', continent: 'Europe',
+        lat: 39.5, lng: 2.9, color: '#e85d3a',
+        tagline: 'The cycling capital of Europe',
+        character: 'Mediterranean archipelago that defined cycling tourism. Perfect infrastructure, bike-friendly hotels, 300 days of sun.',
+        vibes: ['pro-training', 'all-levels', 'infrastructure'],
+        seasonalWindow: 'Mar–Nov. Best: Apr–May, Sep–Oct.',
+        socialProof: { ridersLastMonth: 8500, period: 'April 2025' },
+        image: 'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=1600&q=85',
+        subGeoIds: ['mallorca']
+      },
+      {
+        id: 'carpathians', name: 'Carpathian Mountains', country: 'Romania', continent: 'Europe',
+        lat: 45.6, lng: 24.6, color: '#44D62C',
+        tagline: 'Cycling\'s last great secret',
+        character: 'Epic alpine climbing at a fraction of Alpine costs. Open June–October only, with brown bears, shepherd trails, and zero tourists on two wheels.',
+        vibes: ['alpine', 'adventure', 'value', 'wilderness'],
+        seasonalWindow: 'Jun–Oct. Best: Jul–Aug.',
+        socialProof: { ridersLastMonth: 420, period: 'July 2025' },
+        image: 'https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=1200&q=80',
+        subGeoIds: ['romania']
+      },
+      {
+        id: 'greek-islands', name: 'Greek Islands', country: 'Greece', continent: 'Europe',
+        lat: 35.2, lng: 24.9, color: '#3B82F6',
+        tagline: 'Where mountains meet the Libyan Sea',
+        character: 'Ancient mountains, gorge climbs, and Mediterranean hospitality. White Mountains offer dramatic climbing; Cretan cuisine makes every rest stop memorable.',
+        vibes: ['mountains', 'cuisine', 'history', 'coastal'],
+        seasonalWindow: 'Apr–Nov. Best: May–Jun, Sep–Oct.',
+        socialProof: { ridersLastMonth: 1100, period: 'May 2025' },
+        image: 'https://images.unsplash.com/photo-1656861679110-a632ad041c13?w=1600&q=85',
+        subGeoIds: ['crete']
+      },
+      {
+        id: 'central-italy', name: 'Central Italy', country: 'Italy', continent: 'Europe',
+        lat: 43.35, lng: 11.32, color: '#c9a84c',
+        tagline: 'White roads & Chianti sunsets',
+        character: 'Strade bianche — white gravel roads through cypress-lined vineyards. Rolling Chianti hills with wine and olive oil tasting built into every ride.',
+        vibes: ['gravel', 'wine', 'scenic', 'culture'],
+        seasonalWindow: 'Apr–Oct. Best: May–Jun, Sep–Oct.',
+        socialProof: { ridersLastMonth: 2800, period: 'May 2025' },
+        image: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?w=1200&q=80',
+        subGeoIds: ['tuscany']
+      },
+      {
+        id: 'italian-alps', name: 'Italian Alps', country: 'Italy', continent: 'Europe',
+        lat: 46.53, lng: 10.45, color: '#8B5CF6',
+        tagline: 'The king of Alpine passes',
+        character: 'Home to the Stelvio, Mortirolo, and Gavia — the most feared passes in professional cycling. Open only in summer.',
+        vibes: ['alpine', 'expert', 'iconic-climbs'],
+        seasonalWindow: 'Jun–Sep. Best: Jul–Aug.',
+        socialProof: { ridersLastMonth: 1500, period: 'July 2025' },
+        image: 'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1200&q=80',
+        subGeoIds: ['dolomites']
+      },
+      {
+        id: 'french-alps', name: 'French Alps', country: 'France', continent: 'Europe',
+        lat: 45.09, lng: 6.07, color: '#3B82F6',
+        tagline: 'Where the Tour de France is won',
+        character: 'The most famous climbs in professional cycling. Alpe d\'Huez\'s 21 hairpins, Col du Galibier at 2,642m, decades of Tour de France history.',
+        vibes: ['tour-de-france', 'alpine', 'iconic-climbs'],
+        seasonalWindow: 'May–Sep. Best: Jun–Aug.',
+        socialProof: { ridersLastMonth: 3800, period: 'July 2025' },
+        image: 'https://images.unsplash.com/photo-1530143584546-02191bc84eb5?w=1200&q=80',
+        subGeoIds: ['alps']
+      },
+      {
+        id: 'seto-inland-sea', name: 'Seto Inland Sea', country: 'Japan', continent: 'Asia',
+        lat: 34.25, lng: 133.18, color: '#06B6D4',
+        tagline: 'Island-hopping by bicycle bridge',
+        character: '70 km cycling road connecting six islands via dedicated bicycle bridges. Flat, scenic, punctuated by ramen stops, onsen baths, and Shinto shrines.',
+        vibes: ['accessible', 'cultural', 'island-hopping', 'beginner-friendly'],
+        seasonalWindow: 'Mar–Nov. Best: Apr–May, Oct–Nov.',
+        socialProof: { ridersLastMonth: 5200, period: 'October 2025' },
+        image: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=1200&q=80',
+        subGeoIds: ['japan']
+      },
+      {
+        id: 'catalonia', name: 'Catalonia', country: 'Spain', continent: 'Europe',
+        lat: 41.98, lng: 2.82, color: '#EC4899',
+        tagline: 'Where the pros live & train',
+        character: 'Adopted home of professional cycling. More WorldTour riders live here than anywhere else. Medieval streets, coastal rides, Pyrenean foothills, best cycling café culture.',
+        vibes: ['pro-lifestyle', 'cafe-culture', 'all-levels'],
+        seasonalWindow: 'Mar–Nov. Best: Apr–May, Sep–Oct.',
+        socialProof: { ridersLastMonth: 6100, period: 'April 2025' },
+        image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1200&q=80',
+        subGeoIds: ['girona']
+      },
+      {
+        id: 'western-cape', name: 'Western Cape', country: 'South Africa', continent: 'Africa',
+        lat: -33.93, lng: 18.42, color: '#F59E0B',
+        tagline: 'Where mountains meet the Atlantic',
+        character: 'Chapman\'s Peak Drive is one of the world\'s most scenic coastal roads. Table Mountain as backdrop. Cape Town Cycle Tour draws 35,000 riders.',
+        vibes: ['coastal', 'scenic', 'southern-hemisphere'],
+        seasonalWindow: 'Nov–Mar. Best: Dec–Feb.',
+        socialProof: { ridersLastMonth: 2200, period: 'January 2025' },
+        image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&q=80',
+        subGeoIds: ['cape-town']
+      },
+      {
+        id: 'colombian-andes', name: 'Colombian Andes', country: 'Colombia', continent: 'South America',
+        lat: 6.25, lng: -75.56, color: '#EF4444',
+        tagline: 'Altitude, culture & café de origen',
+        character: 'Homeland of Grand Tour champions. Alto de Letras is a 3,600m mega-climb. Train at altitude in the Andes while drinking the world\'s best coffee.',
+        vibes: ['altitude', 'coffee', 'grand-tour-heritage', 'value'],
+        seasonalWindow: 'Dec–Mar, Jun–Aug. Best: Jan–Feb.',
+        socialProof: { ridersLastMonth: 900, period: 'January 2025' },
+        image: 'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=80',
+        subGeoIds: ['colombia']
+      }
+    ];
+
+
+    /* ═══════════════════════════════════════════
+       2. DESTINATIONS — Sub-geographies (L3)
+       Unified from LOCATIONS + DESTINATIONS + deep dives
+       ═══════════════════════════════════════════ */
+    var DESTINATIONS = [
+      // ── FUERTEVENTURA ──
+      {
+        id: 'fuerteventura', name: 'Fuerteventura', country: 'Spain', continent: 'Europe', flag: '\u{1F1EA}\u{1F1F8}',
+        lat: 28.36, lng: -14.05, color: '#e8491d', regionId: 'canary-islands',
+        tagline: 'Mars on Earth \u2014 desert landscapes, endless coast, wind as companion',
+        desc: 'Europe\'s secret winter training ground. Year-round 17\u201324\u00B0C, volcanic terrain with minimal traffic, and costs lower than Tenerife or Lanzarote. The Betancuria Loop delivers 1,180m of climbing through ancient volcanic spine with Atlantic panoramas.',
+        stats: { dur: '5\u201310 days', diff: 'Intermediate', season: 'Oct\u2013Apr', price: '\u20AC800\u20131,500', group: '2\u201312', routes: 5 },
+        highlights: ['Year-round 17\u201324\u00B0C riding', 'Volcanic landscapes with zero traffic', 'Wind-training paradise for time trialists', 'Cheapest Canary Island for cycling', 'Playitas Resort: Olympic-grade facilities'],
         images: [
           'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1200&q=80',
           'https://images.unsplash.com/photo-1710277412488-cc28392a8867?w=1200&q=80',
           'https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=1200&q=80',
           'https://images.unsplash.com/photo-1534787238916-9ba6764efd4f?w=1200&q=80',
           'https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=1200&q=80'
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1548025146-ed39dc5f04e4?w=1600&q=85',
+        airportIATA: ['FUE'], routeCount: 3, partnerCount: 3,
+        season: {
+          start: 9, end: 6, peak: [11, 12, 1, 2, 3],
+          monthly: [
+            { month: 1,  tempRange: [17, 22], daylight: 10.5, wind: 'moderate-NE', heatmapIntensity: 0.8 },
+            { month: 2,  tempRange: [17, 23], daylight: 11.0, wind: 'moderate-NE', heatmapIntensity: 0.9 },
+            { month: 3,  tempRange: [18, 24], daylight: 12.0, wind: 'moderate-NE', heatmapIntensity: 0.85 },
+            { month: 4,  tempRange: [18, 25], daylight: 13.0, wind: 'light-NE', heatmapIntensity: 0.7 },
+            { month: 5,  tempRange: [19, 26], daylight: 14.0, wind: 'moderate-NE', heatmapIntensity: 0.5 },
+            { month: 6,  tempRange: [21, 28], daylight: 14.5, wind: 'strong-NE', heatmapIntensity: 0.3 },
+            { month: 7,  tempRange: [23, 31], daylight: 14.5, wind: 'strong-NE', heatmapIntensity: 0.1 },
+            { month: 8,  tempRange: [24, 32], daylight: 13.5, wind: 'strong-NE', heatmapIntensity: 0.1 },
+            { month: 9,  tempRange: [23, 30], daylight: 12.5, wind: 'moderate-NE', heatmapIntensity: 0.15 },
+            { month: 10, tempRange: [21, 27], daylight: 11.5, wind: 'moderate-NE', heatmapIntensity: 0.6 },
+            { month: 11, tempRange: [19, 24], daylight: 11.0, wind: 'moderate-NE', heatmapIntensity: 0.75 },
+            { month: 12, tempRange: [18, 22], daylight: 10.5, wind: 'moderate-NE', heatmapIntensity: 0.7 }
+          ]
+        },
+        conditions: {
+          roads: 'Well-maintained asphalt. Inland roads quieter than coastal highways.',
+          water: 'Scarce in interior and south. Carry minimum 2 bottles. Refill in villages.',
+          bikeShops: 'Limited. Puerto del Rosario and Corralejo only. Bring essential spares.',
+          rental: 'Available in Corralejo, Costa Calma, and Jand\u00EDa. Book 1\u20132 weeks ahead in Feb.',
+          specialRisks: 'Calima (Saharan dust) \u2014 low in Feb, occasional. Avoid riding in heavy dust.'
+        },
+        zones: [
+          { id: 'fuerte-north', name: 'The North \u2014 Corralejo & Dunes', character: 'Surfer-town energy. Flat terrain with volcanic backdrops. Famous Corralejo dunes along the coast.', difficulty: 'easy-moderate', bestFor: ['beginners', 'e-bike explorers', 'beach + rides'], routeIds: ['fuerte-coastal'] },
+          { id: 'fuerte-interior', name: 'Volcanic Interior \u2014 Betancuria & P\u00E1jara', character: 'Mars-like landscapes of red earth, dormant volcanoes, and wind-sculpted ravines. The island\'s iconic cycling challenge.', difficulty: 'advanced', bestFor: ['experienced climbers', 'landscape lovers'], routeIds: ['fuerte-betancuria'] },
+          { id: 'fuerte-southeast', name: 'The Southeast \u2014 Las Playitas & Gran Tarajal', character: 'The serious cyclist\'s base. Las Playitas sports resort used by professional teams for winter training.', difficulty: 'intermediate', bestFor: ['performance riders', 'triathletes'], routeIds: [] },
+          { id: 'fuerte-south', name: 'The Wild South \u2014 Jand\u00EDa Peninsula', character: 'Nature reserve. Wild beaches at Cofete, reachable only by gravel track. Pico de la Zarza 807m.', difficulty: 'expert', bestFor: ['gravel adventurers', 'wilderness seekers'], routeIds: ['fuerte-cofete'] },
+          { id: 'fuerte-west', name: 'The West Coast \u2014 El Cotillo & Cliffs', character: 'Remote and solitary. Coastal tracks overlooking furious waves. Quieter than anywhere else on the island.', difficulty: 'intermediate', bestFor: ['solitude seekers', 'coastal lovers'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'corralejo', name: 'Corralejo', character: 'Surfer town. Restaurants, nightlife, bike rental. Ferry to Lanzarote.', bestFor: 'Mixed ability. Social base. Day trips to other zones by car.', accessibleZoneIds: ['fuerte-north', 'fuerte-interior', 'fuerte-west'], partnerIds: ['p-fuerte-playitas'], nearestAirportIATA: 'FUE', transferKm: 40 },
+          { id: 'costa-calma', name: 'Costa Calma', character: 'Quiet resort. Central location. Access to both Jand\u00EDa and the interior.', bestFor: 'Solo riders wanting calm. Strategic for covering the island.', accessibleZoneIds: ['fuerte-south', 'fuerte-interior', 'fuerte-southeast'], partnerIds: [], nearestAirportIATA: 'FUE', transferKm: 75 },
+          { id: 'las-playitas', name: 'Las Playitas', character: 'Sports resort. Training facilities. Pro-cyclist community.', bestFor: 'Performance riders. Structured training environment.', accessibleZoneIds: ['fuerte-southeast', 'fuerte-interior'], partnerIds: ['p-fuerte-playitas'], nearestAirportIATA: 'FUE', transferKm: 65 }
+        ],
+        deepDive: {
+          routeIds: ['fuerte-betancuria', 'fuerte-cofete', 'fuerte-coastal'],
+          intro: 'Fuerteventura is European cycling\'s best-kept winter secret. Year-round sunshine, volcanic landscapes that look like another planet, and trade winds that turn every ride into a tactical challenge. At a fraction of Mallorca\'s cost, with near-zero traffic on inland roads.',
+          seasonBar: [
+            { month: 'Jan', open: true, note: 'Peak \u2014 perfect training weather, 22-25\u00B0C' },
+            { month: 'Feb', open: true, note: 'Peak \u2014 dry, warm, pro teams everywhere' },
+            { month: 'Mar', open: true, note: 'Peak \u2014 ideal conditions, spring light' },
+            { month: 'Apr', open: true, note: 'Open \u2014 warming up, light trade winds' },
+            { month: 'May', open: true, note: 'Open \u2014 warm, occasional calima' },
+            { month: 'Jun', open: true, note: 'Open \u2014 hotter, strong trade winds begin' },
+            { month: 'Jul', open: false, note: 'Too hot \u2014 35\u00B0C+, extreme winds' },
+            { month: 'Aug', open: false, note: 'Too hot \u2014 calima dust storms common' },
+            { month: 'Sep', open: false, note: 'Still hot \u2014 winds moderate late month' },
+            { month: 'Oct', open: true, note: 'Season reopens \u2014 warm, winds easing' },
+            { month: 'Nov', open: true, note: 'Open \u2014 excellent conditions return' },
+            { month: 'Dec', open: true, note: 'Open \u2014 mild, quiet roads, festive atmosphere' }
+          ],
+          culturalHighlights: [
+            { title: 'Volcanic Geology', description: 'Fuerteventura is 20 million years old \u2014 the Canaries\' oldest island. Ride through Miocene-era lava fields, ochre badlands, and volcanic calderas.', icon: 'distance' },
+            { title: 'Queso Majorero', description: 'Protected Designation of Origin goat cheese made from Majorero goats. Aged varieties have a nutty, paprika-rubbed rind. Buy fresh at Betancuria.', icon: 'dining' },
+            { title: 'Wind Culture', description: 'The NNE trade winds shape everything: architecture, agriculture, and cycling tactics. Local riders read wind like a second language.', icon: 'wind' },
+            { title: 'Norman Heritage', description: 'Jean de B\u00E9thencourt conquered the island in 1404. The ancient capital Betancuria preserves a Franciscan monastery and Museo Arqueol\u00F3gico.', icon: 'monument' }
+          ],
+          costComparison: [
+            { destination: 'Fuerteventura', hotel: 85, guide: 65, rental: 35, meal: 15, coffee: 2, beer: 3, total7day: 980, currency: 'EUR' },
+            { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
+            { destination: 'Tenerife', hotel: 95, guide: 70, rental: 40, meal: 18, coffee: 3, beer: 3, total7day: 1120, currency: 'EUR' },
+            { destination: 'Lanzarote', hotel: 90, guide: 68, rental: 38, meal: 16, coffee: 2, beer: 3, total7day: 1050, currency: 'EUR' }
+          ],
+          goldenKeyPackage: {
+            name: 'Volcanic Golden Key',
+            tagline: 'Zero-worry Fuerteventura. Sun, wind, and volcanic roads \u2014 all handled.',
+            includes: ['Private guide + support vehicle all days', 'Playitas Resort premium accommodation', 'Fuerte Bike Station carbon bike rental', 'Airport transfers + route shuttles', 'Wind Rides guided group sessions', 'Emergency mechanical support', 'Cultural stops: Betancuria + cheese tasting', 'Packed lunches + hydration on every ride', '24/7 concierge WhatsApp line'],
+            price7day: 2180,
+            savingsVsDIY: 380
+          }
+        }
       },
+      // ── ROMANIA ──
       {
-        id: 'mallorca', name: 'Mallorca', country: 'Spain', continent: 'Europe',
-        lat: 39.69, lng: 2.98, tagline: 'The cycling capital of Europe', color: '#e85d3a',
+        id: 'romania', name: 'Romania', country: 'Romania', continent: 'Europe', flag: '\u{1F1F7}\u{1F1F4}',
+        lat: 45.60, lng: 24.62, color: '#44D62C', regionId: 'carpathians',
+        tagline: 'The best road in the world',
+        desc: 'The road Jeremy Clarkson called "the best in the world." 90 km through Southern Carpathians crossing 2,042m at B\u00E2lea Lake. Open June\u2013October only. Brown bears, shepherd trails, and zero tourists on two wheels.',
+        stats: { dur: '3\u20137 days', diff: 'Advanced', season: 'Jun\u2013Oct', price: '\u20AC400\u2013900', group: '2\u20138', routes: 4 },
+        highlights: ['2,042m summit at B\u00E2lea Lake', 'Open only 5 months per year', 'Brown bear sightings common', 'Lowest cost cycling destination in Europe', 'Authentic Romanian mountain lodges'],
+        images: [
+          'https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=1200&q=80',
+          'https://images.unsplash.com/photo-1526112982068-f899a62e118e?w=1200&q=80',
+          'https://images.unsplash.com/photo-1551818176-60579e574b91?w=1200&q=80',
+          'https://images.unsplash.com/photo-1504038877628-14603434107c?w=1200&q=80',
+          'https://images.unsplash.com/photo-1584739353467-e42f3f0d36ff?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1561196393-d9ef90aa4d4f?w=1600&q=85',
+        airportIATA: ['SBZ', 'OTP'], routeCount: 4, partnerCount: 6,
+        season: {
+          start: 6, end: 10, peak: [7, 8],
+          monthly: [
+            { month: 1,  tempRange: [-5, 2],  daylight: 9.0,  wind: 'light', heatmapIntensity: 0 },
+            { month: 2,  tempRange: [-3, 4],  daylight: 10.0, wind: 'light', heatmapIntensity: 0 },
+            { month: 3,  tempRange: [1, 9],   daylight: 11.5, wind: 'light', heatmapIntensity: 0 },
+            { month: 4,  tempRange: [5, 14],  daylight: 13.0, wind: 'light', heatmapIntensity: 0 },
+            { month: 5,  tempRange: [10, 19], daylight: 15.0, wind: 'light', heatmapIntensity: 0.05 },
+            { month: 6,  tempRange: [14, 24], daylight: 16.0, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 7,  tempRange: [16, 27], daylight: 16.0, wind: 'light', heatmapIntensity: 0.9 },
+            { month: 8,  tempRange: [16, 27], daylight: 15.0, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 9,  tempRange: [12, 22], daylight: 13.0, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 10, tempRange: [7, 16],  daylight: 11.5, wind: 'light', heatmapIntensity: 0.3 },
+            { month: 11, tempRange: [2, 9],   daylight: 10.0, wind: 'light', heatmapIntensity: 0 },
+            { month: 12, tempRange: [-3, 3],  daylight: 9.0,  wind: 'light', heatmapIntensity: 0 }
+          ]
+        },
+        conditions: {
+          roads: 'Well-maintained main roads. Mountain passes can have rough patches. Minimal traffic outside Jul\u2013Aug.',
+          water: 'Mountain springs on routes. Villages every 15\u201325 km on main roads. Carry extra for remote sections.',
+          bikeShops: 'Sibiu city center. Limited options elsewhere \u2014 bring essential spares.',
+          rental: 'BikeRo in Sibiu, Carpathian Cycles. Book 1 week ahead in peak season.',
+          specialRisks: 'Brown bears near B\u00E2lea Lake area. Dogs in villages (carry deterrent). Altitude cold above 1,800m even in summer.'
+        },
+        zones: [
+          { id: 'ro-transfagarasan', name: 'Transf\u0103g\u0103r\u0103\u0219an Valley', character: 'The most dramatic road in Romania. 90 km crossing the Southern Carpathians at 2,042m via B\u00E2lea Lake.', difficulty: 'advanced', bestFor: ['experienced climbers', 'adventure seekers'], routeIds: ['ro-transfagarasan', 'ro-balea'] },
+          { id: 'ro-transalpina', name: 'Transalpina Ridge', character: 'Romania\'s highest road at 2,145m. Less famous but equally dramatic, with alpine meadows and shepherds\' huts.', difficulty: 'advanced', bestFor: ['altitude lovers', 'solitude seekers'], routeIds: ['ro-transalpina'] },
+          { id: 'ro-cheia', name: 'Cheia Pass & Prahova Valley', character: 'Accessible pass connecting Transylvania to Wallachia. Lower altitude, mixed terrain, rolling through forested valleys.', difficulty: 'intermediate', bestFor: ['intermediate riders', 'mixed terrain'], routeIds: ['ro-cheia'] }
+        ],
+        bases: [
+          { id: 'sibiu', name: 'Sibiu', character: 'European Capital of Culture 2007. Cobblestone squares, baroque architecture, Romania\'s best restaurant scene.', bestFor: 'Main hub for Transf\u0103g\u0103r\u0103\u0219an and Transalpina. Culture and dining on rest days.', accessibleZoneIds: ['ro-transfagarasan', 'ro-transalpina'], partnerIds: ['p-ro-hilton-sibiu', 'p-ro-bikero', 'p-ro-bike-rental'], nearestAirportIATA: 'SBZ', transferKm: 5 },
+          { id: 'curtea-de-arges', name: 'Curtea de Arge\u0219', character: 'Small historic town at the southern base of the Transf\u0103g\u0103r\u0103\u0219an. Medieval monastery.', bestFor: 'Southern approach. Budget-friendly.', accessibleZoneIds: ['ro-transfagarasan'], partnerIds: ['p-ro-posada'], nearestAirportIATA: 'OTP', transferKm: 160 }
+        ],
+        deepDive: {
+          routeIds: ['ro-transfagarasan', 'ro-transalpina', 'ro-balea', 'ro-cheia'],
+          intro: 'Romania is cycling\'s last great secret. While Mallorca and Tuscany crowd with carbon-clad pelotons, the Carpathians offer equally dramatic climbing at a fraction of the cost \u2014 and without the traffic. The Transf\u0103g\u0103r\u0103\u0219an alone has more vertical per kilometer than the Stelvio.',
+          seasonBar: [
+            { month: 'Jan', open: false, note: 'Roads closed \u2014 snow' },
+            { month: 'Feb', open: false, note: 'Roads closed \u2014 snow' },
+            { month: 'Mar', open: false, note: 'Roads closed \u2014 snow' },
+            { month: 'Apr', open: false, note: 'Roads closed \u2014 snow' },
+            { month: 'May', open: false, note: 'Cheia Pass may open late May' },
+            { month: 'Jun', open: true, note: 'Season opens \u2014 snow walls, cool temps, quiet roads' },
+            { month: 'Jul', open: true, note: 'Peak season \u2014 warm, long days, some tourist traffic' },
+            { month: 'Aug', open: true, note: 'Peak season \u2014 busiest month, start rides early' },
+            { month: 'Sep', open: true, note: 'Shoulder \u2014 autumn colors begin, cooler summits' },
+            { month: 'Oct', open: true, note: 'Late season \u2014 stunning foliage, cold summits, roads may close late Oct' },
+            { month: 'Nov', open: false, note: 'Roads closing \u2014 snow risk' },
+            { month: 'Dec', open: false, note: 'Roads closed \u2014 snow' }
+          ],
+          culturalHighlights: [
+            { title: 'Medieval Sibiu', description: 'European Capital of Culture 2007. Cobblestone squares, baroque architecture, and Romania\'s best restaurant scene.', icon: 'monument' },
+            { title: 'Shepherd Traditions', description: 'High mountain shepherds still make cheese in traditional st\u00E2ni. Stop for fresh ca\u0219caval and a glass of jinars.', icon: 'dining' },
+            { title: '\u021Auic\u0103 & Palinc\u0103', description: 'Romania\'s legendary plum brandy. Every village has a master distiller. The double-distilled palinc\u0103 will reset your legs.', icon: 'wine' },
+            { title: 'Fortified Churches', description: 'UNESCO-listed Saxon fortified churches dot the Transylvanian hills. 7 are World Heritage sites within riding distance of Sibiu.', icon: 'book' }
+          ],
+          costComparison: [
+            { destination: 'Romania', hotel: 52, guide: 55, rental: 30, meal: 12, coffee: 2, beer: 2, total7day: 680, currency: 'EUR' },
+            { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
+            { destination: 'French Alps', hotel: 88, guide: 95, rental: 65, meal: 32, coffee: 5, beer: 6, total7day: 1450, currency: 'EUR' },
+            { destination: 'Tuscany', hotel: 160, guide: 90, rental: 50, meal: 35, coffee: 3, beer: 5, total7day: 1780, currency: 'EUR' }
+          ],
+          goldenKeyPackage: {
+            name: 'Carpathian Golden Key',
+            tagline: 'Zero-worry Transf\u0103g\u0103r\u0103\u0219an. Every detail handled.',
+            includes: ['Private guide + support vehicle all days', 'Hilton Sibiu + Hotel Posada accommodation', 'Carpathian Cycles premium bike', 'TransCarpath airport transfers + route shuttles', 'Therme Sibiu recovery sessions', 'Emergency mechanical support', 'Cultural stops: fortified churches + \u021Buic\u0103 tasting', 'Packed lunches + hydration on every ride', '24/7 concierge WhatsApp line'],
+            price7day: 1890,
+            savingsVsDIY: 340
+          }
+        }
+      },
+      // ── CRETE ──
+      {
+        id: 'crete', name: 'Crete', country: 'Greece', continent: 'Europe', flag: '\u{1F1EC}\u{1F1F7}',
+        lat: 35.24, lng: 24.47, color: '#3B82F6', regionId: 'greek-islands',
+        tagline: 'Ancient mountains meet the Libyan Sea',
+        desc: 'Where ancient mountains meet the Libyan Sea. The White Mountains offer dramatic climbing, while Cretan hospitality \u2014 raki after every meal, tavernas that refuse to let you pay for dessert \u2014 makes every ride feel like coming home.',
+        stats: { dur: '5\u201310 days', diff: 'Intermediate\u2013Advanced', season: 'Apr\u2013Nov', price: '\u20AC900\u20131,800', group: '2\u201312', routes: 3 },
+        highlights: ['White Mountains dramatic climbing', 'Samari\u00E1 Gorge approach ride', 'Beach recovery between rides', 'Cretan cuisine and raki culture', 'Ancient Minoan heritage'],
+        images: [
+          'https://images.unsplash.com/photo-1656861679110-a632ad041c13?w=1600&q=85',
+          'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&q=80',
+          'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80',
+          'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=1200&q=80',
+          'https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1656861679110-a632ad041c13?w=1600&q=85',
+        airportIATA: ['CHQ'], routeCount: 3, partnerCount: 3,
+        season: {
+          start: 4, end: 11, peak: [5, 6, 9, 10],
+          monthly: [
+            { month: 1,  tempRange: [9, 15],  daylight: 10.0, wind: 'moderate', heatmapIntensity: 0 },
+            { month: 2,  tempRange: [9, 15],  daylight: 10.5, wind: 'moderate', heatmapIntensity: 0 },
+            { month: 3,  tempRange: [10, 17], daylight: 12.0, wind: 'moderate', heatmapIntensity: 0.05 },
+            { month: 4,  tempRange: [13, 21], daylight: 13.0, wind: 'light', heatmapIntensity: 0.4 },
+            { month: 5,  tempRange: [16, 26], daylight: 14.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 6,  tempRange: [20, 30], daylight: 15.0, wind: 'light-meltemi', heatmapIntensity: 0.85 },
+            { month: 7,  tempRange: [23, 33], daylight: 15.0, wind: 'meltemi', heatmapIntensity: 0.5 },
+            { month: 8,  tempRange: [23, 33], daylight: 14.0, wind: 'meltemi', heatmapIntensity: 0.45 },
+            { month: 9,  tempRange: [21, 29], daylight: 12.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 10, tempRange: [17, 25], daylight: 11.5, wind: 'light', heatmapIntensity: 0.7 },
+            { month: 11, tempRange: [14, 20], daylight: 10.5, wind: 'moderate', heatmapIntensity: 0.3 },
+            { month: 12, tempRange: [11, 16], daylight: 10.0, wind: 'moderate', heatmapIntensity: 0 }
+          ]
+        },
+        conditions: {
+          roads: 'Main roads well-maintained. Mountain roads narrow with sharp turns. Watch for goats.',
+          water: 'Villages every 10\u201320 km on main routes. Mountain springs marked. Carry extra for south coast.',
+          bikeShops: 'Chania and Heraklion. Limited elsewhere.',
+          rental: 'Available in Chania. Book ahead in May\u2013Jun and Sep\u2013Oct.',
+          specialRisks: 'Meltemi winds Jul\u2013Aug can be extreme. Mountain roads steep and exposed. Summer heat above 32\u00B0C \u2014 start early.'
+        },
+        zones: [
+          { id: 'crete-white-mtns', name: 'White Mountains', character: 'Dramatic limestone peaks rising to 2,453m. The most challenging climbing in Crete.', difficulty: 'advanced', bestFor: ['experienced climbers', 'mountain lovers'], routeIds: ['crete-white-mtns'] },
+          { id: 'crete-samaria', name: 'Samari\u00E1 Gorge Approaches', character: 'Rides approaching and descending from Europe\'s longest gorge. Spectacular descents.', difficulty: 'intermediate-advanced', bestFor: ['gorge lovers', 'descenders'], routeIds: ['crete-samaria'] },
+          { id: 'crete-south', name: 'South Coast', character: 'Remote coastal roads with views of the Libyan Sea. Quiet villages, dramatic cliffs, beach stops.', difficulty: 'intermediate', bestFor: ['coastal riders', 'beach recovery'], routeIds: ['crete-south-coast'] }
+        ],
+        bases: [
+          { id: 'chania', name: 'Chania', character: 'Venetian harbor town. Best restaurant scene in Crete. Gateway to White Mountains and Samari\u00E1.', bestFor: 'Main hub. Culture, dining, and mountain access.', accessibleZoneIds: ['crete-white-mtns', 'crete-samaria', 'crete-south'], partnerIds: ['p-crete-anemos', 'p-crete-bikes', 'p-crete-guide'], nearestAirportIATA: 'CHQ', transferKm: 15 }
+        ],
+        deepDive: {
+          routeIds: ['crete-samaria', 'crete-white-mtns', 'crete-south-coast'],
+          intro: 'Crete is where ancient mountains meet the Libyan Sea. The White Mountains offer some of the Mediterranean\'s most dramatic climbing, while Cretan hospitality \u2014 raki after every meal, tavernas that refuse to let you pay for dessert \u2014 makes every ride feel like coming home.',
+          seasonBar: [
+            { month: 'Jan', open: false, note: 'Mountain roads closed \u2014 cold, wet' },
+            { month: 'Feb', open: false, note: 'Mountain roads closed \u2014 snow possible' },
+            { month: 'Mar', open: false, note: 'Early spring \u2014 coastal rides possible but mountains closed' },
+            { month: 'Apr', open: true, note: 'Season opens \u2014 wildflowers, cool mountains' },
+            { month: 'May', open: true, note: 'Peak \u2014 perfect conditions, 20-26\u00B0C' },
+            { month: 'Jun', open: true, note: 'Peak \u2014 warm, long days, dry' },
+            { month: 'Jul', open: true, note: 'Open \u2014 hot (32\u00B0C+), start rides early' },
+            { month: 'Aug', open: true, note: 'Open \u2014 hottest month, beach recovery essential' },
+            { month: 'Sep', open: true, note: 'Peak \u2014 heat easing, sea still warm' },
+            { month: 'Oct', open: true, note: 'Peak \u2014 excellent conditions, fewer tourists' },
+            { month: 'Nov', open: true, note: 'Late season \u2014 cooler, first rains possible' },
+            { month: 'Dec', open: false, note: 'Mountain roads closing \u2014 rain season' }
+          ],
+          culturalHighlights: [
+            { title: 'Minoan Heritage', description: 'Europe\'s oldest civilization flourished here 4,000 years ago. Knossos palace and its frescoes are a rest-day must-visit.', icon: 'monument' },
+            { title: 'Cretan Cuisine', description: 'Dakos, kalitsounia, wild greens, and the world\'s finest olive oil. Every taverna meal ends with free raki and seasonal fruit.', icon: 'dining' },
+            { title: 'Resistance History', description: 'From Venetians to Ottomans to WWII Germans, Cretans never stopped fighting. Imbros Gorge was an Allied evacuation route in 1941.', icon: 'book' },
+            { title: 'Raki Culture', description: 'Cretan grape brandy served after every meal, at every encounter, for every occasion. Refusing is impossible.', icon: 'wine' }
+          ],
+          costComparison: [
+            { destination: 'Crete', hotel: 110, guide: 50, rental: 38, meal: 18, coffee: 3, beer: 4, total7day: 1180, currency: 'EUR' },
+            { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
+            { destination: 'French Alps', hotel: 88, guide: 95, rental: 65, meal: 32, coffee: 5, beer: 6, total7day: 1450, currency: 'EUR' },
+            { destination: 'Tuscany', hotel: 160, guide: 90, rental: 50, meal: 35, coffee: 3, beer: 5, total7day: 1780, currency: 'EUR' }
+          ],
+          goldenKeyPackage: {
+            name: 'Minoan Golden Key',
+            tagline: 'Zero-worry Crete. Mountains, gorges, and the Libyan Sea \u2014 all handled.',
+            includes: ['Private guide + support vehicle all days', 'Anemos Luxury Grand Resort accommodation', 'Cretan Cycling premium bike rental', 'Airport transfers + route shuttles', 'Minoan Rides guided cultural tours', 'Emergency mechanical support', 'Cultural stops: olive oil tasting + monastery visits', 'Packed lunches + taverna dinners included', '24/7 concierge WhatsApp line'],
+            price7day: 2450,
+            savingsVsDIY: 420
+          }
+        }
+      },
+      // ── MALLORCA ──
+      {
+        id: 'mallorca', name: 'Mallorca', country: 'Spain', continent: 'Europe', flag: '\u{1F1EA}\u{1F1F8}',
+        lat: 39.69, lng: 2.98, color: '#e85d3a', regionId: 'balearics',
+        tagline: 'The cycling capital of Europe',
         desc: 'The island that defined cycling tourism. Serra de Tramuntana\'s 26 hairpin Sa Calobra descent is a bucket-list climb for every roadie. Perfect infrastructure, bike-friendly hotels, and 300 days of sun.',
-        stats: { dur: '5–14 days', diff: 'All levels', season: 'Mar–Jun, Sep–Nov', price: '€1,000–2,500', group: '2–20', routes: 8 },
+        stats: { dur: '5\u201314 days', diff: 'All levels', season: 'Mar\u2013Jun, Sep\u2013Nov', price: '\u20AC1,000\u20132,500', group: '2\u201320', routes: 8 },
         highlights: ['Sa Calobra: 26 hairpin legendary descent', 'Serra de Tramuntana UNESCO landscape', '300+ days of sunshine per year', 'Europe\'s most bike-friendly island', 'Pro team training camp destination'],
         images: [
           'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=1200&q=80',
@@ -28,27 +411,49 @@
           'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1200&q=80',
           'https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=80',
           'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80'
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=1600&q=85',
+        airportIATA: ['PMI'], routeCount: 1, partnerCount: 1,
+        season: {
+          start: 3, end: 11, peak: [4, 5, 9, 10],
+          monthly: [
+            { month: 1,  tempRange: [6, 15],  daylight: 10.0, wind: 'light', heatmapIntensity: 0.15 },
+            { month: 2,  tempRange: [6, 15],  daylight: 10.5, wind: 'light', heatmapIntensity: 0.25 },
+            { month: 3,  tempRange: [8, 18],  daylight: 12.0, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 4,  tempRange: [10, 21], daylight: 13.5, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 5,  tempRange: [14, 25], daylight: 14.5, wind: 'light', heatmapIntensity: 0.9 },
+            { month: 6,  tempRange: [18, 29], daylight: 15.0, wind: 'light', heatmapIntensity: 0.7 },
+            { month: 7,  tempRange: [21, 33], daylight: 15.0, wind: 'light', heatmapIntensity: 0.4 },
+            { month: 8,  tempRange: [22, 33], daylight: 14.0, wind: 'light', heatmapIntensity: 0.35 },
+            { month: 9,  tempRange: [19, 29], daylight: 12.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 10, tempRange: [15, 24], daylight: 11.5, wind: 'light', heatmapIntensity: 0.75 },
+            { month: 11, tempRange: [11, 19], daylight: 10.5, wind: 'light', heatmapIntensity: 0.35 },
+            { month: 12, tempRange: [8, 16],  daylight: 9.5,  wind: 'light', heatmapIntensity: 0.1 }
+          ]
+        },
+        conditions: {
+          roads: 'Excellent. Dedicated cycling lanes on many routes. Well-maintained mountain roads.',
+          water: 'Caf\u00E9s and fountains frequent. Never more than 10\u201315 km between stops.',
+          bikeShops: 'Abundant in Palma, Alc\u00FAdia, Pollen\u00E7a, and S\u00F3ller.',
+          rental: 'Wide availability. Carbon road and gravel bikes. Book 2+ weeks ahead in Apr\u2013May.',
+          specialRisks: 'Tourist traffic on coastal roads. Sa Calobra descent has tight turns \u2014 watch for buses.'
+        },
+        zones: [
+          { id: 'mallorca-tramuntana', name: 'Serra de Tramuntana', character: 'UNESCO World Heritage mountain range. Sa Calobra, Puig Major, Cap de Formentor.', difficulty: 'advanced', bestFor: ['climbers', 'pro-training'], routeIds: ['mallorca-sa-calobra'] },
+          { id: 'mallorca-plains', name: 'Central Plain & East Coast', character: 'Flat to rolling terrain. Perfect for base miles, group rides, and beginners.', difficulty: 'easy', bestFor: ['beginners', 'group rides'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'palma', name: 'Palma de Mallorca', character: 'Capital city. Best restaurants, nightlife, cycling caf\u00E9 culture.', bestFor: 'All-round base. City culture plus mountain access.', accessibleZoneIds: ['mallorca-tramuntana', 'mallorca-plains'], partnerIds: [], nearestAirportIATA: 'PMI', transferKm: 8 }
+        ],
+        deepDive: null
       },
+      // ── TUSCANY ──
       {
-        id: 'transfagarasan', name: 'Transfăgărășan', country: 'Romania', continent: 'Europe',
-        lat: 45.60, lng: 24.62, tagline: 'The best road in the world', color: '#44D62C',
-        desc: 'The road Jeremy Clarkson called "the best in the world." 90 km through Southern Carpathians crossing 2,042m at Bâlea Lake. Open June–October only. Brown bears, shepherd trails, and zero tourists on two wheels.',
-        stats: { dur: '3–7 days', diff: 'Advanced', season: 'Jun–Oct', price: '€400–900', group: '2–8', routes: 4 },
-        highlights: ['2,042m summit at Bâlea Lake', 'Open only 5 months per year', 'Brown bear sightings common', 'Lowest cost cycling destination in Europe', 'Authentic Romanian mountain lodges'],
-        images: [
-          'https://images.unsplash.com/photo-1569165003085-e8a1066f1cb8?w=1200&q=80',
-          'https://images.unsplash.com/photo-1526112982068-f899a62e118e?w=1200&q=80',
-          'https://images.unsplash.com/photo-1551818176-60579e574b91?w=1200&q=80',
-          'https://images.unsplash.com/photo-1504038877628-14603434107c?w=1200&q=80',
-          'https://images.unsplash.com/photo-1584739353467-e42f3f0d36ff?w=1200&q=80'
-        ]
-      },
-      {
-        id: 'tuscany', name: 'Tuscany', country: 'Italy', continent: 'Europe',
-        lat: 43.35, lng: 11.32, tagline: 'White roads & Chianti sunsets', color: '#c9a84c',
-        desc: 'The strade bianche — white gravel roads through cypress-lined vineyards that inspired L\'Eroica. Rolling Chianti hills with wine and olive oil tasting built into every ride. Gravel cycling at its most beautiful.',
-        stats: { dur: '4–10 days', diff: 'Intermediate', season: 'Apr–Jun, Sep–Oct', price: '€900–2,000', group: '2–12', routes: 6 },
+        id: 'tuscany', name: 'Tuscany', country: 'Italy', continent: 'Europe', flag: '\u{1F1EE}\u{1F1F9}',
+        lat: 43.35, lng: 11.32, color: '#c9a84c', regionId: 'central-italy',
+        tagline: 'White roads & Chianti sunsets',
+        desc: 'The strade bianche \u2014 white gravel roads through cypress-lined vineyards that inspired L\'Eroica. Rolling Chianti hills with wine and olive oil tasting built into every ride. Gravel cycling at its most beautiful.',
+        stats: { dur: '4\u201310 days', diff: 'Intermediate', season: 'Apr\u2013Jun, Sep\u2013Oct', price: '\u20AC900\u20132,000', group: '2\u201312', routes: 6 },
         highlights: ['Strade Bianche race route rideable', 'Wine tasting at family vineyards', 'Cypress-lined gravel perfection', 'L\'Eroica vintage cycling festival', 'Agriturismo farm-stays with gourmet dining'],
         images: [
           'https://images.unsplash.com/photo-1565992441121-4367c2967103?w=1200&q=80',
@@ -56,13 +461,98 @@
           'https://images.unsplash.com/photo-1541370976299-4d24ebbc9077?w=1200&q=80',
           'https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=1200&q=80',
           'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80'
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?w=1600&q=85',
+        airportIATA: ['FLR', 'PSA'], routeCount: 1, partnerCount: 1,
+        season: {
+          start: 4, end: 10, peak: [5, 6, 9, 10],
+          monthly: [
+            { month: 1,  tempRange: [2, 10],  daylight: 9.5,  wind: 'light', heatmapIntensity: 0 },
+            { month: 2,  tempRange: [3, 12],  daylight: 10.5, wind: 'light', heatmapIntensity: 0.05 },
+            { month: 3,  tempRange: [5, 15],  daylight: 12.0, wind: 'light', heatmapIntensity: 0.2 },
+            { month: 4,  tempRange: [8, 19],  daylight: 13.5, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 5,  tempRange: [12, 24], daylight: 15.0, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 6,  tempRange: [16, 29], daylight: 15.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 7,  tempRange: [19, 33], daylight: 15.5, wind: 'light', heatmapIntensity: 0.4 },
+            { month: 8,  tempRange: [19, 33], daylight: 14.5, wind: 'light', heatmapIntensity: 0.35 },
+            { month: 9,  tempRange: [16, 28], daylight: 12.5, wind: 'light', heatmapIntensity: 0.75 },
+            { month: 10, tempRange: [11, 22], daylight: 11.5, wind: 'light', heatmapIntensity: 0.65 },
+            { month: 11, tempRange: [6, 14],  daylight: 10.0, wind: 'light', heatmapIntensity: 0.1 },
+            { month: 12, tempRange: [3, 10],  daylight: 9.5,  wind: 'light', heatmapIntensity: 0 }
+          ]
+        },
+        conditions: {
+          roads: 'Mix of paved and white gravel (strade bianche). Main roads good. Gravel sections can be rough after rain.',
+          water: 'Frequent villages and agriturismi. Fountains in most town squares.',
+          bikeShops: 'Siena, Florence. Several specialist gravel shops.',
+          rental: 'Good availability. Gravel-specific bikes common. Book ahead for L\'Eroica week.',
+          specialRisks: 'Gravel roads dusty in summer, muddy in rain. Hunters active Oct\u2013Jan (wear bright colors).'
+        },
+        zones: [
+          { id: 'tuscany-chianti', name: 'Chianti Hills', character: 'Rolling vineyard country between Florence and Siena. Classic strade bianche, wine stops, cypress lanes.', difficulty: 'intermediate', bestFor: ['gravel riders', 'wine lovers'], routeIds: ['tuscany-strade-bianche'] },
+          { id: 'tuscany-crete-senesi', name: 'Crete Senesi', character: 'Lunar clay hills south of Siena. Stark, beautiful, remote gravel riding.', difficulty: 'intermediate', bestFor: ['photographers', 'solitude seekers'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'siena', name: 'Siena', character: 'Medieval city. Piazza del Campo, Palio horse race, world-class dining.', bestFor: 'Central hub for all Tuscan gravel. Culture on rest days.', accessibleZoneIds: ['tuscany-chianti', 'tuscany-crete-senesi'], partnerIds: [], nearestAirportIATA: 'FLR', transferKm: 75 }
+        ],
+        deepDive: null
       },
+      // ── DOLOMITES (was stelvio in LOCATIONS) ──
       {
-        id: 'alpe-dhuez', name: 'Alpe d\'Huez', country: 'France', continent: 'Europe',
-        lat: 45.09, lng: 6.07, tagline: '21 bends of Tour de France glory', color: '#3B82F6',
-        desc: 'The most famous climb in professional cycling. 21 numbered hairpin bends, each named after a Tour de France stage winner. 13.8 km at 8.1% average gradient — the ultimate test piece for road cyclists worldwide.',
-        stats: { dur: '3–7 days', diff: 'Advanced', season: 'May–Sep', price: '€1,000–2,200', group: '2–15', routes: 5 },
+        id: 'dolomites', name: 'Stelvio Pass', country: 'Italy', continent: 'Europe', flag: '\u{1F1EE}\u{1F1F9}',
+        lat: 46.53, lng: 10.45, color: '#8B5CF6', regionId: 'italian-alps',
+        tagline: 'The highest paved pass in the Alps',
+        desc: '2,757m of altitude and 48 hairpin turns from the Bormio side alone. The Stelvio is the Everest of European cycling. Open only in summer, it rewards those who conquer it with views stretching to the Dolomites.',
+        stats: { dur: '3\u20137 days', diff: 'Expert', season: 'Jun\u2013Sep', price: '\u20AC1,100\u20132,400', group: '2\u201310', routes: 4 },
+        highlights: ['2,757m \u2014 highest paved Alpine pass', '48 hairpin bends from Bormio', 'Giro d\'Italia legendary summit finish', 'Three approach routes with different characters', 'Connected to Mortirolo and Gavia passes'],
+        images: [
+          'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1200&q=80',
+          'https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=1200&q=80',
+          'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&q=80',
+          'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80',
+          'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1600&q=85',
+        airportIATA: ['INN', 'VRN'], routeCount: 1, partnerCount: 1,
+        season: {
+          start: 6, end: 9, peak: [7, 8],
+          monthly: [
+            { month: 1,  tempRange: [-10, -2], daylight: 9.0,  wind: 'light', heatmapIntensity: 0 },
+            { month: 2,  tempRange: [-8, 0],   daylight: 10.0, wind: 'light', heatmapIntensity: 0 },
+            { month: 3,  tempRange: [-4, 5],   daylight: 11.5, wind: 'light', heatmapIntensity: 0 },
+            { month: 4,  tempRange: [0, 10],   daylight: 13.5, wind: 'light', heatmapIntensity: 0 },
+            { month: 5,  tempRange: [5, 15],   daylight: 15.0, wind: 'light', heatmapIntensity: 0.1 },
+            { month: 6,  tempRange: [8, 20],   daylight: 16.0, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 7,  tempRange: [11, 24],  daylight: 16.0, wind: 'light', heatmapIntensity: 0.9 },
+            { month: 8,  tempRange: [11, 23],  daylight: 14.5, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 9,  tempRange: [7, 18],   daylight: 12.5, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 10, tempRange: [3, 12],   daylight: 11.0, wind: 'light', heatmapIntensity: 0.05 },
+            { month: 11, tempRange: [-3, 5],   daylight: 9.5,  wind: 'light', heatmapIntensity: 0 },
+            { month: 12, tempRange: [-8, -1],  daylight: 9.0,  wind: 'light', heatmapIntensity: 0 }
+          ]
+        },
+        conditions: {
+          roads: 'Well-maintained Alpine roads. Hairpin turns require caution on descents. Some gravel shoulders.',
+          water: 'Rifugios (mountain huts) on main passes. Villages in valleys.',
+          bikeShops: 'Bormio, Prad am Stilfserjoch. Specialist Alpine shops.',
+          rental: 'Available in Bormio and Prad. Book ahead Jul\u2013Aug.',
+          specialRisks: 'Altitude \u2014 above 2,500m oxygen is thin. Afternoon thunderstorms common Jul\u2013Aug. Temperature drops 6\u00B0C per 1,000m.'
+        },
+        zones: [
+          { id: 'dolomites-stelvio', name: 'Stelvio & Surrounding Passes', character: 'The crown jewel. Stelvio, Mortirolo, Gavia \u2014 three legendary passes within a day\'s ride.', difficulty: 'expert', bestFor: ['expert climbers', 'Giro d\'Italia pilgrims'], routeIds: ['dolomites-stelvio'] }
+        ],
+        bases: [
+          { id: 'bormio', name: 'Bormio', character: 'Alpine spa town at the base of Stelvio. Thermal baths for recovery. Classic Italian dining.', bestFor: 'Base for all three major passes. Recovery-focused.', accessibleZoneIds: ['dolomites-stelvio'], partnerIds: [], nearestAirportIATA: 'INN', transferKm: 180 }
+        ],
+        deepDive: null
+      },
+      // ── FRENCH ALPS (was alpe-dhuez in LOCATIONS) ──
+      {
+        id: 'alps', name: 'French Alps', country: 'France', continent: 'Europe', flag: '\u{1F1EB}\u{1F1F7}',
+        lat: 45.09, lng: 6.07, color: '#3B82F6', regionId: 'french-alps',
+        tagline: '21 bends of Tour de France glory',
+        desc: 'The most famous climb in professional cycling. 21 numbered hairpin bends, each named after a Tour de France stage winner. 13.8 km at 8.1% average gradient \u2014 the ultimate test piece for road cyclists worldwide.',
+        stats: { dur: '3\u20137 days', diff: 'Advanced', season: 'May\u2013Sep', price: '\u20AC1,000\u20132,200', group: '2\u201315', routes: 5 },
         highlights: ['21 legendary numbered hairpins', 'Tour de France mountain stage history', 'Col du Galibier and Col de la Croix de Fer nearby', 'Dedicated cycling infrastructure', 'Alpine scenery above 1,800m'],
         images: [
           'https://images.unsplash.com/photo-1530143584546-02191bc84eb5?w=1200&q=80',
@@ -70,69 +560,49 @@
           'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=1200&q=80',
           'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80',
           'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=1200&q=80'
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1530143584546-02191bc84eb5?w=1600&q=85',
+        airportIATA: ['GNB', 'LYS'], routeCount: 2, partnerCount: 1,
+        season: {
+          start: 5, end: 9, peak: [6, 7, 8],
+          monthly: [
+            { month: 1,  tempRange: [-6, 1],  daylight: 9.0,  wind: 'light', heatmapIntensity: 0 },
+            { month: 2,  tempRange: [-5, 3],  daylight: 10.5, wind: 'light', heatmapIntensity: 0 },
+            { month: 3,  tempRange: [-2, 7],  daylight: 12.0, wind: 'light', heatmapIntensity: 0 },
+            { month: 4,  tempRange: [2, 12],  daylight: 13.5, wind: 'light', heatmapIntensity: 0.05 },
+            { month: 5,  tempRange: [6, 17],  daylight: 15.0, wind: 'light', heatmapIntensity: 0.4 },
+            { month: 6,  tempRange: [10, 22], daylight: 16.0, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 7,  tempRange: [12, 25], daylight: 16.0, wind: 'light', heatmapIntensity: 0.95 },
+            { month: 8,  tempRange: [12, 25], daylight: 14.5, wind: 'light', heatmapIntensity: 0.9 },
+            { month: 9,  tempRange: [9, 20],  daylight: 12.5, wind: 'light', heatmapIntensity: 0.55 },
+            { month: 10, tempRange: [4, 14],  daylight: 11.0, wind: 'light', heatmapIntensity: 0.1 },
+            { month: 11, tempRange: [-1, 7],  daylight: 9.5,  wind: 'light', heatmapIntensity: 0 },
+            { month: 12, tempRange: [-5, 2],  daylight: 9.0,  wind: 'light', heatmapIntensity: 0 }
+          ]
+        },
+        conditions: {
+          roads: 'Excellent. French Alpine roads well-maintained. Cycling infrastructure on Alpe d\'Huez.',
+          water: 'Frequent villages and caf\u00E9s in valleys. Carry extra for high passes.',
+          bikeShops: 'Bourg d\'Oisans (base of Alpe d\'Huez), Briançon, Grenoble.',
+          rental: 'Good availability in Bourg d\'Oisans. Book ahead for Tour de France weeks.',
+          specialRisks: 'Afternoon thunderstorms Jun\u2013Aug. Col du Galibier can be cold even in summer. Tour de France weeks bring massive crowds.'
+        },
+        zones: [
+          { id: 'alps-alpe-dhuez', name: 'Alpe d\'Huez & Oisans Valley', character: 'The most famous climb in cycling. 21 numbered hairpins. Bourg d\'Oisans as the base.', difficulty: 'advanced', bestFor: ['Tour de France pilgrims', 'climbers'], routeIds: ['alps-alpe-dhuez'] },
+          { id: 'alps-galibier', name: 'Galibier & High Cols', character: 'Col du Galibier at 2,642m, Col du Lautaret, Col de la Croix de Fer. Epic high-altitude passes.', difficulty: 'expert', bestFor: ['altitude lovers', 'multi-pass days'], routeIds: ['alps-galibier'] }
+        ],
+        bases: [
+          { id: 'bourg-doisans', name: 'Bourg d\'Oisans', character: 'Base village of Alpe d\'Huez. Cycling shops, caf\u00E9s, and hotels catering to cyclists.', bestFor: 'Hub for Alpe d\'Huez and surrounding cols.', accessibleZoneIds: ['alps-alpe-dhuez', 'alps-galibier'], partnerIds: [], nearestAirportIATA: 'GNB', transferKm: 65 }
+        ],
+        deepDive: null
       },
+      // ── JAPAN (was shimanami in LOCATIONS) ──
       {
-        id: 'stelvio', name: 'Stelvio Pass', country: 'Italy', continent: 'Europe',
-        lat: 46.53, lng: 10.45, tagline: 'The highest paved pass in the Alps', color: '#8B5CF6',
-        desc: '2,757m of altitude and 48 hairpin turns from the Bormio side alone. The Stelvio is the Everest of European cycling. Open only in summer, it rewards those who conquer it with views stretching to the Dolomites.',
-        stats: { dur: '3–7 days', diff: 'Expert', season: 'Jun–Sep', price: '€1,100–2,400', group: '2–10', routes: 4 },
-        highlights: ['2,757m — highest paved Alpine pass', '48 hairpin bends from Bormio', 'Giro d\'Italia legendary summit finish', 'Three approach routes with different characters', 'Connected to Mortirolo and Gavia passes'],
-        images: [
-          'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1200&q=80',
-          'https://images.unsplash.com/photo-1477346611705-65d1883cee1e?w=1200&q=80',
-          'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&q=80',
-          'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80',
-          'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=1200&q=80'
-        ]
-      },
-      {
-        id: 'girona', name: 'Girona', country: 'Spain', continent: 'Europe',
-        lat: 41.98, lng: 2.82, tagline: 'Where the pros live & train', color: '#EC4899',
-        desc: 'The adopted home of professional cycling. More WorldTour riders live in Girona than any other city. Medieval streets lead to Mediterranean coast rides, Pyrenean foothills, and the best cycling café culture on Earth.',
-        stats: { dur: '5–14 days', diff: 'All levels', season: 'Mar–Nov', price: '€900–2,100', group: '2–20', routes: 7 },
-        highlights: ['Home to 50+ professional cyclists', 'Rocacorba: the local test climb', 'Costa Brava coastal routes', 'World-class cycling café culture', 'Gateway to the Pyrenees'],
-        images: [
-          'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1200&q=80',
-          'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80',
-          'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=1200&q=80',
-          'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&q=80',
-          'https://images.unsplash.com/photo-1528150230181-99bbf7b22162?w=1200&q=80'
-        ]
-      },
-      {
-        id: 'cape-town', name: 'Cape Town', country: 'South Africa', continent: 'Africa',
-        lat: -33.93, lng: 18.42, tagline: 'Where mountains meet the Atlantic', color: '#F59E0B',
-        desc: 'Chapman\'s Peak Drive is one of the world\'s most scenic coastal roads. Table Mountain as a backdrop to every ride. The Cape Town Cycle Tour is the world\'s largest timed cycling event with 35,000 riders.',
-        stats: { dur: '5–10 days', diff: 'Intermediate', season: 'Nov–Mar', price: '€700–1,600', group: '2–15', routes: 5 },
-        highlights: ['Chapman\'s Peak: world-class coastal road', 'Table Mountain backdrop on every ride', 'Cape Town Cycle Tour: 35,000 riders', 'Cape Winelands cycling routes', 'Southern hemisphere winter training'],
-        images: [
-          'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&q=80',
-          'https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?w=1200&q=80',
-          'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80',
-          'https://images.unsplash.com/photo-1609096100768-f0b74a64733a?w=1200&q=80',
-          'https://images.unsplash.com/photo-1496497243327-9dccd845c35f?w=1200&q=80'
-        ]
-      },
-      {
-        id: 'colombia', name: 'Colombia', country: 'Colombia', continent: 'South America',
-        lat: 6.25, lng: -75.56, tagline: 'Altitude, culture & café de origen', color: '#EF4444',
-        desc: 'The homeland of Egan Bernal, Nairo Quintana, and Rigoberto Urán. Alto de Letras is a 3,600m mega-climb. Train at altitude in the Andes while drinking the world\'s best coffee between switchbacks.',
-        stats: { dur: '7–14 days', diff: 'Advanced', season: 'Dec–Mar, Jun–Aug', price: '€600–1,400', group: '2–12', routes: 5 },
-        highlights: ['Alto de Letras: 80km single climb', 'Train at 2,600m altitude in Medellín', 'World-class Colombian coffee stops', 'Homeland of Grand Tour champions', 'Incredible value for money'],
-        images: [
-          'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=80',
-          'https://images.unsplash.com/photo-1568454537842-d933259bb258?w=1200&q=80',
-          'https://images.unsplash.com/photo-1501770118606-b1d640526693?w=1200&q=80',
-          'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=1200&q=80',
-          'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80'
-        ]
-      },
-      {
-        id: 'shimanami', name: 'Shimanami Kaido', country: 'Japan', continent: 'Asia',
-        lat: 34.25, lng: 133.18, tagline: 'Island-hopping by bicycle bridge', color: '#06B6D4',
+        id: 'japan', name: 'Shimanami Kaido', country: 'Japan', continent: 'Asia', flag: '\u{1F1EF}\u{1F1F5}',
+        lat: 34.25, lng: 133.18, color: '#06B6D4', regionId: 'seto-inland-sea',
+        tagline: 'Island-hopping by bicycle bridge',
         desc: 'A 70 km cycling road connecting six islands across the Seto Inland Sea via dedicated bicycle bridges. Japan\'s ultimate cycling pilgrimage. Flat, scenic, and punctuated by ramen stops, onsen baths, and Shinto shrines.',
-        stats: { dur: '2–5 days', diff: 'Beginner', season: 'Mar–May, Sep–Nov', price: '€800–1,800', group: '2–8', routes: 3 },
+        stats: { dur: '2\u20135 days', diff: 'Beginner', season: 'Mar\u2013May, Sep\u2013Nov', price: '\u20AC800\u20131,800', group: '2\u20138', routes: 3 },
         highlights: ['70 km dedicated cycling bridges', '6 islands connected across the sea', 'Japanese onsen baths at every stop', 'Flat, accessible for all abilities', 'Ramen, sushi & cultural immersion'],
         images: [
           'https://images.unsplash.com/photo-1528164344705-47542687000d?w=1200&q=80',
@@ -140,9 +610,151 @@
           'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=80',
           'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80',
           'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=1200&q=80'
-        ]
+        ],
+        image: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=1600&q=85',
+        airportIATA: ['HIJ', 'MYJ'], routeCount: 1, partnerCount: 2,
+        season: {
+          start: 3, end: 11, peak: [4, 5, 10, 11],
+          monthly: [
+            { month: 1,  tempRange: [2, 9],   daylight: 10.0, wind: 'light', heatmapIntensity: 0.05 },
+            { month: 2,  tempRange: [2, 10],  daylight: 10.5, wind: 'light', heatmapIntensity: 0.1 },
+            { month: 3,  tempRange: [5, 14],  daylight: 12.0, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 4,  tempRange: [10, 20], daylight: 13.5, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 5,  tempRange: [15, 24], daylight: 14.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 6,  tempRange: [19, 27], daylight: 14.5, wind: 'light', heatmapIntensity: 0.3 },
+            { month: 7,  tempRange: [23, 31], daylight: 14.5, wind: 'light', heatmapIntensity: 0.2 },
+            { month: 8,  tempRange: [24, 32], daylight: 13.5, wind: 'light', heatmapIntensity: 0.2 },
+            { month: 9,  tempRange: [20, 28], daylight: 12.5, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 10, tempRange: [14, 23], daylight: 11.5, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 11, tempRange: [8, 17],  daylight: 10.5, wind: 'light', heatmapIntensity: 0.7 },
+            { month: 12, tempRange: [4, 12],  daylight: 10.0, wind: 'light', heatmapIntensity: 0.1 }
+          ]
+        },
+        conditions: {
+          roads: 'Dedicated cycling lanes on bridges. Island roads quiet and well-paved.',
+          water: 'Konbini (convenience stores) every few km. Vending machines everywhere.',
+          bikeShops: 'Onomichi and Imabari. Rental stations along the route.',
+          rental: 'Giant store in Onomichi. Rental stations with drop-off at the other end.',
+          specialRisks: 'Rainy season (tsuyu) Jun\u2013Jul. Typhoon risk Aug\u2013Sep. Bridges close in high winds.'
+        },
+        zones: [
+          { id: 'japan-shimanami', name: 'Shimanami Kaido Bridge Route', character: 'The full 70 km island-hopping route from Onomichi to Imabari via six islands and dedicated cycling bridges.', difficulty: 'beginner', bestFor: ['all abilities', 'cultural immersion', 'families'], routeIds: ['japan-shimanami'] }
+        ],
+        bases: [
+          { id: 'onomichi', name: 'Onomichi', character: 'Hillside port town. Temple walks, cat alleys, ramen street. The traditional starting point.', bestFor: 'Start point. Cultural richness. Giant rental shop.', accessibleZoneIds: ['japan-shimanami'], partnerIds: [], nearestAirportIATA: 'HIJ', transferKm: 80 }
+        ],
+        deepDive: null
+      },
+      // ── GIRONA (globe-only, no routes yet) ──
+      {
+        id: 'girona', name: 'Girona', country: 'Spain', continent: 'Europe', flag: '\u{1F1EA}\u{1F1F8}',
+        lat: 41.98, lng: 2.82, color: '#EC4899', regionId: 'catalonia',
+        tagline: 'Where the pros live & train',
+        desc: 'The adopted home of professional cycling. More WorldTour riders live in Girona than any other city. Medieval streets lead to Mediterranean coast rides, Pyrenean foothills, and the best cycling caf\u00E9 culture on Earth.',
+        stats: { dur: '5\u201314 days', diff: 'All levels', season: 'Mar\u2013Nov', price: '\u20AC900\u20132,100', group: '2\u201320', routes: 7 },
+        highlights: ['Home to 50+ professional cyclists', 'Rocacorba: the local test climb', 'Costa Brava coastal routes', 'World-class cycling caf\u00E9 culture', 'Gateway to the Pyrenees'],
+        images: [
+          'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1200&q=80',
+          'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=80',
+          'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=1200&q=80',
+          'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=1200&q=80',
+          'https://images.unsplash.com/photo-1528150230181-99bbf7b22162?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1200&q=80',
+        airportIATA: ['GRO', 'BCN'], routeCount: 0, partnerCount: 0,
+        season: {
+          start: 3, end: 11, peak: [4, 5, 9, 10],
+          monthly: [
+            { month: 1,  tempRange: [3, 12],  daylight: 9.5,  wind: 'light-tramontana', heatmapIntensity: 0.1 },
+            { month: 2,  tempRange: [4, 13],  daylight: 10.5, wind: 'light-tramontana', heatmapIntensity: 0.2 },
+            { month: 3,  tempRange: [6, 16],  daylight: 12.0, wind: 'light', heatmapIntensity: 0.55 },
+            { month: 4,  tempRange: [9, 19],  daylight: 13.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 5,  tempRange: [13, 23], daylight: 14.5, wind: 'light', heatmapIntensity: 0.9 },
+            { month: 6,  tempRange: [17, 28], daylight: 15.5, wind: 'light', heatmapIntensity: 0.75 },
+            { month: 7,  tempRange: [20, 31], daylight: 15.5, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 8,  tempRange: [20, 31], daylight: 14.0, wind: 'light', heatmapIntensity: 0.45 },
+            { month: 9,  tempRange: [17, 27], daylight: 12.5, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 10, tempRange: [13, 22], daylight: 11.5, wind: 'light', heatmapIntensity: 0.65 },
+            { month: 11, tempRange: [8, 16],  daylight: 10.0, wind: 'light-tramontana', heatmapIntensity: 0.25 },
+            { month: 12, tempRange: [4, 12],  daylight: 9.5,  wind: 'light-tramontana', heatmapIntensity: 0.1 }
+          ]
+        },
+        conditions: null, zones: [], bases: [], deepDive: null
+      },
+      // ── CAPE TOWN (globe-only, no routes yet) ──
+      {
+        id: 'cape-town', name: 'Cape Town', country: 'South Africa', continent: 'Africa', flag: '\u{1F1FF}\u{1F1E6}',
+        lat: -33.93, lng: 18.42, color: '#F59E0B', regionId: 'western-cape',
+        tagline: 'Where mountains meet the Atlantic',
+        desc: 'Chapman\'s Peak Drive is one of the world\'s most scenic coastal roads. Table Mountain as a backdrop to every ride. The Cape Town Cycle Tour is the world\'s largest timed cycling event with 35,000 riders.',
+        stats: { dur: '5\u201310 days', diff: 'Intermediate', season: 'Nov\u2013Mar', price: '\u20AC700\u20131,600', group: '2\u201315', routes: 5 },
+        highlights: ['Chapman\'s Peak: world-class coastal road', 'Table Mountain backdrop on every ride', 'Cape Town Cycle Tour: 35,000 riders', 'Cape Winelands cycling routes', 'Southern hemisphere winter training'],
+        images: [
+          'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&q=80',
+          'https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?w=1200&q=80',
+          'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80',
+          'https://images.unsplash.com/photo-1609096100768-f0b74a64733a?w=1200&q=80',
+          'https://images.unsplash.com/photo-1496497243327-9dccd845c35f?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1200&q=80',
+        airportIATA: ['CPT'], routeCount: 0, partnerCount: 0,
+        season: {
+          start: 11, end: 3, peak: [12, 1, 2],
+          monthly: [
+            { month: 1,  tempRange: [16, 28], daylight: 14.5, wind: 'strong-SE', heatmapIntensity: 0.85 },
+            { month: 2,  tempRange: [16, 28], daylight: 13.5, wind: 'strong-SE', heatmapIntensity: 0.8 },
+            { month: 3,  tempRange: [15, 26], daylight: 12.5, wind: 'moderate', heatmapIntensity: 0.6 },
+            { month: 4,  tempRange: [12, 23], daylight: 11.5, wind: 'light', heatmapIntensity: 0.3 },
+            { month: 5,  tempRange: [10, 20], daylight: 10.5, wind: 'moderate-NW', heatmapIntensity: 0.1 },
+            { month: 6,  tempRange: [8, 18],  daylight: 10.0, wind: 'moderate-NW', heatmapIntensity: 0.05 },
+            { month: 7,  tempRange: [7, 17],  daylight: 10.0, wind: 'moderate-NW', heatmapIntensity: 0.05 },
+            { month: 8,  tempRange: [8, 18],  daylight: 10.5, wind: 'moderate-NW', heatmapIntensity: 0.1 },
+            { month: 9,  tempRange: [9, 20],  daylight: 11.5, wind: 'moderate', heatmapIntensity: 0.2 },
+            { month: 10, tempRange: [11, 23], daylight: 12.5, wind: 'moderate-SE', heatmapIntensity: 0.4 },
+            { month: 11, tempRange: [13, 25], daylight: 13.5, wind: 'strong-SE', heatmapIntensity: 0.7 },
+            { month: 12, tempRange: [15, 27], daylight: 14.5, wind: 'strong-SE', heatmapIntensity: 0.85 }
+          ]
+        },
+        conditions: null, zones: [], bases: [], deepDive: null
+      },
+      // ── COLOMBIA (globe-only, no routes yet) ──
+      {
+        id: 'colombia', name: 'Colombia', country: 'Colombia', continent: 'South America', flag: '\u{1F1E8}\u{1F1F4}',
+        lat: 6.25, lng: -75.56, color: '#EF4444', regionId: 'colombian-andes',
+        tagline: 'Altitude, culture & caf\u00E9 de origen',
+        desc: 'The homeland of Egan Bernal, Nairo Quintana, and Rigoberto Ur\u00E1n. Alto de Letras is a 3,600m mega-climb. Train at altitude in the Andes while drinking the world\'s best coffee between switchbacks.',
+        stats: { dur: '7\u201314 days', diff: 'Advanced', season: 'Dec\u2013Mar, Jun\u2013Aug', price: '\u20AC600\u20131,400', group: '2\u201312', routes: 5 },
+        highlights: ['Alto de Letras: 80km single climb', 'Train at 2,600m altitude in Medell\u00EDn', 'World-class Colombian coffee stops', 'Homeland of Grand Tour champions', 'Incredible value for money'],
+        images: [
+          'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=80',
+          'https://images.unsplash.com/photo-1568454537842-d933259bb258?w=1200&q=80',
+          'https://images.unsplash.com/photo-1501770118606-b1d640526693?w=1200&q=80',
+          'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=1200&q=80',
+          'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80'
+        ],
+        image: 'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=1200&q=80',
+        airportIATA: ['MDE', 'BOG'], routeCount: 0, partnerCount: 0,
+        season: {
+          start: 12, end: 3, peak: [1, 2],
+          monthly: [
+            { month: 1,  tempRange: [15, 27], daylight: 12.0, wind: 'light', heatmapIntensity: 0.8 },
+            { month: 2,  tempRange: [15, 27], daylight: 12.0, wind: 'light', heatmapIntensity: 0.85 },
+            { month: 3,  tempRange: [15, 27], daylight: 12.0, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 4,  tempRange: [15, 26], daylight: 12.0, wind: 'light', heatmapIntensity: 0.25 },
+            { month: 5,  tempRange: [15, 25], daylight: 12.5, wind: 'light', heatmapIntensity: 0.15 },
+            { month: 6,  tempRange: [14, 26], daylight: 12.5, wind: 'light', heatmapIntensity: 0.5 },
+            { month: 7,  tempRange: [14, 27], daylight: 12.5, wind: 'light', heatmapIntensity: 0.6 },
+            { month: 8,  tempRange: [14, 27], daylight: 12.5, wind: 'light', heatmapIntensity: 0.55 },
+            { month: 9,  tempRange: [14, 26], daylight: 12.0, wind: 'light', heatmapIntensity: 0.2 },
+            { month: 10, tempRange: [15, 25], daylight: 12.0, wind: 'light', heatmapIntensity: 0.15 },
+            { month: 11, tempRange: [15, 25], daylight: 12.0, wind: 'light', heatmapIntensity: 0.2 },
+            { month: 12, tempRange: [15, 27], daylight: 12.0, wind: 'light', heatmapIntensity: 0.7 }
+          ]
+        },
+        conditions: null, zones: [], bases: [], deepDive: null
       }
     ];
+
 
     /* ═══════════════════════════════════════════
        2. RACE CALENDAR
@@ -330,7 +942,10 @@
           { url: 'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=1600&q=85', caption: 'Winding road through the Vega de Río Palmas toward the ancient capital', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1548025146-ed39dc5f04e4?w=1600&q=85',
-        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['volcanic', 'climbing', 'year-round'], isNew: false, isFeatured: true
+        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['volcanic', 'climbing', 'year-round'], isNew: false, isFeatured: true,
+        effortCategory: 'full-day-moderate',
+        accessibleFromBases: ['corralejo', 'costa-calma', 'las-playitas'],
+        confidence: { waterFrequency: 'every-18km', phoneSignal: 'good', nearestBikeShop: 'Corralejo 30km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+34 112', offlineMapAvailable: true }
       },
       {
         id: 'fuerte-cofete', destinationId: 'fuerteventura', name: 'Cofete Peninsula', subtitle: 'Remote beach road to the island\'s wild edge',
@@ -350,7 +965,10 @@
           { url: 'https://images.unsplash.com/photo-1663931340881-bf00526cd9f5?w=1600&q=85', caption: 'Rough gravel track descending through volcanic terrain to the coast', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1568051243851-f9b136146e97?w=1600&q=85',
-        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['gravel', 'adventure', 'remote', 'wind'], isNew: true, isFeatured: false
+        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['gravel', 'adventure', 'remote', 'wind'], isNew: true, isFeatured: false,
+        effortCategory: 'half-day-hard',
+        accessibleFromBases: ['costa-calma'],
+        confidence: { waterFrequency: 'scarce', phoneSignal: 'poor', nearestBikeShop: 'Morro Jable 15km', surfaceBreakdown: '40% asphalt / 60% gravel', emergencyContacts: '+34 112', offlineMapAvailable: true }
       },
       {
         id: 'fuerte-coastal', destinationId: 'fuerteventura', name: 'Coastal North Circuit', subtitle: 'Flat speed run along turquoise lagoons',
@@ -370,7 +988,10 @@
           { url: 'https://images.unsplash.com/photo-1530538095376-a4936b35b5f0?w=1600&q=85', caption: 'Turquoise lagoons near El Cotillo — perfect post-ride recovery pools', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1710277412488-cc28392a8867?w=1600&q=85',
-        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['flat', 'coastal', 'recovery', 'year-round'], isNew: false, isFeatured: false
+        country: 'Spain', region: 'Canary Islands', flag: '🇪🇸', tags: ['flat', 'coastal', 'recovery', 'year-round'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-easy',
+        accessibleFromBases: ['corralejo'],
+        confidence: { waterFrequency: 'every-15km', phoneSignal: 'excellent', nearestBikeShop: 'Corralejo 5km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+34 112', offlineMapAvailable: true }
       },
       // ── ROMANIA (4 routes) ──
       {
@@ -396,7 +1017,10 @@
           { url: 'https://images.unsplash.com/photo-1589810876123-5d9e4f48184e?w=1600&q=85', caption: 'Sibiu\'s Piața Mare with its iconic pastel merchant houses and "eye" dormers', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1561196393-d9ef90aa4d4f?w=1600&q=85',
-        country: 'Romania', region: 'Făgăraș Mountains', flag: '🇷🇴', tags: ['epic', 'climbing', 'alpine', 'switchbacks', 'multi-day'], isNew: false, isFeatured: true
+        country: 'Romania', region: 'Făgăraș Mountains', flag: '🇷🇴', tags: ['epic', 'climbing', 'alpine', 'switchbacks', 'multi-day'], isNew: false, isFeatured: true,
+        effortCategory: 'multi-day',
+        accessibleFromBases: ['sibiu', 'curtea-de-arges'],
+        confidence: { waterFrequency: 'every-20km', phoneSignal: 'poor-above-1500m', nearestBikeShop: 'Sibiu 45km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+40 112', offlineMapAvailable: true }
       },
       {
         id: 'ro-transalpina', destinationId: 'romania', name: 'Transalpina', subtitle: 'Romania\'s highest paved road — wilder, quieter, harder',
@@ -420,7 +1044,10 @@
           { url: 'https://images.unsplash.com/photo-1758707686634-60415a54ee68?w=1600&q=85', caption: 'Transhumant shepherd flocks crossing high mountain meadows along the Transalpina corridor', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=85',
-        country: 'Romania', region: 'Parâng Mountains', flag: '🇷🇴', tags: ['epic', 'climbing', 'alpine', 'remote', 'multi-day'], isNew: false, isFeatured: false
+        country: 'Romania', region: 'Parâng Mountains', flag: '🇷🇴', tags: ['epic', 'climbing', 'alpine', 'remote', 'multi-day'], isNew: false, isFeatured: false,
+        effortCategory: 'multi-day',
+        accessibleFromBases: ['sibiu'],
+        confidence: { waterFrequency: 'every-25km', phoneSignal: 'poor', nearestBikeShop: 'Sibiu 50km', surfaceBreakdown: '95% asphalt / 5% gravel patches', emergencyContacts: '+40 112', offlineMapAvailable: true }
       },
       {
         id: 'ro-balea', destinationId: 'romania', name: 'Bâlea Lac Loop', subtitle: 'Summit assault — north face only, maximum climbing',
@@ -439,7 +1066,10 @@
           { url: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=85', caption: 'The north face switchbacks visible from the Bâlea valley — cycling\'s most recognizable climb in Eastern Europe', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=85',
-        country: 'Romania', region: 'Făgăraș Mountains', flag: '🇷🇴', tags: ['climbing', 'switchbacks', 'day-ride'], isNew: false, isFeatured: false
+        country: 'Romania', region: 'Făgăraș Mountains', flag: '🇷🇴', tags: ['climbing', 'switchbacks', 'day-ride'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-hard',
+        accessibleFromBases: ['sibiu'],
+        confidence: { waterFrequency: 'every-20km', phoneSignal: 'poor-above-1500m', nearestBikeShop: 'Sibiu 45km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+40 112', offlineMapAvailable: true }
       },
       {
         id: 'ro-cheia', destinationId: 'romania', name: 'Cheia Pass', subtitle: 'Transylvanian gateway through the Ciucaș foothills',
@@ -459,7 +1089,10 @@
           { url: 'https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=1600&q=85', caption: 'The medieval Black Church in Brașov, southeastern Europe\'s largest Gothic church', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=85',
-        country: 'Romania', region: 'Ciucaș Mountains', flag: '🇷🇴', tags: ['forest', 'moderate', 'scenic', 'day-ride'], isNew: false, isFeatured: false
+        country: 'Romania', region: 'Ciucaș Mountains', flag: '🇷🇴', tags: ['forest', 'moderate', 'scenic', 'day-ride'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-moderate',
+        accessibleFromBases: [],
+        confidence: { waterFrequency: 'every-15km', phoneSignal: 'moderate', nearestBikeShop: 'Brasov 60km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+40 112', offlineMapAvailable: true }
       },
       // ── CRETE (3 routes) ──
       {
@@ -480,7 +1113,10 @@
           { url: 'https://images.unsplash.com/photo-1586861203927-800a5acdcc4d?w=1600&q=85', caption: 'Climbing through olive groves toward the Omalos plateau above Chania', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1656861679110-a632ad041c13?w=1600&q=85',
-        country: 'Greece', region: 'White Mountains', flag: '🇬🇷', tags: ['climbing', 'gorge', 'coastal', 'scenic'], isNew: false, isFeatured: true
+        country: 'Greece', region: 'White Mountains', flag: '🇬🇷', tags: ['climbing', 'gorge', 'coastal', 'scenic'], isNew: false, isFeatured: true,
+        effortCategory: 'full-day-moderate',
+        accessibleFromBases: ['chania'],
+        confidence: { waterFrequency: 'every-15km', phoneSignal: 'moderate', nearestBikeShop: 'Chania 20km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+30 112', offlineMapAvailable: true }
       },
       {
         id: 'crete-white-mtns', destinationId: 'crete', name: 'White Mountains Loop', subtitle: 'Multi-day traverse of Crete\'s untamed heart',
@@ -504,7 +1140,10 @@
           { url: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=1600&q=85', caption: 'Hora Sfakion\'s tiny harbor — the "Spartan" stronghold wedged between cliffs and sea', afterParagraph: 1 }
         ],
         image: 'https://images.unsplash.com/photo-1504512485720-7d83a16ee930?w=1600&q=85',
-        country: 'Greece', region: 'White Mountains', flag: '🇬🇷', tags: ['epic', 'multi-day', 'remote', 'climbing', 'adventure'], isNew: true, isFeatured: false
+        country: 'Greece', region: 'White Mountains', flag: '🇬🇷', tags: ['epic', 'multi-day', 'remote', 'climbing', 'adventure'], isNew: true, isFeatured: false,
+        effortCategory: 'multi-day',
+        accessibleFromBases: ['chania'],
+        confidence: { waterFrequency: 'every-20km', phoneSignal: 'poor-in-mountains', nearestBikeShop: 'Chania 30km', surfaceBreakdown: '90% asphalt / 10% gravel', emergencyContacts: '+30 112', offlineMapAvailable: true }
       },
       {
         id: 'crete-south-coast', destinationId: 'crete', name: 'South Coast Cruise', subtitle: 'Laid-back coastal roll along the Libyan Sea',
@@ -524,7 +1163,10 @@
           { url: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=85', caption: 'Cretan taverna table: dakos, fresh fish, and olive oil — the cyclist\'s reward', afterParagraph: 3 }
         ],
         image: 'https://images.unsplash.com/photo-1515859005217-8a1f08870f59?w=1600&q=85',
-        country: 'Greece', region: 'South Crete', flag: '🇬🇷', tags: ['coastal', 'flat', 'recovery', 'warm'], isNew: false, isFeatured: false
+        country: 'Greece', region: 'South Crete', flag: '🇬🇷', tags: ['coastal', 'flat', 'recovery', 'warm'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-easy',
+        accessibleFromBases: ['chania'],
+        confidence: { waterFrequency: 'every-12km', phoneSignal: 'good', nearestBikeShop: 'Chania 40km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+30 112', offlineMapAvailable: true }
       },
       // ── CLASSIC EUROPEAN + JAPAN (6 routes, lighter data) ──
       {
@@ -545,7 +1187,10 @@
           { url: 'https://images.unsplash.com/photo-1744718734621-b3b19a39b999?w=1600&q=85', caption: 'Torrent de Pareis gorge at sea level — a natural cathedral of limestone walls', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1640188223456-f5e5b33615fc?w=1600&q=85',
-        country: 'Spain', region: 'Mallorca', flag: '🇪🇸', tags: ['climbing', 'hairpins', 'iconic', 'pro-training'], isNew: false, isFeatured: false
+        country: 'Spain', region: 'Mallorca', flag: '🇪🇸', tags: ['climbing', 'hairpins', 'iconic', 'pro-training'], isNew: false, isFeatured: false,
+        effortCategory: 'half-day-hard',
+        accessibleFromBases: ['palma'],
+        confidence: { waterFrequency: 'every-15km', phoneSignal: 'good', nearestBikeShop: 'Palma 30km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+34 112', offlineMapAvailable: true }
       },
       {
         id: 'italy-strade-bianche', destinationId: 'tuscany', name: 'Strade Bianche', subtitle: 'Tuscany\'s white gravel roads — the race route',
@@ -565,7 +1210,10 @@
           { url: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1600&q=85', caption: 'Siena\'s Piazza del Campo — the shell-shaped finish line of the Strade Bianche race', afterParagraph: 3 }
         ],
         image: 'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=1600&q=85',
-        country: 'Italy', region: 'Tuscany', flag: '🇮🇹', tags: ['gravel', 'iconic', 'race-route', 'rolling'], isNew: false, isFeatured: false
+        country: 'Italy', region: 'Tuscany', flag: '🇮🇹', tags: ['gravel', 'iconic', 'race-route', 'rolling'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-moderate',
+        accessibleFromBases: ['siena'],
+        confidence: { waterFrequency: 'every-12km', phoneSignal: 'good', nearestBikeShop: 'Siena 5km', surfaceBreakdown: '55% asphalt / 45% white gravel', emergencyContacts: '+39 112', offlineMapAvailable: true }
       },
       {
         id: 'italy-stelvio', destinationId: 'dolomites', name: 'Passo dello Stelvio', subtitle: 'The king of Alpine passes — 48 hairpins to 2,758m',
@@ -585,7 +1233,10 @@
           { url: 'https://images.unsplash.com/photo-1755874851336-2b6c6c94690b?w=1600&q=85', caption: 'Snow walls lining the road in June near the Stelvio summit — a dramatic alpine tunnel', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=1600&q=85',
-        country: 'Italy', region: 'South Tyrol', flag: '🇮🇹', tags: ['epic', 'climbing', 'alpine', 'hairpins', 'iconic'], isNew: false, isFeatured: false
+        country: 'Italy', region: 'South Tyrol', flag: '🇮🇹', tags: ['epic', 'climbing', 'alpine', 'hairpins', 'iconic'], isNew: false, isFeatured: false,
+        effortCategory: 'half-day-hard',
+        accessibleFromBases: ['bormio'],
+        confidence: { waterFrequency: 'every-10km', phoneSignal: 'moderate', nearestBikeShop: 'Bormio 3km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+39 112', offlineMapAvailable: true }
       },
       {
         id: 'france-alpe-dhuez', destinationId: 'alps', name: 'Alpe d\'Huez', subtitle: '21 legendary hairpins — cycling\'s most storied climb',
@@ -605,7 +1256,10 @@
           { url: 'https://images.unsplash.com/photo-1530143311094-34d807799e8f?w=1600&q=85', caption: 'A hairpin bend bearing a Tour de France champion\'s name — the unique countdown experience', afterParagraph: 2 }
         ],
         image: 'https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?w=1600&q=85',
-        country: 'France', region: 'Isère Alps', flag: '🇫🇷', tags: ['climbing', 'iconic', 'tour-de-france', 'hairpins'], isNew: false, isFeatured: false
+        country: 'France', region: 'Isère Alps', flag: '🇫🇷', tags: ['climbing', 'iconic', 'tour-de-france', 'hairpins'], isNew: false, isFeatured: false,
+        effortCategory: 'half-day-hard',
+        accessibleFromBases: ['bourg-doisans'],
+        confidence: { waterFrequency: 'every-8km', phoneSignal: 'good', nearestBikeShop: 'Bourg d\'Oisans 1km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+33 112', offlineMapAvailable: true }
       },
       {
         id: 'france-galibier', destinationId: 'alps', name: 'Col du Galibier', subtitle: 'Where the Tour\'s fate is decided — 2,642m of suffering',
@@ -625,7 +1279,10 @@
           { url: 'https://images.unsplash.com/photo-1666870981007-fb95c18e7e18?w=1600&q=85', caption: 'The Desgrange memorial near the summit — a pilgrimage site for Tour de France devotees', afterParagraph: 3 }
         ],
         image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=85',
-        country: 'France', region: 'Savoie Alps', flag: '🇫🇷', tags: ['epic', 'climbing', 'alpine', 'tour-de-france'], isNew: false, isFeatured: false
+        country: 'France', region: 'Savoie Alps', flag: '🇫🇷', tags: ['epic', 'climbing', 'alpine', 'tour-de-france'], isNew: false, isFeatured: false,
+        effortCategory: 'full-day-hard',
+        accessibleFromBases: ['bourg-doisans'],
+        confidence: { waterFrequency: 'every-15km', phoneSignal: 'moderate', nearestBikeShop: 'Bourg d\'Oisans 20km', surfaceBreakdown: '100% asphalt', emergencyContacts: '+33 112', offlineMapAvailable: true }
       },
       {
         id: 'japan-shimanami', destinationId: 'japan', name: 'Shimanami Kaido', subtitle: 'Island-hopping across the Seto Inland Sea',
@@ -645,7 +1302,10 @@
           { url: 'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=1600&q=85', caption: 'Cherry blossom season along the Shimanami Kaido — Japan at its most beautiful', afterParagraph: 0 }
         ],
         image: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=1600&q=85',
-        country: 'Japan', region: 'Seto Inland Sea', flag: '🇯🇵', tags: ['flat', 'coastal', 'island-hopping', 'beginner-friendly', 'iconic'], isNew: true, isFeatured: false
+        country: 'Japan', region: 'Seto Inland Sea', flag: '🇯🇵', tags: ['flat', 'coastal', 'island-hopping', 'beginner-friendly', 'iconic'], isNew: true, isFeatured: false,
+        effortCategory: 'full-day-easy',
+        accessibleFromBases: ['onomichi'],
+        confidence: { waterFrequency: 'every-5km', phoneSignal: 'excellent', nearestBikeShop: 'Onomichi 0km (at start)', surfaceBreakdown: '100% asphalt (dedicated cycling path)', emergencyContacts: '+81 110', offlineMapAvailable: true }
       }
     ];
 
@@ -972,221 +1632,28 @@
     };
 
     /* ═══════════════════════════════════════════
-       ROMANIA DEEP DIVE DATA
-       ═══════════════════════════════════════════ */
-    var ROMANIA_DEEP_DIVE = {
-      intro: 'Romania is cycling\'s last great secret. While Mallorca and Tuscany crowd with carbon-clad pelotons, the Carpathians offer equally dramatic climbing at a fraction of the cost — and without the traffic. The Transfăgărășan alone has more vertical per kilometer than the Stelvio.',
-      routeIds: ['ro-transfagarasan', 'ro-transalpina', 'ro-balea', 'ro-cheia'],
-      partnerIds: ['p-ro-hilton-sibiu', 'p-ro-bikero', 'p-ro-bike-rental', 'p-ro-shuttle', 'p-ro-posada', 'p-ro-recovery'],
-      seasonBar: [
-        { month: 'Jan', open: false, note: 'Roads closed — snow' },
-        { month: 'Feb', open: false, note: 'Roads closed — snow' },
-        { month: 'Mar', open: false, note: 'Roads closed — snow' },
-        { month: 'Apr', open: false, note: 'Roads closed — snow' },
-        { month: 'May', open: false, note: 'Cheia Pass may open late May' },
-        { month: 'Jun', open: true, note: 'Season opens — snow walls, cool temps, quiet roads' },
-        { month: 'Jul', open: true, note: 'Peak season — warm, long days, some tourist traffic' },
-        { month: 'Aug', open: true, note: 'Peak season — busiest month, start rides early' },
-        { month: 'Sep', open: true, note: 'Shoulder — autumn colors begin, cooler summits' },
-        { month: 'Oct', open: true, note: 'Late season — stunning foliage, cold summits, roads may close late Oct' },
-        { month: 'Nov', open: false, note: 'Roads closing — snow risk' },
-        { month: 'Dec', open: false, note: 'Roads closed — snow' }
-      ],
-      culturalHighlights: [
-        { title: 'Medieval Sibiu', description: 'European Capital of Culture 2007. Cobblestone squares, baroque architecture, and Romania\'s best restaurant scene.', icon: 'monument' },
-        { title: 'Shepherd Traditions', description: 'High mountain shepherds still make cheese in traditional stâni. Stop for fresh cașcaval and a glass of jinars.', icon: 'dining' },
-        { title: 'Țuică & Palincă', description: 'Romania\'s legendary plum brandy. Every village has a master distiller. The double-distilled palincă will reset your legs.', icon: 'wine' },
-        { title: 'Fortified Churches', description: 'UNESCO-listed Saxon fortified churches dot the Transylvanian hills. 7 are World Heritage sites within riding distance of Sibiu.', icon: 'book' }
-      ],
-      costComparison: [
-        { destination: 'Romania', hotel: 52, guide: 55, rental: 30, meal: 12, coffee: 2, beer: 2, total7day: 680, currency: 'EUR' },
-        { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
-        { destination: 'French Alps', hotel: 88, guide: 95, rental: 65, meal: 32, coffee: 5, beer: 6, total7day: 1450, currency: 'EUR' },
-        { destination: 'Tuscany', hotel: 160, guide: 90, rental: 50, meal: 35, coffee: 3, beer: 5, total7day: 1780, currency: 'EUR' }
-      ],
-      goldenKeyPackage: {
-        name: 'Carpathian Golden Key',
-        tagline: 'Zero-worry Transfăgărășan. Every detail handled.',
-        includes: ['Private guide + support vehicle all days', 'Hilton Sibiu + Hotel Posada accommodation', 'Carpathian Cycles premium bike', 'TransCarpath airport transfers + route shuttles', 'Therme Sibiu recovery sessions', 'Emergency mechanical support', 'Cultural stops: fortified churches + țuică tasting', 'Packed lunches + hydration on every ride', '24/7 concierge WhatsApp line'],
-        price7day: 1890,
-        savingsVsDIY: 340
-      }
-    };
-
-    /* ═══════════════════════════════════════════
-       CANARY ISLANDS DEEP DIVE DATA
-       ═══════════════════════════════════════════ */
-    var CANARY_ISLANDS_DEEP_DIVE = {
-      intro: 'Fuerteventura is European cycling\'s best-kept winter secret. Year-round sunshine, volcanic landscapes that look like another planet, and trade winds that turn every ride into a tactical challenge. At a fraction of Mallorca\'s cost, with near-zero traffic on inland roads.',
-      routeIds: ['fuerte-betancuria', 'fuerte-cofete', 'fuerte-coastal'],
-      partnerIds: ['p-fuerte-playitas', 'p-fuerte-bike-station', 'p-fuerte-wind-rides'],
-      seasonBar: [
-        { month: 'Jan', open: true, note: 'Peak — perfect training weather, 22-25°C' },
-        { month: 'Feb', open: true, note: 'Peak — dry, warm, pro teams everywhere' },
-        { month: 'Mar', open: true, note: 'Peak — ideal conditions, spring light' },
-        { month: 'Apr', open: true, note: 'Open — warming up, light trade winds' },
-        { month: 'May', open: true, note: 'Open — warm, occasional calima' },
-        { month: 'Jun', open: true, note: 'Open — hotter, strong trade winds begin' },
-        { month: 'Jul', open: false, note: 'Too hot — 35°C+, extreme winds' },
-        { month: 'Aug', open: false, note: 'Too hot — calima dust storms common' },
-        { month: 'Sep', open: false, note: 'Still hot — winds moderate late month' },
-        { month: 'Oct', open: true, note: 'Season reopens — warm, winds easing' },
-        { month: 'Nov', open: true, note: 'Open — excellent conditions return' },
-        { month: 'Dec', open: true, note: 'Open — mild, quiet roads, festive atmosphere' }
-      ],
-      culturalHighlights: [
-        { title: 'Volcanic Geology', description: 'Fuerteventura is 20 million years old — the Canaries\' oldest island. Ride through Miocene-era lava fields, ochre badlands, and volcanic calderas.', icon: 'distance' },
-        { title: 'Queso Majorero', description: 'Protected Designation of Origin goat cheese made from Majorero goats. Aged varieties have a nutty, paprika-rubbed rind. Buy fresh at Betancuria.', icon: 'dining' },
-        { title: 'Wind Culture', description: 'The NNE trade winds shape everything: architecture, agriculture, and cycling tactics. Local riders read wind like a second language.', icon: 'wind' },
-        { title: 'Norman Heritage', description: 'Jean de Béthencourt conquered the island in 1404. The ancient capital Betancuria preserves a Franciscan monastery and Museo Arqueológico.', icon: 'monument' }
-      ],
-      costComparison: [
-        { destination: 'Fuerteventura', hotel: 85, guide: 65, rental: 35, meal: 15, coffee: 2, beer: 3, total7day: 980, currency: 'EUR' },
-        { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
-        { destination: 'Tenerife', hotel: 95, guide: 70, rental: 40, meal: 18, coffee: 3, beer: 3, total7day: 1120, currency: 'EUR' },
-        { destination: 'Lanzarote', hotel: 90, guide: 68, rental: 38, meal: 16, coffee: 2, beer: 3, total7day: 1050, currency: 'EUR' }
-      ],
-      goldenKeyPackage: {
-        name: 'Volcanic Golden Key',
-        tagline: 'Zero-worry Fuerteventura. Sun, wind, and volcanic roads — all handled.',
-        includes: ['Private guide + support vehicle all days', 'Playitas Resort premium accommodation', 'Fuerte Bike Station carbon bike rental', 'Airport transfers + route shuttles', 'Wind Rides guided group sessions', 'Emergency mechanical support', 'Cultural stops: Betancuria + cheese tasting', 'Packed lunches + hydration on every ride', '24/7 concierge WhatsApp line'],
-        price7day: 2180,
-        savingsVsDIY: 380
-      }
-    };
-
-    /* ═══════════════════════════════════════════
-       CRETE DEEP DIVE DATA
-       ═══════════════════════════════════════════ */
-    var CRETE_DEEP_DIVE = {
-      intro: 'Crete is where ancient mountains meet the Libyan Sea. The White Mountains offer some of the Mediterranean\'s most dramatic climbing, while Cretan hospitality — raki after every meal, tavernas that refuse to let you pay for dessert — makes every ride feel like coming home.',
-      routeIds: ['crete-samaria', 'crete-white-mtns', 'crete-south-coast'],
-      partnerIds: ['p-crete-anemos', 'p-crete-bikes', 'p-crete-guide'],
-      seasonBar: [
-        { month: 'Jan', open: false, note: 'Mountain roads closed — cold, wet' },
-        { month: 'Feb', open: false, note: 'Mountain roads closed — snow possible' },
-        { month: 'Mar', open: false, note: 'Early spring — coastal rides possible but mountains closed' },
-        { month: 'Apr', open: true, note: 'Season opens — wildflowers, cool mountains' },
-        { month: 'May', open: true, note: 'Peak — perfect conditions, 20-26°C' },
-        { month: 'Jun', open: true, note: 'Peak — warm, long days, dry' },
-        { month: 'Jul', open: true, note: 'Open — hot (32°C+), start rides early' },
-        { month: 'Aug', open: true, note: 'Open — hottest month, beach recovery essential' },
-        { month: 'Sep', open: true, note: 'Peak — heat easing, sea still warm' },
-        { month: 'Oct', open: true, note: 'Peak — excellent conditions, fewer tourists' },
-        { month: 'Nov', open: true, note: 'Late season — cooler, first rains possible' },
-        { month: 'Dec', open: false, note: 'Mountain roads closing — rain season' }
-      ],
-      culturalHighlights: [
-        { title: 'Minoan Heritage', description: 'Europe\'s oldest civilization flourished here 4,000 years ago. Knossos palace and its frescoes are a rest-day must-visit from Chania.', icon: 'monument' },
-        { title: 'Cretan Cuisine', description: 'Dakos, kalitsounia, wild greens, and the world\'s finest olive oil. Every taverna meal ends with free raki and seasonal fruit.', icon: 'dining' },
-        { title: 'Resistance History', description: 'From Venetians to Ottomans to WWII Germans, Cretans never stopped fighting. The Imbros Gorge was an Allied evacuation route in 1941.', icon: 'book' },
-        { title: 'Raki Culture', description: 'Cretan grape brandy served after every meal, at every encounter, for every occasion. Refusing is impossible. Moderation is aspirational.', icon: 'wine' }
-      ],
-      costComparison: [
-        { destination: 'Crete', hotel: 110, guide: 50, rental: 38, meal: 18, coffee: 3, beer: 4, total7day: 1180, currency: 'EUR' },
-        { destination: 'Mallorca', hotel: 145, guide: 85, rental: 55, meal: 28, coffee: 4, beer: 5, total7day: 1620, currency: 'EUR' },
-        { destination: 'French Alps', hotel: 88, guide: 95, rental: 65, meal: 32, coffee: 5, beer: 6, total7day: 1450, currency: 'EUR' },
-        { destination: 'Tuscany', hotel: 160, guide: 90, rental: 50, meal: 35, coffee: 3, beer: 5, total7day: 1780, currency: 'EUR' }
-      ],
-      goldenKeyPackage: {
-        name: 'Minoan Golden Key',
-        tagline: 'Zero-worry Crete. Mountains, gorges, and the Libyan Sea — all handled.',
-        includes: ['Private guide + support vehicle all days', 'Anemos Luxury Grand Resort accommodation', 'Cretan Cycling premium bike rental', 'Airport transfers + route shuttles', 'Minoan Rides guided cultural tours', 'Emergency mechanical support', 'Cultural stops: olive oil tasting + monastery visits', 'Packed lunches + taverna dinners included', '24/7 concierge WhatsApp line'],
-        price7day: 2450,
-        savingsVsDIY: 420
-      }
-    };
-
-    /* ═══════════════════════════════════════════
-       DESTINATIONS — enhanced from original
-       ═══════════════════════════════════════════ */
-    var DESTINATIONS = [
-      {
-        id: 'fuerteventura', name: 'Fuerteventura', country: 'Spain', flag: '🇪🇸', region: 'Canary Islands',
-        tagline: 'Year-round volcanic cycling paradise',
-        season: { start: 9, end: 6, peak: [11, 12, 1, 2, 3] }, routeCount: 3, partnerCount: 3,
-        airports: ['fuerteventura'], airportIATA: ['FUE'],
-        image: 'https://images.unsplash.com/photo-1548025146-ed39dc5f04e4?w=1600&q=85',
-        highlights: ['Volcanic landscapes', 'Trade wind training', 'Year-round sun', 'Pro team base']
-      },
-      {
-        id: 'romania', name: 'Romania', country: 'Romania', flag: '🇷🇴', region: 'Carpathian Mountains',
-        tagline: 'Epic alpine climbs at unbeatable value',
-        season: { start: 6, end: 10, peak: [7, 8] }, routeCount: 4, partnerCount: 6,
-        airports: ['sibiu', 'bucharest'], airportIATA: ['SBZ', 'OTP'],
-        image: 'https://images.unsplash.com/photo-1561196393-d9ef90aa4d4f?w=1600&q=85',
-        highlights: ['Transfăgărășan', '2,000m+ summits', 'Medieval towns', 'Best value in Europe']
-      },
-      {
-        id: 'crete', name: 'Crete', country: 'Greece', flag: '🇬🇷', region: 'Greek Islands',
-        tagline: 'Ancient mountains meet the Libyan Sea',
-        season: { start: 4, end: 11, peak: [5, 6, 9, 10] }, routeCount: 3, partnerCount: 3,
-        airports: ['chania'], airportIATA: ['CHQ'],
-        image: 'https://images.unsplash.com/photo-1656861679110-a632ad041c13?w=1600&q=85',
-        highlights: ['White Mountains', 'Gorge climbs', 'Beach recovery', 'Cretan cuisine']
-      },
-      {
-        id: 'mallorca', name: 'Mallorca', country: 'Spain', flag: '🇪🇸', region: 'Balearic Islands',
-        tagline: 'The cycling capital of Europe',
-        season: { start: 3, end: 11, peak: [4, 5, 9, 10] }, routeCount: 1, partnerCount: 1,
-        airports: ['palma', 'mallorca'], airportIATA: ['PMI'],
-        image: 'https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?w=1600&q=85',
-        highlights: ['Sa Calobra descent', 'Serra de Tramuntana', '300 days of sun', 'Pro team base']
-      },
-      {
-        id: 'tuscany', name: 'Tuscany', country: 'Italy', flag: '🇮🇹', region: 'Central Italy',
-        tagline: 'White gravel roads & Chianti sunsets',
-        season: { start: 4, end: 10, peak: [5, 6, 9, 10] }, routeCount: 1, partnerCount: 1,
-        airports: ['florence', 'pisa', 'siena'], airportIATA: ['FLR', 'PSA'],
-        image: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?w=1600&q=85',
-        highlights: ['Strade Bianche route', 'Chianti vineyards', 'L\'Eroica festival', 'Agriturismo stays']
-      },
-      {
-        id: 'dolomites', name: 'Dolomites', country: 'Italy', flag: '🇮🇹', region: 'South Tyrol',
-        tagline: 'The king of Alpine passes — 48 hairpins to 2,758m',
-        season: { start: 6, end: 9, peak: [7, 8] }, routeCount: 1, partnerCount: 1,
-        airports: ['innsbruck', 'verona', 'bolzano', 'bormio'], airportIATA: ['INN', 'VRN'],
-        image: 'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1600&q=85',
-        highlights: ['Stelvio Pass 2,758m', '48 hairpin bends', 'Giro d\'Italia summit', 'Connected to Mortirolo']
-      },
-      {
-        id: 'alps', name: 'French Alps', country: 'France', flag: '🇫🇷', region: 'Isère & Savoie Alps',
-        tagline: 'Where the Tour de France is won and lost',
-        season: { start: 5, end: 9, peak: [6, 7, 8] }, routeCount: 2, partnerCount: 1,
-        airports: ['grenoble', 'lyon', 'geneva', 'chambery'], airportIATA: ['GNB', 'LYS'],
-        image: 'https://images.unsplash.com/photo-1530143584546-02191bc84eb5?w=1600&q=85',
-        highlights: ['Alpe d\'Huez 21 hairpins', 'Col du Galibier 2,642m', 'Tour de France history', 'Alpine scenery']
-      },
-      {
-        id: 'japan', name: 'Shimanami Kaido', country: 'Japan', flag: '🇯🇵', region: 'Seto Inland Sea',
-        tagline: 'Island-hopping by bicycle across the sea',
-        season: { start: 3, end: 11, peak: [4, 5, 10, 11] }, routeCount: 1, partnerCount: 2,
-        airports: ['hiroshima', 'onomichi', 'matsuyama'], airportIATA: ['HIJ', 'MYJ'],
-        image: 'https://images.unsplash.com/photo-1528164344705-47542687000d?w=1600&q=85',
-        highlights: ['70km cycling bridges', '6 islands connected', 'Japanese onsen baths', 'Flat & accessible']
-      }
-    ];
-
-    /* ═══════════════════════════════════════════
        CONFIGURATOR STATE — 7-step wizard
        ═══════════════════════════════════════════ */
     var CONFIGURATOR_STATE = {
       currentStep: 1,
       mode: 'standard',
       destination: null,
+      selectedBase: null,
       dates: { start: null, end: null, nights: 7 },
       selectedRoutes: [],
       accommodation: [],
       transport: { flight: null, shuttles: [], departureCity: null, flightSource: 'static' },
       services: { guide: null, rental: null, addons: [] },
       itinerary: [],
-      pricing: { subtotal: 0, memberDiscount: 0, goldenKeyPremium: 0, total: 0 }
+      pricing: { subtotal: 0, memberDiscount: 0, goldenKeyPremium: 0, total: 0 },
+      submitted: false
     };
 
     // Lookup maps for O(1) access by id
     var ROUTE_BY_ID = buildLookupMap(ROUTE_DATABASE);
     var PARTNER_BY_ID = buildLookupMap(PARTNERS_DATABASE);
     var DESTINATION_BY_ID = buildLookupMap(DESTINATIONS);
+    var REGION_BY_ID = buildLookupMap(REGIONS);
 
     var CONFIGURATOR_STEPS = [
       { num: 1, label: 'Destination', icon: 'distance' },
@@ -1274,14 +1741,14 @@
           '<div class="cl-cat-count">' + checkedCount + '/' + cat.items.length + '</div>' +
           '<div class="cl-cat-arrow">\u25BE</div>' +
           '</div>' +
-          '<div class="cl-items">' + cat.items.map(function (item, ii) {
+          '<div class="cl-items"><div class="cl-items-inner">' + cat.items.map(function (item, ii) {
             var key = ci + '-' + ii;
             return '<div class="cl-item' + (checkedItems.has(key) ? ' checked' : '') + '" onclick="toggleItem(this,\'' + key + '\',' + ci + ')">' +
               '<div class="cl-checkbox"></div>' +
               '<div class="cl-item-text">' + item.text + '</div>' +
               '<div class="cl-item-priority ' + item.priority + '">' + item.priority + '</div>' +
               '</div>';
-          }).join('') + '</div>' +
+          }).join('') + '</div></div>' +
           '</div>';
       }).join('');
       updateProgress();
@@ -1323,10 +1790,13 @@
        4. THREE.JS GLOBE
        ═══════════════════════════════════════════ */
     var globeScene, globeCamera, globeRenderer, globeGroup, markerMeshes = [];
+    var globeMarkers = []; // { regionId, dot, glow, ring, stem, intensity }
     var isGlobeInit = false, isDragging = false, autoRotate = true;
     var globeVisible = false, globeAnimId = null;
     var prevMouse = { x: 0, y: 0 }, mouseNDC;
     var raycaster;
+    var globeMonth = new Date().getMonth() + 1;
+    var globeSeasonality = true;
 
     function latLngToVec3(lat, lng, r) {
       var phi = (90 - lat) * (Math.PI / 180);
@@ -1366,14 +1836,309 @@
       return c;
     }
 
+    function getRegionHeatmap(regionId, month) {
+      var region = REGION_BY_ID[regionId];
+      if (!region) return 0;
+      var maxIntensity = 0;
+      region.subGeoIds.forEach(function (sgId) {
+        var dest = DESTINATION_BY_ID[sgId];
+        if (dest && dest.season && dest.season.monthly) {
+          var m = dest.season.monthly.find(function (mo) { return mo.month === month; });
+          if (m && m.heatmapIntensity > maxIntensity) maxIntensity = m.heatmapIntensity;
+        }
+      });
+      return maxIntensity;
+    }
+
+    function getRawHeatmap(regionId) {
+      var region = REGION_BY_ID[regionId];
+      if (!region) return 0;
+      var total = 0, count = 0;
+      region.subGeoIds.forEach(function (sgId) {
+        var dest = DESTINATION_BY_ID[sgId];
+        if (dest && dest.season && dest.season.monthly) {
+          dest.season.monthly.forEach(function (mo) {
+            total += mo.heatmapIntensity;
+            count++;
+          });
+        }
+      });
+      return count > 0 ? total / count : 0;
+    }
+
+    function getEffectiveIntensity(regionId) {
+      if (!globeSeasonality) return getRawHeatmap(regionId);
+      return getRegionHeatmap(regionId, globeMonth);
+    }
+
+    function intensityToMarkerProps(intensity) {
+      return {
+        dotSize: 0.008 + intensity * 0.008,
+        glowSize: 0.015 + intensity * 0.015,
+        glowOpacity: 0.1 + intensity * 0.4,
+        ringInner: 0.02 + intensity * 0.01,
+        ringOuter: 0.025 + intensity * 0.02,
+        ringOpacity: 0.15 + intensity * 0.35,
+        stemOpacity: 0.3 + intensity * 0.3
+      };
+    }
+
+    function seasonLabel(intensity) {
+      if (intensity >= 0.7) return 'Peak Season';
+      if (intensity >= 0.4) return 'Good Conditions';
+      if (intensity > 0) return 'Shoulder Season';
+      return 'Off Season';
+    }
+
+    function seasonColor(intensity) {
+      if (intensity >= 0.7) return '#44D62C';
+      if (intensity >= 0.4) return '#c9a96e';
+      if (intensity > 0) return '#F59E0B';
+      return '#EF4444';
+    }
+
+    function seasonLabelShort(intensity) {
+      if (intensity >= 0.7) return 'Peak';
+      if (intensity >= 0.4) return 'Good';
+      if (intensity > 0) return 'Shoulder';
+      return 'Off';
+    }
+
+    function buildOverlayHero(data) {
+      return '<div class="exp-hero">' +
+        '<img src="' + data.image + '" alt="' + data.name + '">' +
+        '<div class="exp-hero-overlay"></div>' +
+        '<div class="exp-hero-content">' +
+        '<div class="exp-eyebrow" style="color:' + data.color + '">' + data.continent + ' \u00B7 ' + data.country + '</div>' +
+        '<div class="exp-title">' + data.name.toUpperCase() + '</div>' +
+        '<div class="exp-tagline">' + data.tagline + '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function buildStatBar(stats) {
+      return '<div class="exp-stats">' +
+        stats.map(function (s) {
+          return '<div class="exp-stat">' +
+            '<div class="exp-stat-label">' + s.label + '</div>' +
+            '<div class="exp-stat-value"' + (s.color ? ' style="color:' + s.color + '"' : '') + '>' + s.value + '</div>' +
+            '</div>';
+        }).join('') +
+        '</div>';
+    }
+
+    function navigateToDestination(destId) {
+      closeExperience();
+      setTimeout(function () { openExperience(destId); }, 300);
+    }
+
+    function repaintGlobeMarkers(animate) {
+      var duration = animate ? 500 : 0;
+      var startTime = Date.now();
+      var startProps = globeMarkers.map(function (m) {
+        return {
+          glowScale: m.glow.scale.x,
+          glowOpacity: m.glow.material.opacity,
+          ringOpacity: m.ring.material.opacity,
+          stemOpacity: m.stem.material.opacity,
+          intensity: m.intensity
+        };
+      });
+      var targetProps = globeMarkers.map(function (m) {
+        return getEffectiveIntensity(m.regionId);
+      });
+
+      // Update sidebar pills
+      var pills = document.querySelectorAll('.loc-pill');
+      pills.forEach(function (pill, i) {
+        if (i < targetProps.length) {
+          pill.classList.toggle('peak', targetProps[i] >= 0.6);
+        }
+      });
+
+      // Update stat text
+      var peakCount = targetProps.filter(function (t) { return t >= 0.6; }).length;
+      var statEl = document.getElementById('globe-stat-text');
+      if (statEl) statEl.textContent = peakCount + ' in season · ' + REGIONS.length + ' regions';
+
+      if (!animate || duration === 0) {
+        globeMarkers.forEach(function (m, i) {
+          var p = intensityToMarkerProps(targetProps[i]);
+          m.glow.scale.setScalar(p.glowSize / 0.015);
+          m.glow.material.opacity = p.glowOpacity;
+          m.ring.material.opacity = p.ringOpacity;
+          m.stem.material.opacity = p.stemOpacity;
+          m.intensity = targetProps[i];
+        });
+        return;
+      }
+
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var t = Math.min(1, elapsed / duration);
+        var ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+        globeMarkers.forEach(function (m, i) {
+          var sp = startProps[i];
+          var tp = intensityToMarkerProps(targetProps[i]);
+          m.glow.scale.setScalar(sp.glowScale + (tp.glowSize / 0.015 - sp.glowScale) * ease);
+          m.glow.material.opacity = sp.glowOpacity + (tp.glowOpacity - sp.glowOpacity) * ease;
+          m.ring.material.opacity = sp.ringOpacity + (tp.ringOpacity - sp.ringOpacity) * ease;
+          m.stem.material.opacity = sp.stemOpacity + (tp.stemOpacity - sp.stemOpacity) * ease;
+          if (t >= 1) m.intensity = targetProps[i];
+        });
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      tick();
+    }
+
+    var MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function renderGlobeMonthBar() {
+      var bar = document.getElementById('globe-month-bar');
+      if (!bar) return;
+      // Compute global average intensity per month for heatmap coloring
+      var monthAvgs = [];
+      for (var m = 1; m <= 12; m++) {
+        var total = 0;
+        REGIONS.forEach(function (r) { total += getRegionHeatmap(r.id, m); });
+        monthAvgs.push(total / REGIONS.length);
+      }
+      var maxAvg = Math.max.apply(null, monthAvgs);
+
+      bar.innerHTML = MONTH_ABBR.map(function (label, i) {
+        var month = i + 1;
+        var norm = maxAvg > 0 ? monthAvgs[i] / maxAvg : 0;
+        var r = Math.round(68 + norm * 132);
+        var g = Math.round(40 + norm * 80);
+        var b = Math.round(20 + norm * 10);
+        var bgColor = 'rgba(' + r + ',' + g + ',' + b + ',' + (0.15 + norm * 0.4) + ')';
+        var cls = 'globe-month-btn' + (month === globeMonth ? ' active' : '');
+        return '<button class="' + cls + '" onclick="setGlobeMonth(' + month + ')" style="background:' + bgColor + '">' + label + '</button>';
+      }).join('');
+    }
+
+    function generateQuickIdeas(month) {
+      return DESTINATIONS.map(function (dest) {
+        var mo = dest.season && dest.season.monthly
+          ? dest.season.monthly.find(function (m) { return m.month === month; })
+          : null;
+        var intensity = mo ? mo.heatmapIntensity : 0;
+        var region = REGION_BY_ID[dest.regionId];
+
+        // Build reason string from monthly data
+        var reasons = [seasonLabelShort(intensity)];
+        if (mo && mo.tempRange) reasons.push(mo.tempRange[0] + '\u2013' + mo.tempRange[1] + '\u00B0C');
+        if (mo && mo.wind) reasons.push(mo.wind.replace(/^(light|moderate|strong)-?/i, function (m) { return m.charAt(0).toUpperCase() + m.slice(1).replace('-', ' '); }));
+
+        // Check for race events this month
+        var monthStr = month < 10 ? '0' + month : '' + month;
+        var events = RACE_EVENTS.filter(function (e) {
+          return e.date.substring(5, 7) === monthStr && e.location.toLowerCase().indexOf(dest.name.toLowerCase()) > -1;
+        });
+        if (events.length > 0) reasons.push(events[0].name);
+
+        // Cost hint from deep dive or stats
+        var costHint = dest.stats ? dest.stats.price : '';
+        if (dest.deepDive && dest.deepDive.costComparison && dest.deepDive.costComparison.length > 0) {
+          var own = dest.deepDive.costComparison.find(function (c) { return c.destination === dest.name; });
+          if (own) costHint = '\u20AC' + own.total7day.toLocaleString() + '/wk';
+        }
+
+        // Count rideable routes for this month
+        var destRoutes = ROUTE_DATABASE.filter(function (r) { return r.destinationId === dest.id; });
+        var rideableCount = destRoutes.filter(function (r) { return isRouteRideableInMonth(r, month); }).length;
+
+        return {
+          destId: dest.id,
+          destName: dest.name,
+          regionName: region ? region.name : '',
+          intensity: intensity,
+          label: seasonLabelShort(intensity),
+          color: seasonColor(intensity),
+          reason: reasons.join(' \u00B7 '),
+          costHint: costHint,
+          routeCount: dest.routeCount,
+          rideableCount: rideableCount,
+          image: dest.image,
+          flag: dest.flag
+        };
+      }).sort(function (a, b) {
+        // Destinations with rideable routes first, then by intensity
+        if (a.rideableCount > 0 && b.rideableCount === 0) return -1;
+        if (b.rideableCount > 0 && a.rideableCount === 0) return 1;
+        return b.intensity - a.intensity;
+      });
+    }
+
+    var quickIdeasOpen = false;
+
+    function renderQuickIdeas() {
+      var panel = document.getElementById('quick-ideas-panel');
+      if (!panel) return;
+      var ideas = generateQuickIdeas(globeMonth).slice(0, 4);
+      var monthName = MONTH_ABBR[globeMonth - 1];
+
+      panel.innerHTML =
+        '<div class="qi-header">' +
+        '<div class="qi-title">TRIP IDEAS FOR ' + monthName.toUpperCase() + '</div>' +
+        '<button class="qi-close" onclick="toggleQuickIdeas()" aria-label="Close trip ideas">\u00D7</button>' +
+        '</div>' +
+        '<div class="qi-cards">' +
+        ideas.map(function (idea) {
+          return '<div class="qi-card" onclick="openExperience(\'' + idea.destId + '\')" style="--accent:' + idea.color + '">' +
+            '<div class="qi-card-img"><img src="' + idea.image + '" alt="' + idea.destName + '" loading="lazy"></div>' +
+            '<div class="qi-card-body">' +
+            '<div class="qi-card-dest">' + idea.flag + ' ' + idea.destName + '</div>' +
+            '<div class="qi-card-region">' + idea.regionName + '</div>' +
+            '<div class="qi-card-reason">' + idea.reason + '</div>' +
+            '<div class="qi-card-meta">' +
+            (idea.routeCount > 0 ? '<span>' + idea.rideableCount + '/' + idea.routeCount + ' routes open</span>' : '<span class="qi-coming-soon">Coming Soon</span>') +
+            (idea.costHint ? '<span>' + idea.costHint + '</span>' : '') +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        }).join('') +
+        '</div>';
+    }
+
+    function toggleQuickIdeas() {
+      var panel = document.getElementById('quick-ideas-panel');
+      if (!panel) return;
+      quickIdeasOpen = !quickIdeasOpen;
+      panel.classList.toggle('active', quickIdeasOpen);
+      if (quickIdeasOpen) renderQuickIdeas();
+      var btn = document.getElementById('qi-toggle-btn');
+      if (btn) btn.classList.toggle('active', quickIdeasOpen);
+    }
+
+    function setGlobeMonth(month) {
+      globeMonth = month;
+      renderGlobeMonthBar();
+      repaintGlobeMarkers(true);
+      if (quickIdeasOpen) renderQuickIdeas();
+      // Propagate to route explorer (visibility-gated)
+      routeFilterState.month = month;
+      var grid = document.getElementById('routeCardsGrid');
+      if (grid && grid.offsetParent !== null) renderRouteCards();
+      // Re-render season filter pill label
+      var seasonPill = document.getElementById('reSeasonPill');
+      if (seasonPill) seasonPill.textContent = 'Open in ' + MONTH_ABBR[month - 1];
+    }
+
+    function toggleGlobeSeasonality(on) {
+      globeSeasonality = on;
+      repaintGlobeMarkers(true);
+      if (quickIdeasOpen) renderQuickIdeas();
+    }
+
     function showGlobeFallback() {
       var loading = document.getElementById('globe-loading');
       loading.innerHTML = '<div style="text-align:center;padding:2rem">' +
         '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;letter-spacing:4px;color:#c9a96e;margin-bottom:12px">CYCLING DESTINATIONS</div>' +
-        '<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:24px">3D globe unavailable \u2014 explore destinations below</div>' +
+        '<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:24px">3D globe unavailable \u2014 explore regions below</div>' +
         '<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:500px;margin:0 auto">' +
-        LOCATIONS.map(function (loc) {
-          return '<button onclick="openExperience(\'' + loc.id + '\')" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#e8e4dd;padding:8px 14px;border-radius:var(--radius-sm);cursor:pointer;font-family:DM Sans;font-size:12px;font-weight:500;transition:all .2s;min-height:36px" onmouseover="this.style.borderColor=\'' + loc.color + '\';this.style.color=\'' + loc.color + '\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.1)\';this.style.color=\'#e8e4dd\'">' + loc.name + '</button>';
+        REGIONS.map(function (r) {
+          return '<button onclick="openRegion(\'' + r.id + '\')" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#e8e4dd;padding:8px 14px;border-radius:var(--radius-sm);cursor:pointer;font-family:DM Sans;font-size:12px;font-weight:500;transition:all .2s;min-height:36px" onmouseover="this.style.borderColor=\'' + r.color + '\';this.style.color=\'' + r.color + '\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.1)\';this.style.color=\'#e8e4dd\'">' + r.name + '</button>';
         }).join('') +
         '</div></div>';
       loading.classList.remove('hidden');
@@ -1449,26 +2214,29 @@
         sun.position.set(5, 3, 5);
         globeScene.add(sun);
 
-        // Location markers + sidebar pills
+        // Region markers + sidebar pills (L1 globe shows REGIONS, not destinations)
         var sidebar = document.getElementById('globe-sidebar');
-        LOCATIONS.forEach(function (loc) {
-          var pos = latLngToVec3(loc.lat, loc.lng, 1.005);
-          var col = new THREE.Color(loc.color);
+        REGIONS.forEach(function (region) {
+          var intensity = getEffectiveIntensity(region.id);
+          var props = intensityToMarkerProps(intensity);
+          var pos = latLngToVec3(region.lat, region.lng, 1.005);
+          var col = new THREE.Color(region.color);
 
           // Dot
-          var dot = new THREE.Mesh(new THREE.SphereGeometry(0.012, 16, 16), new THREE.MeshBasicMaterial({ color: col }));
+          var dot = new THREE.Mesh(new THREE.SphereGeometry(props.dotSize, 16, 16), new THREE.MeshBasicMaterial({ color: col }));
           dot.position.copy(pos);
-          dot.userData = { locId: loc.id };
+          dot.userData = { locId: region.id, isRegion: true };
           globeGroup.add(dot);
           markerMeshes.push(dot);
 
           // Glow
-          var glow = new THREE.Mesh(new THREE.SphereGeometry(0.02, 16, 16), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.3 }));
+          var glow = new THREE.Mesh(new THREE.SphereGeometry(0.015, 16, 16), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: props.glowOpacity }));
           glow.position.copy(pos);
+          glow.scale.setScalar(props.glowSize / 0.015);
           globeGroup.add(glow);
 
           // Ring
-          var ring = new THREE.Mesh(new THREE.RingGeometry(0.025, 0.03, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.4, side: THREE.DoubleSide }));
+          var ring = new THREE.Mesh(new THREE.RingGeometry(props.ringInner, props.ringOuter, 32), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: props.ringOpacity, side: THREE.DoubleSide }));
           ring.position.copy(pos);
           ring.lookAt(new THREE.Vector3(0, 0, 0));
           globeGroup.add(ring);
@@ -1476,15 +2244,23 @@
           // Stem line
           var stemEnd = pos.clone().multiplyScalar(1.04);
           var stemGeo = new THREE.BufferGeometry().setFromPoints([pos, stemEnd]);
-          globeGroup.add(new THREE.Line(stemGeo, new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: 0.5 })));
+          var stemMat = new THREE.LineBasicMaterial({ color: col, transparent: true, opacity: props.stemOpacity });
+          var stem = new THREE.Line(stemGeo, stemMat);
+          globeGroup.add(stem);
+
+          // Store structured reference for live repaint
+          globeMarkers.push({ regionId: region.id, dot: dot, glow: glow, ring: ring, stem: stem, intensity: intensity });
 
           // Sidebar pill
           var pill = document.createElement('div');
-          pill.className = 'loc-pill';
-          pill.textContent = loc.name;
-          pill.onclick = (function (l) { return function () { flyTo(l); openExperience(l.id); }; })(loc);
+          pill.className = 'loc-pill' + (intensity >= 0.6 ? ' peak' : '');
+          pill.textContent = region.name;
+          pill.onclick = (function (r) { return function () { flyTo(r); openRegion(r.id); }; })(region);
           sidebar.appendChild(pill);
         });
+
+        // Render month bar controls
+        renderGlobeMonthBar();
 
         // Interaction
         var canvas = globeRenderer.domElement;
@@ -1513,7 +2289,7 @@
           if (isDragging && Date.now() - startTime < 200) {
             raycaster.setFromCamera(mouseNDC, globeCamera);
             var hits = raycaster.intersectObjects(markerMeshes);
-            if (hits.length > 0) openExperience(hits[0].object.userData.locId);
+            if (hits.length > 0) openRegion(hits[0].object.userData.locId);
           }
           isDragging = false;
           setTimeout(function () { autoRotate = true; }, 3000);
@@ -1561,7 +2337,7 @@
           raycaster.setFromCamera(mouseNDC, globeCamera);
           var hits = raycaster.intersectObjects(markerMeshes);
           if (hits.length > 0) {
-            var loc = LOCATIONS.find(function (l) { return l.id === hits[0].object.userData.locId; });
+            var loc = REGION_BY_ID[hits[0].object.userData.locId];
             if (loc) {
               tooltipName.textContent = loc.name;
               tooltipCountry.textContent = loc.country;
@@ -1640,17 +2416,196 @@
     }
 
     /* ═══════════════════════════════════════════
-       5. EXPERIENCE OVERLAY
+       5. EXPERIENCE OVERLAY — Section builders
        ═══════════════════════════════════════════ */
+
+    function zoneDifficultyColor(diff) {
+      if (!diff) return 'rgba(255,255,255,0.4)';
+      var d = diff.toLowerCase();
+      if (d.indexOf('expert') > -1) return '#EF4444';
+      if (d.indexOf('advanced') > -1) return '#F59E0B';
+      if (d.indexOf('moderate') > -1 || d.indexOf('intermediate') > -1) return '#c9a96e';
+      return '#44D62C';
+    }
+
+    function buildZonesSection(loc) {
+      if (!loc.zones || loc.zones.length === 0) return '';
+      var cards = loc.zones.map(function (z) {
+        var routeIds = z.routeIds || [];
+        var routeLinksHtml = routeIds.map(function (rid) {
+          var r = ROUTE_BY_ID[rid];
+          if (!r) return '';
+          return '<a class="zone-route-link" onclick="openRouteDetail(\'' + rid + '\')">' + r.name + ' \u2192</a>';
+        }).join('');
+        var bestForHtml = z.bestFor ? z.bestFor.map(function (b) {
+          return '<span class="zone-best-for-tag">' + b + '</span>';
+        }).join('') : '';
+        return '<div class="zone-card" style="--accent:' + loc.color + '">' +
+          '<div class="zone-card-header">' +
+          '<div class="zone-card-name">' + z.name + '</div>' +
+          '<div class="zone-card-diff" style="color:' + zoneDifficultyColor(z.difficulty) + '">' + (z.difficulty || '') + '</div>' +
+          '</div>' +
+          '<div class="zone-card-character">' + z.character + '</div>' +
+          (routeLinksHtml ? '<div class="zone-route-links">' + routeLinksHtml + '</div>' : '') +
+          '<div class="zone-card-footer">' +
+          (bestForHtml ? '<div class="zone-best-for">' + bestForHtml + '</div>' : '') +
+          '</div>' +
+          '</div>';
+      }).join('');
+      return '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Riding Zones</div>' +
+        '<div class="exp-section-title">WHERE TO RIDE</div>' +
+        '<div class="zone-grid">' + cards + '</div>';
+    }
+
+    function buildBasesSection(loc) {
+      if (!loc.bases || loc.bases.length === 0) return '';
+      var hasRoutes = loc.routeCount > 0;
+      var cards = loc.bases.map(function (b) {
+        var zoneNames = b.accessibleZoneIds ? b.accessibleZoneIds.map(function (zid) {
+          var zone = loc.zones ? loc.zones.find(function (z) { return z.id === zid; }) : null;
+          return zone ? zone.name.split(' \u2014 ')[0] : zid;
+        }) : [];
+        var partnerCount = b.partnerIds ? b.partnerIds.length : 0;
+        return '<div class="base-card" style="--accent:' + loc.color + '">' +
+          '<div class="base-card-name">' + b.name + '</div>' +
+          '<div class="base-card-character">' + b.character + '</div>' +
+          '<div class="base-card-best-for"><strong>Best for:</strong> ' + b.bestFor + '</div>' +
+          (b.transferKm ? '<div class="base-card-meta">Airport transfer: ' + b.transferKm + ' km (' + b.nearestAirportIATA + ')</div>' : '') +
+          (zoneNames.length > 0 ? '<div class="base-card-zones">Zones: ' + zoneNames.join(', ') + '</div>' : '') +
+          (partnerCount > 0 ? '<div class="base-card-partners">' + partnerCount + ' partner' + (partnerCount > 1 ? 's' : '') + ' at this base</div>' : '') +
+          (hasRoutes ? '<button class="base-card-cta" onclick="closeExperience();document.getElementById(\'trip-builder\').scrollIntoView({behavior:\'smooth\'});setTimeout(function(){startTripFromBase(\'' + loc.id + '\',\'' + b.id + '\')},400)">Plan Trip from Here \u2192</button>' : '') +
+          '</div>';
+      }).join('');
+      return '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Base Camps</div>' +
+        '<div class="exp-section-title">WHERE TO STAY</div>' +
+        '<div class="base-grid">' + cards + '</div>';
+    }
+
+    function buildConditionsSection(loc) {
+      if (!loc.conditions) return '';
+      var items = [
+        { icon: 'distance', label: 'Roads', text: loc.conditions.roads },
+        { icon: 'health', label: 'Water', text: loc.conditions.water },
+        { icon: 'bike', label: 'Bike Shops', text: loc.conditions.bikeShops },
+        { icon: 'bike', label: 'Bike Rental', text: loc.conditions.rental }
+      ];
+      if (loc.conditions.specialRisks) {
+        items.push({ icon: 'health', label: 'Special Risks', text: loc.conditions.specialRisks });
+      }
+      var html = items.map(function (item) {
+        return '<div class="condition-item">' +
+          '<div class="condition-label">' + item.label + '</div>' +
+          '<div class="condition-text">' + item.text + '</div>' +
+          '</div>';
+      }).join('');
+      return '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Practical Intel</div>' +
+        '<div class="exp-section-title">CONDITIONS & LOGISTICS</div>' +
+        '<div class="conditions-grid">' + html + '</div>';
+    }
+
+    function buildDestSeasonBar(loc) {
+      if (!loc.season || !loc.season.monthly) return '';
+      var cells = loc.season.monthly.map(function (mo) {
+        var color = seasonColor(mo.heatmapIntensity);
+        var temp = mo.tempRange ? mo.tempRange[0] + '\u2013' + mo.tempRange[1] + '\u00B0' : '';
+        var isActive = mo.month === globeMonth;
+        return '<div class="dest-season-cell' + (isActive ? ' dest-season-active' : '') + '">' +
+          '<div class="dest-season-month">' + MONTH_ABBR[mo.month - 1] + '</div>' +
+          '<div class="dest-season-bar-fill" style="background:' + color + ';height:' + Math.max(4, mo.heatmapIntensity * 32) + 'px"></div>' +
+          '<div class="dest-season-temp">' + temp + '</div>' +
+          (isActive ? '<div class="dest-season-now">Now</div>' : '') +
+          '</div>';
+      }).join('');
+      return '<div class="exp-section-eyebrow" style="color:' + loc.color + '">When to Go</div>' +
+        '<div class="exp-section-title">SEASONAL CONDITIONS</div>' +
+        '<div class="dest-season-bar">' + cells + '</div>';
+    }
+
+    function buildDeepDive(loc) {
+      if (!loc.deepDive) return '';
+      var html = '';
+
+      // Cultural highlights
+      if (loc.deepDive.culturalHighlights && loc.deepDive.culturalHighlights.length > 0) {
+        var cards = loc.deepDive.culturalHighlights.map(function (ch) {
+          return '<div class="culture-card" style="--accent:' + loc.color + '">' +
+            '<div class="culture-card-title">' + ch.title + '</div>' +
+            '<div class="culture-card-desc">' + ch.description + '</div>' +
+            '</div>';
+        }).join('');
+        html += '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Local Culture</div>' +
+          '<div class="exp-section-title">CULTURAL HIGHLIGHTS</div>' +
+          '<div class="culture-grid">' + cards + '</div>';
+      }
+
+      // Season notes (deep dive editorial)
+      if (loc.deepDive.seasonBar && loc.deepDive.seasonBar.length > 0) {
+        var notes = loc.deepDive.seasonBar.map(function (s) {
+          var statusClass = s.open ? 'season-note-open' : 'season-note-closed';
+          return '<div class="season-note ' + statusClass + '">' +
+            '<span class="season-note-month">' + s.month + '</span>' +
+            '<span class="season-note-text">' + s.note + '</span>' +
+            '</div>';
+        }).join('');
+        html += '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Expert Notes</div>' +
+          '<div class="exp-section-title">MONTH-BY-MONTH GUIDE</div>' +
+          '<div class="season-notes-list">' + notes + '</div>';
+      }
+
+      // Cost comparison
+      if (loc.deepDive.costComparison && loc.deepDive.costComparison.length > 0) {
+        var costCards = loc.deepDive.costComparison.map(function (c) {
+          var isCurrent = c.destination === loc.name;
+          return '<div class="cost-card' + (isCurrent ? ' cost-card-current' : '') + '" style="--accent:' + loc.color + '">' +
+            '<div class="cost-card-dest">' + c.destination + (isCurrent ? ' \u2713' : '') + '</div>' +
+            '<div class="cost-card-total">' + c.currency + ' ' + c.total7day.toLocaleString() + '<span class="cost-card-per">/7 days</span></div>' +
+            '<div class="cost-card-breakdown">' +
+            '<span>Hotel ' + c.currency + ' ' + c.hotel + '/n</span>' +
+            '<span>Guide ' + c.currency + ' ' + c.guide + '/d</span>' +
+            '<span>Rental ' + c.currency + ' ' + c.rental + '/d</span>' +
+            '<span>Meal ' + c.currency + ' ' + c.meal + '</span>' +
+            '</div>' +
+            '</div>';
+        }).join('');
+        html += '<div class="exp-section-eyebrow" style="color:' + loc.color + '">Value</div>' +
+          '<div class="exp-section-title">COST COMPARISON</div>' +
+          '<div class="cost-grid">' + costCards + '</div>';
+      }
+
+      // Golden key package
+      if (loc.deepDive.goldenKeyPackage) {
+        var pkg = loc.deepDive.goldenKeyPackage;
+        var includes = pkg.includes.map(function (item) {
+          return '<li class="gk-include">' + item + '</li>';
+        }).join('');
+        html += '<div class="golden-key-section" style="--accent:' + loc.color + '">' +
+          '<div class="gk-header">' +
+          '<div class="gk-eyebrow">Premium Experience</div>' +
+          '<div class="gk-name">' + pkg.name + '</div>' +
+          '<div class="gk-tagline">' + pkg.tagline + '</div>' +
+          '</div>' +
+          '<ul class="gk-includes">' + includes + '</ul>' +
+          '<div class="gk-pricing">' +
+          '<div class="gk-price">From \u20AC' + pkg.price7day.toLocaleString() + ' <span class="gk-price-per">/ 7 days</span></div>' +
+          (pkg.savingsVsDIY ? '<div class="gk-savings">Save \u20AC' + pkg.savingsVsDIY + ' vs. booking separately</div>' : '') +
+          '</div>' +
+          '</div>';
+      }
+
+      return html;
+    }
+
     function openExperience(id) {
-      var loc = LOCATIONS.find(function (l) { return l.id === id; });
+      var loc = DESTINATIONS.find(function (l) { return l.id === id; });
       if (!loc) return;
+      _savedScrollY = window.scrollY;
 
       var overlay = document.getElementById('experience-overlay');
       var content = document.getElementById('exp-content');
+      var region = REGION_BY_ID[loc.regionId];
 
       var highlightsHtml = loc.highlights.map(function (h) {
-        return '<div class="exp-highlight"><span style="color:' + loc.color + ';flex-shrink:0">\u25C6</span><span style="font-size:13px;color:rgba(255,255,255,0.55)">' + h + '</span></div>';
+        return '<div class="exp-highlight"><span style="color:' + loc.color + ';flex-shrink:0">\u25C6</span><span class="exp-highlight-text">' + h + '</span></div>';
       }).join('');
 
       var galleryHtml = loc.images.map(function (img, i) {
@@ -1658,39 +2613,42 @@
       }).join('');
 
       content.innerHTML =
-        '<div class="exp-hero">' +
-        '<img src="' + loc.images[0] + '" alt="' + loc.name + '">' +
-        '<div class="exp-hero-overlay"></div>' +
-        '<div class="exp-hero-content">' +
-        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:' + loc.color + ';font-weight:600;margin-bottom:8px">' + loc.continent + ' \u00B7 ' + loc.country + '</div>' +
-        '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:clamp(32px,7vw,64px);letter-spacing:3px;color:#e8e4dd;line-height:0.95">' + loc.name.toUpperCase() + '</div>' +
-        '<div style="font-family:\'Cormorant Garamond\',serif;font-size:clamp(14px,2.5vw,20px);color:rgba(255,255,255,0.6);font-style:italic;margin-top:6px">' + loc.tagline + '</div>' +
+        '<div class="exp-breadcrumb">' +
+        '<span class="exp-breadcrumb-link" onclick="closeExperience()">Globe</span>' +
+        '<span class="exp-breadcrumb-sep">\u203A</span>' +
+        (region ? '<span class="exp-breadcrumb-link" onclick="closeExperience();setTimeout(function(){openRegion(\'' + region.id + '\')},420)">' + region.name + '</span><span class="exp-breadcrumb-sep">\u203A</span>' : '') +
+        '<span class="exp-breadcrumb-current">' + loc.name + '</span>' +
         '</div>' +
-        '</div>' +
-        '<div class="exp-stats">' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Duration</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#e8e4dd;letter-spacing:1px">' + loc.stats.dur + '</div></div>' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Difficulty</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#e8e4dd;letter-spacing:1px">' + loc.stats.diff + '</div></div>' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Season</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#e8e4dd;letter-spacing:1px">' + loc.stats.season + '</div></div>' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Budget</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#c9a96e;letter-spacing:1px">' + loc.stats.price + '</div></div>' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Group Size</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#e8e4dd;letter-spacing:1px">' + loc.stats.group + '</div></div>' +
-        '<div class="exp-stat"><div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px">Routes</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:' + loc.color + ';letter-spacing:1px">' + loc.stats.routes + ' GUIDES</div></div>' +
-        '</div>' +
+        buildOverlayHero({ image: loc.images[0], name: loc.name, color: loc.color, continent: loc.continent, country: loc.country, tagline: loc.tagline }) +
+        buildStatBar([
+          { label: 'Duration', value: loc.stats.dur },
+          { label: 'Difficulty', value: loc.stats.diff },
+          { label: 'Season', value: loc.stats.season },
+          { label: 'Budget', value: loc.stats.price, color: '#c9a96e' },
+          { label: 'Group Size', value: loc.stats.group },
+          { label: 'Routes', value: loc.stats.routes + ' GUIDES', color: loc.color }
+        ]) +
         '<div class="exp-body">' +
-        '<div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:' + loc.color + ';font-weight:600;margin-bottom:8px">About This Destination</div>' +
-        '<div style="font-family:\'Cormorant Garamond\',serif;font-size:18px;color:rgba(255,255,255,0.7);line-height:1.7">' + loc.desc + '</div>' +
+        '<div class="exp-section-eyebrow" style="color:' + loc.color + '">About This Destination</div>' +
+        '<div class="region-character-text">' + loc.desc + '</div>' +
         '<div class="exp-grid">' +
-        '<div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:2px;color:#e8e4dd;margin-bottom:12px">HIGHLIGHTS</div>' + highlightsHtml + '</div>' +
-        '<div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:2px;color:#e8e4dd;margin-bottom:12px">LOCATION</div>' +
-        '<div style="border-radius:var(--radius-md);overflow:hidden;border:1px solid rgba(255,255,255,0.06)">' +
-        '<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=' + (loc.lng - 1) + ',' + (loc.lat - 0.5) + ',' + (loc.lng + 1) + ',' + (loc.lat + 0.5) + '&layer=mapnik&marker=' + loc.lat + ',' + loc.lng + '" style="width:100%;height:220px;border:none;filter:saturate(0.8) brightness(0.85)" loading="lazy"></iframe>' +
+        '<div><div class="exp-section-title">HIGHLIGHTS</div>' + highlightsHtml + '</div>' +
+        '<div><div class="exp-section-title">LOCATION</div>' +
+        '<div class="exp-map-frame">' +
+        '<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=' + (loc.lng - 1) + ',' + (loc.lat - 0.5) + ',' + (loc.lng + 1) + ',' + (loc.lat + 0.5) + '&layer=mapnik&marker=' + loc.lat + ',' + loc.lng + '" class="exp-map-iframe" loading="lazy"></iframe>' +
         '</div>' +
         '</div>' +
         '</div>' +
+        buildDestSeasonBar(loc) +
+        buildZonesSection(loc) +
+        buildBasesSection(loc) +
+        buildConditionsSection(loc) +
+        buildDeepDive(loc) +
         '</div>' +
         '<div class="exp-gallery">' + galleryHtml + '</div>' +
         '<div class="exp-cta">' +
-        '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:clamp(20px,4vw,32px);letter-spacing:3px;color:#e8e4dd;margin-bottom:6px">READY TO RIDE ' + loc.name.toUpperCase() + '?</div>' +
-        '<div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px">Build your complete trip in the Trip Builder</div>' +
+        '<div class="exp-cta-title">READY TO RIDE ' + loc.name.toUpperCase() + '?</div>' +
+        '<div class="exp-cta-sub">Build your complete trip in the Trip Builder</div>' +
         '<button class="exp-cta-btn" onclick="closeExperience();document.getElementById(\'trip-builder\').scrollIntoView({behavior:\'smooth\'});setTimeout(function(){selectTripById(\'' + loc.id + '\')},400)">BUILD YOUR TRIP \u2192</button>' +
         '</div>';
 
@@ -1702,6 +2660,76 @@
     function closeExperience() {
       document.getElementById('experience-overlay').classList.remove('active');
       document.body.style.overflow = '';
+      window.scrollTo(0, _savedScrollY);
+    }
+
+    /* ═══════════════════════════════════════════
+       5b. REGION OVERLAY (L2 View)
+       ═══════════════════════════════════════════ */
+    function openRegion(regionId) {
+      var region = REGION_BY_ID[regionId];
+      if (!region) return;
+      _savedScrollY = window.scrollY;
+
+      var overlay = document.getElementById('experience-overlay');
+      var content = document.getElementById('exp-content');
+      var intensity = getEffectiveIntensity(regionId);
+
+      // Sub-geography cards with thumbnails
+      var subGeoHtml = region.subGeoIds.map(function (sgId) {
+        var dest = DESTINATION_BY_ID[sgId];
+        if (!dest) return '';
+        var destIntensity = 0;
+        if (dest.season && dest.season.monthly) {
+          var m = dest.season.monthly.find(function (mo) { return mo.month === globeMonth; });
+          if (m) destIntensity = m.heatmapIntensity;
+        }
+        return '<div class="region-subgeo-card" style="--accent:' + dest.color + '" onclick="navigateToDestination(\'' + dest.id + '\')">' +
+          '<div class="region-subgeo-thumb"><img src="' + dest.image + '" alt="' + dest.name + '" loading="lazy"></div>' +
+          '<div class="region-subgeo-body">' +
+          '<div class="region-subgeo-header">' +
+          '<div class="region-subgeo-name">' + dest.name.toUpperCase() + '</div>' +
+          '<div class="region-subgeo-season" style="color:' + seasonColor(destIntensity) + '">' + seasonLabelShort(destIntensity) + '</div>' +
+          '</div>' +
+          '<div class="region-subgeo-tagline">' + dest.tagline + '</div>' +
+          '<div class="region-subgeo-meta">' +
+          '<span>' + dest.stats.routes + ' routes</span>' +
+          '<span>' + dest.stats.diff + '</span>' +
+          '<span>' + dest.stats.season + '</span>' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+
+      // Vibes tags
+      var vibesHtml = region.vibes.map(function (v) {
+        return '<span class="region-vibe-tag">' + v + '</span>';
+      }).join('');
+
+      content.innerHTML =
+        '<div class="exp-breadcrumb">' +
+        '<span class="exp-breadcrumb-link" onclick="closeExperience()">Globe</span>' +
+        '<span class="exp-breadcrumb-sep">\u203A</span>' +
+        '<span class="exp-breadcrumb-current">' + region.name + '</span>' +
+        '</div>' +
+        buildOverlayHero({ image: region.image, name: region.name, color: region.color, continent: region.continent, country: region.country, tagline: region.tagline }) +
+        buildStatBar([
+          { label: 'Right Now', value: seasonLabel(intensity).toUpperCase(), color: seasonColor(intensity) },
+          { label: 'Best Window', value: region.seasonalWindow },
+          { label: 'Destinations', value: region.subGeoIds.length },
+          { label: 'Riders Last Month', value: region.socialProof ? region.socialProof.ridersLastMonth.toLocaleString() : '\u2014', color: region.color }
+        ]) +
+        '<div class="exp-body">' +
+        '<div class="exp-section-eyebrow" style="color:' + region.color + '">Region Character</div>' +
+        '<div class="region-character-text">' + region.character + '</div>' +
+        '<div class="region-vibes-row">' + vibesHtml + '</div>' +
+        '<div class="exp-section-title">EXPLORE DESTINATIONS</div>' +
+        '<div class="region-subgeo-grid">' + subGeoHtml + '</div>' +
+        '</div>';
+
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      overlay.scrollTop = 0;
     }
 
     // Swipe-right-to-dismiss on experience overlay (mobile)
@@ -1727,7 +2755,7 @@
     var lbImages = [], lbIdx = 0;
 
     function openLightbox(locId, idx) {
-      var loc = LOCATIONS.find(function (l) { return l.id === locId; });
+      var loc = DESTINATIONS.find(function (l) { return l.id === locId; });
       if (!loc) return;
       lbImages = loc.images;
       lbIdx = idx;
@@ -1771,7 +2799,7 @@
     /* ═══════════════════════════════════════════
        ROUTE ENCYCLOPEDIA — Rendering + Filtering
        ═══════════════════════════════════════════ */
-    var routeFilterState = { type: 'all', dest: 'all', maxDiff: 5, maxDist: 200, sort: 'featured' };
+    var routeFilterState = { type: 'all', dest: 'all', maxDiff: 5, maxDist: 200, sort: 'featured', month: null };
     var comparedRoutes = [];
 
     // getRoutePartners() defined in app.js
@@ -1792,6 +2820,8 @@
         '<span class="rbadge rbadge-' + route.type + '">' + route.type.charAt(0).toUpperCase() + route.type.slice(1) + '</span>' +
         (route.isNew ? '<span class="rbadge rbadge-new">New</span>' : '') +
         (route.stages.length ? '<span class="rbadge" style="background:var(--forest);color:var(--chalk)">' + route.stages.length + '-Day</span>' : '') +
+        (route.effortCategory ? '<span class="rbadge rbadge-effort">' + effortLabel(route.effortCategory) + '</span>' : '') +
+        (routeFilterState.month ? '<span class="rbadge rbadge-season' + (isRoutePeakInMonth(route, routeFilterState.month) ? ' rbadge-peak' : '') + '">' + (isRoutePeakInMonth(route, routeFilterState.month) ? 'Peak' : 'Open') + '</span>' : '') +
         '</div>' +
         '<label class="re-compare-cb' + (isCompared ? ' active' : '') + '" onclick="event.stopPropagation();toggleCompareRoute(\'' + route.id + '\')">' +
         '<input type="checkbox"' + (isCompared ? ' checked' : '') + ' aria-label="Compare ' + route.name + '"> Compare' +
@@ -1826,6 +2856,14 @@
       if (!grid) return;
       grid.innerHTML = routes.map(function (r, i) { return renderRouteCard(r, i); }).join('');
       document.getElementById('reResultsCount').textContent = routes.length + ' route' + (routes.length !== 1 ? 's' : '');
+      // Staggered enter animation on cards
+      requestAnimationFrame(function () {
+        var cards = grid.querySelectorAll('.route-card');
+        cards.forEach(function (card, i) {
+          card.classList.add('route-card-enter');
+          if (i < 8) card.classList.add('route-card-enter-' + i);
+        });
+      });
       // Re-observe reveal elements
       grid.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el); });
     }
@@ -1880,6 +2918,16 @@
         routeFilterState.sort = this.value;
         renderRouteCards();
       });
+      // Season filter toggle
+      var seasonToggle = document.getElementById('reSeasonToggle');
+      if (seasonToggle) {
+        seasonToggle.addEventListener('change', function () {
+          routeFilterState.month = this.checked ? globeMonth : null;
+          var pill = document.getElementById('reSeasonPill');
+          if (pill) pill.textContent = this.checked ? 'Open in ' + MONTH_ABBR[globeMonth - 1] : 'Any Season';
+          renderRouteCards();
+        });
+      }
     }
 
     /* ═══════════════════════════════════════════
@@ -1887,19 +2935,66 @@
        ═══════════════════════════════════════════ */
     // buildDetailElevSvg() defined in app.js
 
+    var EFFORT_LABELS = {
+      'half-day-easy': 'Half Day \u00B7 Easy',
+      'half-day-hard': 'Half Day \u00B7 Hard',
+      'full-day-easy': 'Full Day \u00B7 Easy',
+      'full-day-moderate': 'Full Day \u00B7 Moderate',
+      'full-day-hard': 'Full Day \u00B7 Hard',
+      'multi-day': 'Multi-Day'
+    };
+
+    function effortLabel(category) {
+      return EFFORT_LABELS[category] || category || '';
+    }
+
+    function buildConfidenceSection(route) {
+      if (!route.confidence) return '';
+      var c = route.confidence;
+      var items = [
+        { label: 'Water Frequency', value: c.waterFrequency },
+        { label: 'Phone Signal', value: c.phoneSignal },
+        { label: 'Nearest Bike Shop', value: c.nearestBikeShop },
+        { label: 'Surface Breakdown', value: c.surfaceBreakdown },
+        { label: 'Emergency Contacts', value: c.emergencyContacts },
+        { label: 'Offline Map', value: c.offlineMapAvailable ? 'Available' : 'Not available' }
+      ];
+      return '<div class="rd-section"><h2 class="rd-section-title">Route Confidence</h2>' +
+        '<div class="rd-intel-grid">' +
+        items.map(function (item) {
+          return '<div class="rd-intel-item"><div class="rd-intel-label">' + item.label + '</div><div class="rd-intel-val">' + item.value + '</div></div>';
+        }).join('') +
+        '</div></div>';
+    }
+
+    var _savedScrollY = 0;
+
     function openRouteDetail(routeId) {
       var route = ROUTE_BY_ID[routeId];
       if (!route) return;
+      _savedScrollY = window.scrollY;
       var partners = getRoutePartners(route);
       var modal = document.getElementById('rdModal');
       var inner = document.getElementById('rdModalInner');
+      var dest = DESTINATION_BY_ID[route.destinationId];
+      var region = dest ? REGION_BY_ID[dest.regionId] : null;
+      // Build breadcrumb
+      var breadcrumb = '<div class="rd-breadcrumb">' +
+        '<span class="exp-breadcrumb-link" onclick="closeRouteDetail()">Globe</span>' +
+        '<span class="exp-breadcrumb-sep">\u203A</span>' +
+        (region ? '<span class="exp-breadcrumb-link" onclick="closeRouteDetail();setTimeout(function(){openRegion(\'' + region.id + '\')},420)">' + region.name + '</span><span class="exp-breadcrumb-sep">\u203A</span>' : '') +
+        (dest ? '<span class="exp-breadcrumb-link" onclick="closeRouteDetail();setTimeout(function(){openExperience(\'' + dest.id + '\')},420)">' + dest.name + '</span><span class="exp-breadcrumb-sep">\u203A</span>' : '') +
+        '<span class="exp-breadcrumb-current">' + route.name + '</span>' +
+        '</div>';
       // Build modal HTML
-      var html = '<button class="rd-close" onclick="closeRouteDetail()" aria-label="Close route detail">&times;</button>' +
+      var html = breadcrumb +
+        '<button class="rd-close" onclick="closeRouteDetail()" aria-label="Close route detail">&times;</button>' +
         '<div class="rd-hero" style="background-image:url(' + route.image + ')">' +
         '<div class="rd-hero-overlay">' +
         '<div class="rd-hero-badge">' +
         '<span class="rbadge rbadge-' + route.type + '">' + route.type.charAt(0).toUpperCase() + route.type.slice(1) + '</span>' +
         (route.stages.length ? '<span class="rbadge" style="background:var(--forest);color:var(--chalk)">' + route.stages.length + '-Day Stage Route</span>' : '') +
+        (route.effortCategory ? '<span class="rbadge rbadge-effort">' + effortLabel(route.effortCategory) + '</span>' : '') +
         '</div>' +
         '<h1 class="rd-hero-title">' + route.name + '</h1>' +
         '<p class="rd-hero-subtitle">' + route.subtitle + '</p>' +
@@ -1943,8 +3038,11 @@
         '<div class="rd-intel-item"><div class="rd-intel-label">Weather</div><div class="rd-intel-val">' + route.weather + '</div></div>' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Surface</div><div class="rd-intel-val" style="text-transform:capitalize">' + route.surfaceType + ' — Condition ' + route.surfaceCondition + '/5</div></div>' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Traffic</div><div class="rd-intel-val">' + trafficDot(route.trafficLevel) + ' Level ' + route.trafficLevel + '/5</div></div>' +
-        '<div class="rd-intel-item"><div class="rd-intel-label">Season</div><div class="rd-intel-val">' + monthName(route.season.start) + '–' + monthName(route.season.end) + (route.season.peak.length ? ' (peak: ' + route.season.peak.map(monthName).join(', ') + ')' : '') + '</div></div>' +
+        '<div class="rd-intel-item"><div class="rd-intel-label">Season</div><div class="rd-intel-val">' + seasonRangeWithPeak(route.season) + '</div></div>' +
+        '<div class="rd-intel-item"><div class="rd-intel-label">Right Now</div><div class="rd-intel-val" style="color:' + (isRouteRideableInMonth(route, globeMonth) ? (isRoutePeakInMonth(route, globeMonth) ? '#44D62C' : '#c9a96e') : '#EF4444') + ';font-weight:700">' + (isRouteRideableInMonth(route, globeMonth) ? (isRoutePeakInMonth(route, globeMonth) ? 'Open \u2014 Peak Season' : 'Open \u2014 Shoulder') : 'Closed') + ' (' + MONTH_ABBR[globeMonth - 1] + ')</div></div>' +
         '</div></div>';
+      // Confidence
+      html += buildConfidenceSection(route);
       // Strava
       if (route.strava) {
         html += '<div class="rd-section"><h2 class="rd-section-title">Strava Data</h2>' +
@@ -2009,6 +3107,7 @@
         '</div>';
       inner.innerHTML = html;
       modal.classList.add('active');
+      modal.scrollTop = 0;
       document.body.style.overflow = 'hidden';
       // Elevation profile hover
       setTimeout(function () {
@@ -2032,6 +3131,7 @@
     function closeRouteDetail() {
       document.getElementById('rdModal').classList.remove('active');
       document.body.style.overflow = '';
+      window.scrollTo(0, _savedScrollY);
     }
 
     // monthName() defined in app.js
@@ -2078,7 +3178,7 @@
         { label: 'Surface', fn: function (r) { return r.surfaceType } },
         { label: 'Traffic', fn: function (r) { return trafficDot(r.trafficLevel) + ' ' + r.trafficLevel + '/5' } },
         { label: 'Scenery', fn: function (r) { return r.sceneryRating + '/5' } },
-        { label: 'Season', fn: function (r) { return monthName(r.season.start) + '–' + monthName(r.season.end) } },
+        { label: 'Season', fn: function (r) { return seasonRangeStr(r.season) } },
         { label: 'Strava KOM', fn: function (r) { return r.strava ? r.strava.komTime : '—' } },
         { label: 'Partners', fn: function (r) { return getRoutePartners(r).length } }
       ];
@@ -2196,14 +3296,9 @@
     }, { threshold: 0.3 });
     document.querySelectorAll('section[id]').forEach(function (s) { sectionObs.observe(s); });
 
-    // Globe lazy init via IntersectionObserver
-    var globeObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { initGlobe(); globeObs.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    var globeSection = document.getElementById('world-tours');
-    if (globeSection) globeObs.observe(globeSection);
+    // Globe immediate init — first paint then init (rAF deferral)
+    var globeSection = document.getElementById('home');
+    requestAnimationFrame(function () { initGlobe(); });
 
     // Globe visibility tracking — pause/resume animation when off-screen
     var globeVisObs = new IntersectionObserver(function (entries) {
@@ -2213,6 +3308,38 @@
       });
     }, { threshold: 0.05 });
     if (globeSection) globeVisObs.observe(globeSection);
+
+    /* ═══════════════════════════════════════════
+       PARTNER HELPERS
+       ═══════════════════════════════════════════ */
+    function getPartnersForDest(destId, category, baseId) {
+      var partners = PARTNERS_DATABASE.filter(function (p) {
+        if (p.destinationId !== destId) return false;
+        if (category && p.category !== category) return false;
+        return true;
+      });
+      if (baseId) {
+        var dest = DESTINATION_BY_ID[destId];
+        var base = dest && dest.bases ? dest.bases.find(function (b) { return b.id === baseId; }) : null;
+        var basePartnerIds = base && base.partnerIds ? base.partnerIds : [];
+        partners.sort(function (a, b) {
+          var aMatch = basePartnerIds.indexOf(a.id) > -1 ? 0 : 1;
+          var bMatch = basePartnerIds.indexOf(b.id) > -1 ? 0 : 1;
+          return aMatch - bMatch;
+        });
+      }
+      return partners;
+    }
+
+    function startTripFromBase(destId, baseId) {
+      var dest = DESTINATION_BY_ID[destId];
+      if (!dest || dest.routeCount === 0) return;
+      var base = dest.bases ? dest.bases.find(function (b) { return b.id === baseId; }) : null;
+      cfgSelectDest(destId);
+      CONFIGURATOR_STATE.selectedBase = base ? baseId : null;
+      CONFIGURATOR_STATE.currentStep = 2;
+      cfgRefreshUI();
+    }
 
     /* ═══════════════════════════════════════════
        TRIP CONFIGURATOR — 7-Step Wizard Engine
@@ -2258,6 +3385,10 @@
     }
 
     function cfgNextStep() {
+      if (CONFIGURATOR_STATE.currentStep === 7) {
+        cfgSubmitBooking();
+        return;
+      }
       if (CONFIGURATOR_STATE.currentStep < 7) {
         CONFIGURATOR_STATE.currentStep++;
         cfgRefreshUI();
@@ -2274,8 +3405,17 @@
     function updateCfgNav() {
       var prev = document.getElementById('cfgPrev');
       var next = document.getElementById('cfgNext');
-      if (prev) prev.style.visibility = CONFIGURATOR_STATE.currentStep === 1 ? 'hidden' : 'visible';
-      if (next) next.textContent = CONFIGURATOR_STATE.currentStep === 7 ? 'Request Booking →' : 'Next Step →';
+      var isSubmitted = CONFIGURATOR_STATE.submitted;
+      if (prev) prev.style.visibility = (CONFIGURATOR_STATE.currentStep === 1 || isSubmitted) ? 'hidden' : 'visible';
+      if (next) {
+        if (isSubmitted) {
+          next.style.display = 'none';
+        } else {
+          next.style.display = '';
+          next.disabled = false;
+          next.textContent = CONFIGURATOR_STATE.currentStep === 7 ? 'Request Booking \u2192' : 'Next Step \u2192';
+        }
+      }
     }
 
     // cfgCalcPricing() defined in app.js (with NaN guards)
@@ -2284,9 +3424,7 @@
       CONFIGURATOR_STATE.mode = on ? 'concierge' : 'standard';
       if (on && CONFIGURATOR_STATE.destination) {
         // Auto-select premium partners
-        var gkPartners = PARTNERS_DATABASE.filter(function (p) {
-          return p.destinationId === CONFIGURATOR_STATE.destination && p.isGoldenKey;
-        });
+        var gkPartners = getPartnersForDest(CONFIGURATOR_STATE.destination, null, CONFIGURATOR_STATE.selectedBase).filter(function (p) { return p.isGoldenKey; });
         CONFIGURATOR_STATE.accommodation = gkPartners.filter(function (p) { return p.category === 'hotel' });
         var guide = gkPartners.filter(function (p) { return p.category === 'guide' })[0];
         if (guide) CONFIGURATOR_STATE.services.guide = guide;
@@ -2295,23 +3433,16 @@
       renderCfgSidebar();
     }
 
-    // Map LOCATIONS IDs (globe/experience) → DESTINATIONS IDs (configurator)
-    var LOCATION_TO_DEST = {
-      'transfagarasan': 'romania',
-      'alpe-dhuez': 'alps',
-      'stelvio': 'dolomites'
-    };
-
     function selectTripById(id) {
-      var destId = LOCATION_TO_DEST[id] || id;
-      // Verify destination exists; silently abort if not (girona, cape-town, colombia have no configurator entry)
-      var exists = DESTINATIONS.some(function (d) { return d.id === destId; });
+      // Verify destination exists; silently abort if not (girona, cape-town, colombia have no routes)
+      var exists = DESTINATIONS.some(function (d) { return d.id === id && d.routeCount > 0; });
       if (!exists) return;
-      cfgSelectDest(destId);
+      cfgSelectDest(id);
       CONFIGURATOR_STATE.currentStep = 2;
       cfgRefreshUI();
     }
 
+    var _cfgLastStep = 1;
     function renderCfgStep() {
       var panel = document.getElementById('cfgPanel');
       if (!panel) return;
@@ -2326,7 +3457,17 @@
         case 6: html = renderCfgStep6(); break;
         case 7: html = renderCfgStep7(); break;
       }
-      panel.innerHTML = '<div class="cfg-panel-enter">' + html + '</div>';
+      // Exit animation if step actually changed
+      if (step !== _cfgLastStep && panel.firstChild) {
+        panel.firstChild.classList.add('cfg-panel-exit');
+        setTimeout(function () {
+          panel.innerHTML = '<div class="cfg-panel-enter">' + html + '</div>';
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
+      } else {
+        panel.innerHTML = '<div class="cfg-panel-enter">' + html + '</div>';
+      }
+      _cfgLastStep = step;
       updateCfgNav();
       // Post-render hook: if step 5 and departure city is set, trigger flight search
       if (step === 5 && CONFIGURATOR_STATE.transport.departureCity && !_cfgApiLoading) {
@@ -2344,14 +3485,14 @@
       return '<h3 class="cfg-panel-title">Choose Your Destination</h3>' +
         '<p class="cfg-panel-desc">Select a destination to begin building your trip. Routes, partners, and pricing update automatically.</p>' +
         '<div class="cfg-dest-grid">' +
-        DESTINATIONS.map(function (d) {
+        DESTINATIONS.filter(function (d) { return d.routeCount > 0; }).map(function (d) {
           var sel = CONFIGURATOR_STATE.destination === d.id;
           return '<div class="cfg-dest-card' + (sel ? ' selected' : '') + '" onclick="cfgSelectDest(\'' + d.id + '\')">' +
             '<img src="' + d.image + '" alt="' + d.name + '" loading="lazy">' +
             '<div class="cfg-dest-overlay">' +
             '<div class="cfg-dest-name">' + d.flag + ' ' + d.name + '</div>' +
             '<div class="cfg-dest-tagline">' + d.tagline + '</div>' +
-            '<div class="cfg-dest-meta">' + d.routeCount + ' routes · ' + d.partnerCount + ' partners · ' + monthName(d.season.start) + '–' + monthName(d.season.end) + '</div>' +
+            '<div class="cfg-dest-meta">' + d.routeCount + ' routes · ' + d.partnerCount + ' partners · ' + seasonRangeStr(d.season) + '</div>' +
             '</div>' +
             '</div>';
         }).join('') + '</div>';
@@ -2359,21 +3500,49 @@
 
     function cfgSelectDest(id) {
       CONFIGURATOR_STATE.destination = id;
+      CONFIGURATOR_STATE.selectedBase = null;
       CONFIGURATOR_STATE.selectedRoutes = [];
       CONFIGURATOR_STATE.accommodation = [];
       CONFIGURATOR_STATE.transport = { flight: null, shuttles: [], departureCity: null, flightSource: 'static' };
       CONFIGURATOR_STATE.services = { guide: null, rental: null, addons: [] };
+      CONFIGURATOR_STATE.submitted = false;
       if (CONFIGURATOR_STATE.mode === 'concierge') toggleGoldenKey(true);
       renderCfgStep();
       renderCfgSidebar();
     }
 
     // Step 2: Dates
-    function renderCfgStep2() {
+    function cfgSmartDateDefault() {
+      if (CONFIGURATOR_STATE.dates.start && CONFIGURATOR_STATE.dates.start !== '2026-07-15') return;
       var dest = DESTINATION_BY_ID[CONFIGURATOR_STATE.destination];
-      var seasonTip = dest ? 'Best season: ' + monthName(dest.season.start) + '–' + monthName(dest.season.end) + '. Peak: ' + dest.season.peak.map(monthName).join(', ') : '';
+      if (!dest || !dest.season || !dest.season.peak || !dest.season.peak.length) return;
+      var peakMonth = dest.season.peak[0];
+      var year = 2026;
+      // If peak month has already passed in 2026, use 2027
+      var now = new Date();
+      if (year === now.getFullYear() && peakMonth < now.getMonth() + 1) year = 2027;
+      var mm = peakMonth < 10 ? '0' + peakMonth : '' + peakMonth;
+      CONFIGURATOR_STATE.dates.start = year + '-' + mm + '-15';
+      CONFIGURATOR_STATE.dates.end = addDays(CONFIGURATOR_STATE.dates.start, CONFIGURATOR_STATE.dates.nights);
+    }
+
+    function cfgDateOutOfSeason() {
+      var dest = DESTINATION_BY_ID[CONFIGURATOR_STATE.destination];
+      if (!dest || !dest.season || !CONFIGURATOR_STATE.dates.start) return false;
+      var month = parseInt(CONFIGURATOR_STATE.dates.start.split('-')[1]);
+      var s = dest.season.start, e = dest.season.end;
+      if (s <= e) return month < s || month > e;
+      return month < s && month > e;
+    }
+
+    function renderCfgStep2() {
+      cfgSmartDateDefault();
+      var dest = DESTINATION_BY_ID[CONFIGURATOR_STATE.destination];
+      var seasonTip = dest ? 'Best season: ' + seasonRangeWithPeak(dest.season) : '';
+      var outOfSeason = cfgDateOutOfSeason();
       return '<h3 class="cfg-panel-title">When Are You Going?</h3>' +
         '<p class="cfg-panel-desc">' + seasonTip + '</p>' +
+        (outOfSeason ? '<div class="cfg-season-warning">Selected dates fall outside the rideable season for this destination. Some routes may be closed.</div>' : '') +
         '<div class="cfg-date-grid">' +
         '<div class="cfg-date-field"><label>Start Date</label><input type="date" id="cfgDateStart" value="' + (CONFIGURATOR_STATE.dates.start || '2026-07-15') + '" onchange="cfgUpdateDates()"></div>' +
         '<div class="cfg-date-field"><label>End Date</label><input type="date" id="cfgDateEnd" value="' + (CONFIGURATOR_STATE.dates.end || '2026-07-22') + '" onchange="cfgUpdateDates()"></div>' +
@@ -2415,15 +3584,21 @@
     // Step 3: Routes
     function renderCfgStep3() {
       var destRoutes = ROUTE_DATABASE.filter(function (r) { return r.destinationId === CONFIGURATOR_STATE.destination; });
+      var tripMonth = CONFIGURATOR_STATE.dates.start ? parseInt(CONFIGURATOR_STATE.dates.start.split('-')[1]) : null;
       return '<h3 class="cfg-panel-title">Select Your Routes</h3>' +
         '<p class="cfg-panel-desc">Choose one or more routes for your trip. Multi-day routes include stage breakdowns.</p>' +
         '<div class="cfg-route-grid">' +
         destRoutes.map(function (r) {
           var sel = CONFIGURATOR_STATE.selectedRoutes.indexOf(r.id) > -1;
-          return '<div class="cfg-route-mini' + (sel ? ' selected' : '') + '" onclick="cfgToggleRoute(\'' + r.id + '\')">' +
+          var closed = tripMonth && !isRouteRideableInMonth(r, tripMonth);
+          var peak = tripMonth && isRoutePeakInMonth(r, tripMonth);
+          return '<div class="cfg-route-mini' + (sel ? ' selected' : '') + (closed ? ' cfg-route-closed' : '') + '" onclick="cfgToggleRoute(\'' + r.id + '\')">' +
             '<img src="' + r.image + '" alt="' + r.name + '" loading="lazy">' +
             '<div class="cfg-route-mini-body">' +
-            '<div class="cfg-route-mini-name">' + r.name + '</div>' +
+            '<div class="cfg-route-mini-name">' + r.name +
+            (closed ? '<span class="cfg-route-season-tag closed">Closed in ' + monthName(tripMonth) + '</span>' : '') +
+            (peak ? '<span class="cfg-route-season-tag peak">Peak Season</span>' : '') +
+            '</div>' +
             '<div class="cfg-route-mini-stats">' + r.distance + 'km · ' + r.elevationGain.toLocaleString() + 'm ↑ · ' + difficultyBar(r.difficulty) + '</div>' +
             '<div class="cfg-route-mini-desc">' + r.shortDesc.substring(0, 120) + '...</div>' +
             (r.stages.length ? '<div class="cfg-route-mini-stages">' + r.stages.length + '-day stage route</div>' : '') +
@@ -2443,22 +3618,29 @@
 
     // Step 4: Accommodation
     function renderCfgStep4() {
-      var hotels = PARTNERS_DATABASE.filter(function (p) {
-        return p.destinationId === CONFIGURATOR_STATE.destination && p.category === 'hotel';
-      });
+      var st = CONFIGURATOR_STATE;
+      var hotels = getPartnersForDest(st.destination, 'hotel', st.selectedBase);
+      var baseObj = null;
+      if (st.selectedBase) {
+        var dest = DESTINATION_BY_ID[st.destination];
+        baseObj = dest && dest.bases ? dest.bases.find(function (b) { return b.id === st.selectedBase; }) : null;
+      }
+      var basePartnerIds = baseObj && baseObj.partnerIds ? baseObj.partnerIds : [];
       return '<h3 class="cfg-panel-title">Where You\'ll Stay</h3>' +
         '<p class="cfg-panel-desc">Cycling-specific hotels with bike storage, early breakfast, and workshop access.</p>' +
         '<div class="cfg-hotel-grid">' +
         hotels.map(function (h) {
-          var sel = CONFIGURATOR_STATE.accommodation.some(function (a) { return a.id === h.id });
+          var sel = st.accommodation.some(function (a) { return a.id === h.id });
+          var atBase = basePartnerIds.indexOf(h.id) > -1;
           return '<div class="cfg-hotel-card' + (sel ? ' selected' : '') + (h.isGoldenKey ? ' golden-key' : '') + '" onclick="cfgToggleHotel(\'' + h.id + '\')">' +
+            (atBase ? '<span class="cfg-base-tag">At your base</span>' : '') +
             (h.isGoldenKey ? '<span class="cfg-gk-badge">Golden Key</span>' : '') +
             '<img src="' + h.image + '" alt="' + h.name + '" loading="lazy">' +
             '<div class="cfg-hotel-info">' +
             '<div class="cfg-hotel-name">' + h.name + '</div>' +
             '<div class="cfg-hotel-rating">' + h.rating + '★ · ' + h.reviewCount + ' reviews</div>' +
             '<div class="cfg-hotel-amenities">' + h.cyclingAmenities.slice(0, 3).map(function (a) { return '<span class="amenity-tag">' + a + '</span>' }).join('') + '</div>' +
-            '<div class="cfg-hotel-price">€' + h.priceFrom + '/night · <strong>€' + (h.priceFrom * CONFIGURATOR_STATE.dates.nights) + '</strong> total</div>' +
+            '<div class="cfg-hotel-price">€' + h.priceFrom + '/night · <strong>€' + (h.priceFrom * st.dates.nights) + '</strong> total</div>' +
             '</div>' +
             '<div class="cfg-check">' + (sel ? '✓' : '') + '</div>' +
             '</div>';
@@ -2846,10 +4028,10 @@
 
     // Step 6: Services
     function renderCfgStep6() {
-      var dest = CONFIGURATOR_STATE.destination;
-      var guides = PARTNERS_DATABASE.filter(function (p) { return p.destinationId === dest && p.category === 'guide' });
-      var rentals = PARTNERS_DATABASE.filter(function (p) { return p.destinationId === dest && p.category === 'rental' });
-      var physio = PARTNERS_DATABASE.filter(function (p) { return p.destinationId === dest && (p.category === 'physio') });
+      var st = CONFIGURATOR_STATE;
+      var guides = getPartnersForDest(st.destination, 'guide', st.selectedBase);
+      var rentals = getPartnersForDest(st.destination, 'rental', st.selectedBase);
+      var physio = getPartnersForDest(st.destination, 'physio', st.selectedBase);
       var html = '<h3 class="cfg-panel-title">Services & Support</h3>' +
         '<p class="cfg-panel-desc">Guides, bike rental, and recovery services to complete your trip.</p>';
       // Guides
@@ -2912,10 +4094,110 @@
       cfgToggleItem(CONFIGURATOR_STATE.services.addons, id);
     }
 
+    // Booking submission
+    function cfgSubmitBooking() {
+      if (CONFIGURATOR_STATE.submitted) return;
+      var name = document.getElementById('cfgBookName');
+      var email = document.getElementById('cfgBookEmail');
+      var phone = document.getElementById('cfgBookPhone');
+      if (!name || !email || !name.value.trim() || !email.value.trim()) {
+        var firstEmpty = (!name || !name.value.trim()) ? name : email;
+        if (firstEmpty) firstEmpty.focus();
+        return;
+      }
+      if (email.validity && !email.validity.valid) { email.focus(); return; }
+      var st = CONFIGURATOR_STATE;
+      var dest = DESTINATION_BY_ID[st.destination];
+      var payload = {
+        name: name.value.trim(),
+        email: email.value.trim(),
+        phone: phone ? phone.value.trim() : '',
+        destination: dest ? dest.name : st.destination,
+        base: st.selectedBase || '',
+        dates: st.dates,
+        mode: st.mode,
+        routes: st.selectedRoutes.map(function (rid) { var r = ROUTE_BY_ID[rid]; return r ? r.name : rid; }),
+        accommodation: st.accommodation.map(function (a) { return a.name; }),
+        guide: st.services.guide ? st.services.guide.name : '',
+        rental: st.services.rental ? st.services.rental.name : '',
+        addons: st.services.addons.map(function (a) { return a.name; }),
+        flight: st.transport.flight ? st.transport.flight.airline + ' ' + st.transport.flight.from + ' → ' + st.transport.flight.to : '',
+        total: st.pricing.total
+      };
+      var formData = new FormData();
+      formData.append('form-name', 'booking-request');
+      Object.keys(payload).forEach(function (k) {
+        var val = typeof payload[k] === 'object' ? JSON.stringify(payload[k]) : payload[k];
+        formData.append(k, val);
+      });
+      CONFIGURATOR_STATE.submitted = true;
+      var btn = document.getElementById('cfgNext');
+      if (btn) { btn.textContent = 'Submitting...'; btn.disabled = true; }
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      }).then(function () {
+        renderCfgStep();
+        updateCfgNav();
+      }).catch(function () {
+        renderCfgStep();
+        updateCfgNav();
+      });
+    }
+
+    function cfgSerializeBooking() {
+      var st = CONFIGURATOR_STATE;
+      var dest = DESTINATION_BY_ID[st.destination];
+      return {
+        destination: dest ? dest.name : '',
+        base: st.selectedBase || '',
+        nights: st.dates.nights,
+        mode: st.mode,
+        routes: st.selectedRoutes.length,
+        accommodation: st.accommodation.length,
+        total: st.pricing.total
+      };
+    }
+
+    function cfgResetBooking() {
+      CONFIGURATOR_STATE.currentStep = 1;
+      CONFIGURATOR_STATE.destination = null;
+      CONFIGURATOR_STATE.selectedBase = null;
+      CONFIGURATOR_STATE.selectedRoutes = [];
+      CONFIGURATOR_STATE.accommodation = [];
+      CONFIGURATOR_STATE.transport = { flight: null, shuttles: [], departureCity: null, flightSource: 'static' };
+      CONFIGURATOR_STATE.services = { guide: null, rental: null, addons: [] };
+      CONFIGURATOR_STATE.pricing = { subtotal: 0, memberDiscount: 0, goldenKeyPremium: 0, total: 0 };
+      CONFIGURATOR_STATE.submitted = false;
+      cfgRefreshUI();
+    }
+
     // Step 7: Review
     function renderCfgStep7() {
       var st = CONFIGURATOR_STATE;
       var dest = DESTINATION_BY_ID[st.destination];
+
+      // Confirmation view after submission
+      if (st.submitted) {
+        return '<div class="cfg-confirmation">' +
+          '<div class="cfg-confirm-icon">&#10003;</div>' +
+          '<h3 class="cfg-panel-title">Booking Request Sent</h3>' +
+          '<p class="cfg-panel-desc">We\'ve received your trip request for ' + (dest ? dest.flag + ' ' + dest.name : 'your destination') + '.</p>' +
+          '<div class="cfg-confirm-next">' +
+          '<div class="cfg-confirm-step">We\'ll review your trip and email you within 24 hours with availability and final pricing.</div>' +
+          '<div class="cfg-confirm-step">No payment is required until your trip is confirmed.</div>' +
+          '</div>' +
+          '<div class="cfg-confirm-summary">' +
+          '<div class="cfg-confirm-line"><span>Destination</span><span>' + (dest ? dest.name : '') + '</span></div>' +
+          '<div class="cfg-confirm-line"><span>Duration</span><span>' + st.dates.nights + ' nights</span></div>' +
+          '<div class="cfg-confirm-line"><span>Routes</span><span>' + st.selectedRoutes.length + '</span></div>' +
+          '<div class="cfg-confirm-line"><span>Est. Total</span><span>\u20AC' + st.pricing.total + '</span></div>' +
+          '</div>' +
+          '<button class="btn btn-ghost cfg-confirm-reset" onclick="cfgResetBooking()" style="color:var(--chalk);border-color:rgba(255,255,255,0.2);margin-top:1.5rem">Plan Another Trip</button>' +
+          '</div>';
+      }
+
       var html = '<h3 class="cfg-panel-title">Trip Review</h3>';
       if (!dest) return html + '<p class="cfg-panel-desc">Please select a destination first.</p>';
       html += '<div class="cfg-review-header">' +
@@ -2971,6 +4253,15 @@
         (st.pricing.goldenKeyPremium ? '<div class="cfg-review-line" style="color:var(--gold)"><span>Golden Key Premium</span><span>+€' + st.pricing.goldenKeyPremium + '</span></div>' : '') +
         '<div class="cfg-review-line cfg-review-total"><span>Total</span><span>€' + st.pricing.total + '</span></div>' +
         '</div>';
+      // Contact form
+      html += '<div class="cfg-booking-form">' +
+        '<div class="cfg-booking-form-title">Your Details</div>' +
+        '<div class="cfg-booking-fields">' +
+        '<input type="text" id="cfgBookName" placeholder="Full name" required class="cfg-book-input">' +
+        '<input type="email" id="cfgBookEmail" placeholder="Email address" required class="cfg-book-input">' +
+        '<input type="tel" id="cfgBookPhone" placeholder="Phone (optional)" class="cfg-book-input">' +
+        '</div>' +
+        '</div>';
       return html;
     }
 
@@ -3011,84 +4302,6 @@
       sb.innerHTML = html;
     }
 
-    /* ═══════════════════════════════════════════
-       DEEP DIVE — Unified Rendering
-       ═══════════════════════════════════════════ */
-    function renderDeepDive(data, elPrefix, destId, sectionSelector) {
-      // Intro
-      var intro = document.getElementById(elPrefix + 'Intro');
-      if (intro) intro.textContent = data.intro;
-      // Routes grid
-      var grid = document.getElementById(elPrefix + 'RoutesGrid');
-      if (grid) {
-        grid.innerHTML = data.routeIds.map(function (rid, i) {
-          var r = ROUTE_BY_ID[rid];
-          if (!r) return '';
-          return '<div class="dd-route-card reveal' + (i ? ' reveal-delay-' + i : '') + '" onclick="openRouteDetail(\'' + r.id + '\')">' +
-            '<img src="' + r.image + '" alt="' + r.name + '" loading="lazy">' +
-            '<div class="dd-route-overlay">' +
-            '<div class="dd-route-name">' + r.name + '</div>' +
-            '<div class="dd-route-stats">' + r.distance + 'km · ' + r.elevationGain.toLocaleString() + 'm ↑ · ' + difficultyBar(r.difficulty) + '</div>' +
-            (r.stages.length ? '<div class="dd-route-stages">' + r.stages.length + '-day stage route</div>' : '<div class="dd-route-stages">Day ride</div>') +
-            '</div>' +
-            '</div>';
-        }).join('');
-      }
-      // Season bar
-      var seasonBar = document.getElementById(elPrefix + 'SeasonBar');
-      if (seasonBar) {
-        seasonBar.innerHTML = data.seasonBar.map(function (m) {
-          var cls = m.open ? 'dd-month open' : 'dd-month closed';
-          if (m.note.indexOf('Peak') > -1) cls += ' peak';
-          return '<div class="' + cls + '" title="' + m.note + '"><div class="dd-month-name">' + m.month + '</div><div class="dd-month-bar"></div></div>';
-        }).join('');
-      }
-      // Cost table
-      var costTable = document.getElementById(elPrefix + 'CostTable');
-      if (costTable) {
-        var html = '<table><thead><tr><th>Destination</th><th>Hotel/night</th><th>Guide/day</th><th>Rental/day</th><th>Meal</th><th>7-Day Total</th></tr></thead><tbody>';
-        data.costComparison.forEach(function (c, i) {
-          html += '<tr' + (i === 0 ? ' class="dd-cost-highlight"' : '') + '>' +
-            '<td><strong>' + c.destination + '</strong></td>' +
-            '<td>€' + c.hotel + '</td><td>€' + c.guide + '</td><td>€' + c.rental + '</td><td>€' + c.meal + '</td>' +
-            '<td><strong>€' + c.total7day + '</strong></td></tr>';
-        });
-        html += '</tbody></table>';
-        costTable.innerHTML = html;
-      }
-      // Cultural highlights
-      var cultureGrid = document.getElementById(elPrefix + 'CultureGrid');
-      if (cultureGrid) {
-        cultureGrid.innerHTML = data.culturalHighlights.map(function (ch, i) {
-          return '<div class="dd-culture-card reveal' + (i ? ' reveal-delay-' + i : '') + '">' +
-            '<div class="dd-culture-icon">' + (VX_ICONS[ch.icon] || '') + '</div>' +
-            '<h4>' + ch.title + '</h4>' +
-            '<p>' + ch.description + '</p>' +
-            '</div>';
-        }).join('');
-      }
-      // Golden Key callout
-      var gkCallout = document.getElementById(elPrefix + 'GkCallout');
-      if (gkCallout) {
-        var pkg = data.goldenKeyPackage;
-        gkCallout.innerHTML = '<div class="dd-gk-header">' +
-          '<div class="dd-gk-title">' + pkg.name + '</div>' +
-          '<div class="dd-gk-tagline">' + pkg.tagline + '</div>' +
-          '</div>' +
-          '<div class="dd-gk-includes">' +
-          '<h4>Package Includes:</h4>' +
-          '<ul>' + pkg.includes.map(function (item) { return '<li>' + item + '</li>'; }).join('') + '</ul>' +
-          '</div>' +
-          '<div class="dd-gk-pricing">' +
-          '<div class="dd-gk-price">€' + pkg.price7day + ' <span>/ 7 days all-inclusive</span></div>' +
-          '<div class="dd-gk-saving">Save €' + pkg.savingsVsDIY + ' vs. booking separately</div>' +
-          '<a href="#trip-builder" class="btn btn-primary" onclick="setTimeout(function(){selectTripById(\'' + destId + '\');toggleGoldenKey(true);document.getElementById(\'cfgGkToggle\').querySelector(\'input\').checked=true},300)">Book Golden Key Package →</a>' +
-          '</div>';
-      }
-      // Re-observe reveals
-      document.querySelectorAll(sectionSelector + ' .reveal').forEach(function (el) { revealObs.observe(el); });
-    }
-
     // Image skeleton loading — fade in on load
     document.querySelectorAll('.route-card-img img, .partner-card-img img').forEach(function (img) {
       img.setAttribute('data-loaded', 'false');
@@ -3114,7 +4327,4 @@
     renderChecklist();
     renderCalendar();
     initTripBuilder();
-    renderDeepDive(ROMANIA_DEEP_DIVE, 'ro', 'romania', '.romania-section');
-    renderDeepDive(CANARY_ISLANDS_DEEP_DIVE, 'ci', 'fuerteventura', '.canary-section');
-    renderDeepDive(CRETE_DEEP_DIVE, 'cr', 'crete', '.crete-section');
 
