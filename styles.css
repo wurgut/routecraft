@@ -4786,7 +4786,7 @@
     .route-modal {
       position: fixed;
       inset: 0;
-      z-index: var(--z-modal);
+      z-index: 1200;
       background: var(--chalk);
       overflow-y: auto;
       transform: translateY(100%);
@@ -7910,7 +7910,7 @@ textarea:focus-visible,
   background: rgba(10, 10, 10, 0.98);
   backdrop-filter: blur(20px);
   border-left: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 1000;
+  z-index: 1100;
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
@@ -8022,3 +8022,352 @@ textarea:focus-visible,
 .sg-deepdive-img { width: 100%; border-radius: var(--radius-md); margin: 1.5rem 0; object-fit: cover; aspect-ratio: 16/9; }
 .sg-deepdive-caption { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; margin-top: -1rem; margin-bottom: 1.5rem; font-style: italic; }
 
+
+/* Strava Integration */
+.nav-strava {
+    background: transparent;
+    color: #fc4c02;
+    border: 1px solid rgba(252, 76, 2, 0.5);
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+.nav-strava:hover {
+    background: #fc4c02;
+    color: #fff;
+}
+.nav-strava.connected {
+    background: rgba(252, 76, 2, 0.1);
+    color: #fc4c02;
+    border-color: rgba(252, 76, 2, 0.3);
+}
+
+
+/* ═══════════════════════════════════════════
+   ITINERARY BUILDER DRAWER
+   ═══════════════════════════════════════════ */
+.itb-drawer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  background: var(--obsidian);
+  color: var(--chalk);
+  z-index: var(--z-drawer);
+  border-top-left-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(110%);
+  transition: transform .4s var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-bottom: none;
+  border-right: none;
+}
+
+.itb-drawer.active {
+  transform: translateY(0);
+}
+
+.itb-drawer-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.02);
+}
+
+.itb-drawer-title {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin-top: 2px;
+}
+
+.itb-drawer-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color .2s;
+}
+
+.itb-drawer-close:hover {
+  color: var(--chalk);
+}
+
+.itb-drawer-body {
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.itb-drawer-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.3);
+}
+
+.itb-empty {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+.itb-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.itb-item-img {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.itb-item-info {
+  flex-grow: 1;
+}
+
+.itb-item-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.itb-item-stats {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.itb-item-remove {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.itb-item-remove:hover {
+  background: var(--ember);
+}
+
+.itb-stats-summary {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  color: var(--chalk);
+}
+
+.rc-itb-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  background: rgba(10,10,10,0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s var(--ease-out);
+  z-index: 10;
+}
+
+.rc-itb-btn:hover {
+  background: var(--forest);
+  transform: scale(1.1);
+}
+
+.rc-itb-btn.added {
+  background: var(--ember);
+  border-color: var(--ember);
+}
+
+.rd-hero-itb {
+  position: absolute;
+  top: 1.5rem;
+  right: 5rem;
+  background: rgba(10,10,10,0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rd-hero-itb:hover {
+  background: var(--forest);
+}
+
+.rd-hero-itb.added {
+  background: var(--ember);
+  border-color: var(--ember);
+}
+
+
+/* ═══════════════════════════════════════════
+   COMMUNITY REVIEWS
+   ═══════════════════════════════════════════ */
+.rd-reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.rd-review-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+}
+
+.rd-rv-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rd-rv-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--slate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: var(--chalk);
+}
+
+.rd-rv-meta {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.rd-rv-meta strong {
+  font-size: 0.9rem;
+  color: var(--chalk);
+}
+
+.rd-rv-meta span {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.rd-rv-stars {
+  color: var(--gold);
+  letter-spacing: 2px;
+  font-size: 1.1rem;
+}
+
+.rd-rv-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.7);
+}
+
+.rd-review-form {
+  margin-top: 2rem;
+  background: rgba(10,10,10,0.5);
+  border: 1px solid rgba(201,168,76,0.2);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--gold);
+}
+
+.rd-review-form h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  font-size: 1.3rem;
+  color: var(--chalk);
+  margin-bottom: 0.5rem;
+}
+
+.rd-review-form p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 1.5rem;
+}
+
+.rd-rv-stars-input {
+  color: var(--gold);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.rd-rv-stars-input span {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0;
+  margin-right: 10px;
+}
+
+.rd-review-form textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  color: var(--chalk);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 1rem;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.rd-review-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}

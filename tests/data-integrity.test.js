@@ -131,9 +131,9 @@ test('No duplicate airline codes', function () {
 
 console.log('\nREGIONS data integrity');
 
-test('REGIONS array loaded with 11 entries', function () {
+test('REGIONS array loaded with 13 entries', function () {
   assert(Array.isArray(REGIONS), 'Failed to extract REGIONS');
-  assert.strictEqual(REGIONS.length, 11, 'Expected 11 regions, got ' + REGIONS.length);
+  assert.strictEqual(REGIONS.length, 13, 'Expected 11 regions, got ' + REGIONS.length);
 });
 
 test('All regions have required fields', function () {
@@ -163,9 +163,9 @@ test('All region subGeoIds reference valid destination IDs', function () {
 
 console.log('\nDESTINATIONS data integrity');
 
-test('DESTINATIONS array loaded with 11 entries', function () {
+test('DESTINATIONS array loaded with 13 entries', function () {
   assert(Array.isArray(DESTINATIONS), 'Failed to extract DESTINATIONS');
-  assert.strictEqual(DESTINATIONS.length, 11, 'Expected 11 destinations, got ' + DESTINATIONS.length);
+  assert.strictEqual(DESTINATIONS.length, 13, 'Expected 11 destinations, got ' + DESTINATIONS.length);
 });
 
 test('All destinations have required fields', function () {
@@ -242,9 +242,9 @@ test('Deep dive destinations have routeIds in deepDive', function () {
 
 console.log('\nROUTE_DATABASE data integrity');
 
-test('ROUTE_DATABASE array loaded with 16 entries', function () {
+test('ROUTE_DATABASE array loaded with 18 entries', function () {
   assert(Array.isArray(ROUTE_DATABASE), 'Failed to extract ROUTE_DATABASE');
-  assert.strictEqual(ROUTE_DATABASE.length, 16, 'Expected 16 routes, got ' + ROUTE_DATABASE.length);
+  assert.strictEqual(ROUTE_DATABASE.length, 18, 'Expected 16 routes, got ' + ROUTE_DATABASE.length);
 });
 
 test('All routes have required fields', function () {
@@ -719,7 +719,7 @@ test('generateQuickIdeas returns array of 11 ideas for any month', function () {
   for (var m = 1; m <= 12; m++) {
     var ideas = generateQuickIdeas(m);
     assert(Array.isArray(ideas), 'Month ' + m + ': not an array');
-    assert.strictEqual(ideas.length, 11, 'Month ' + m + ': expected 11, got ' + ideas.length);
+    assert.strictEqual(ideas.length, 13, 'Month ' + m + ': expected 13, got ' + ideas.length);
   }
 });
 

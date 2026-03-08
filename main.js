@@ -3,6 +3,29 @@
        ═══════════════════════════════════════════ */
     var REGIONS = [
       {
+        id: 'french-alps-dup', name: 'French Alps', country: 'France', continent: 'Europe',
+        lat: 45.0, lng: 6.0, color: '#3B82F6',
+        tagline: 'The roof of cycling history',
+        character: 'Legendary cols of the Tour de France. High altitude, epic passes, and deep cycling culture.',
+        vibes: ['alpine', 'history', 'epic', 'bucket-list'],
+        seasonalWindow: 'Jun–Sep. Best: Jul–Aug.',
+        socialProof: { ridersLastMonth: 12500, period: 'July 2025' },
+        image: 'https://images.unsplash.com/photo-1549491763-70678fc53036?w=1600&q=85',
+        subGeoIds: ['alps-huezdor']
+      },
+      {
+        id: 'dolomites-region', name: 'The Dolomites', country: 'Italy', continent: 'Europe',
+        lat: 46.5, lng: 11.8, color: '#EF4444',
+        tagline: 'Most beautiful mountains in the world',
+        character: 'Pale peaks, dramatic jagged horizons, demanding climbs, and impeccable Italian hospitality.',
+        vibes: ['dramatic', 'grueling', 'cuisine', 'maratona'],
+        seasonalWindow: 'Jun–Sep. Best: Jul.',
+        socialProof: { ridersLastMonth: 9500, period: 'July 2025' },
+        image: 'https://images.unsplash.com/photo-1546200299-46fdb89a5840?w=1600&q=85',
+        subGeoIds: ['dolomites-alta-badia']
+      }
+,
+      {
         id: 'canary-islands', name: 'Canary Islands', country: 'Spain', continent: 'Europe',
         lat: 28.1, lng: -15.4, color: '#e8491d',
         tagline: 'Volcanic fire, year-round sun',
@@ -131,6 +154,47 @@
        Unified from LOCATIONS + DESTINATIONS + deep dives
        ═══════════════════════════════════════════ */
     var DESTINATIONS = [
+      {
+        id: 'alps-huezdor', regionId: 'french-alps', name: "Alpe d'Huez & Oisans",
+        country: 'France', continent: 'Europe', lat: 45.09, lng: 6.06, color: '#3B82F6',
+        tagline: 'The Holy Mountain of Cycling',
+        character: 'The ultimate bucket list destination for road cyclists wanting to trace the history of the Tour de France on legendary ascents.',
+        desc: 'Bourg d\'Oisans Valley serves as the perfect launchpad to tackle Alpe d\'Huez, Galibier, and Croix de Fer.',
+        image: 'https://images.unsplash.com/photo-1549491763-70678fc53036?w=1600&q=85',
+        images: ['https://images.unsplash.com/photo-1549491763-70678fc53036?w=800','https://images.unsplash.com/photo-1582260654067-17ed36f0db5b?w=800'],
+        flag: '🇫🇷', airportIATA: ['LYS', 'GVA'], season: { start: 6, end: 9, peakStart: 7, peakEnd: 8, peak: [7, 8], monthly: [ {month:1, heatmapIntensity: 0}, {month:2, heatmapIntensity: 0}, {month:3, heatmapIntensity: 0}, {month:4, heatmapIntensity: 0}, {month:5, heatmapIntensity: 0.5}, {month:6, heatmapIntensity: 0.8}, {month:7, heatmapIntensity: 1.0}, {month:8, heatmapIntensity: 1.0}, {month:9, heatmapIntensity: 0.8}, {month:10, heatmapIntensity: 0.3}, {month:11, heatmapIntensity: 0}, {month:12, heatmapIntensity: 0} ] }, routeCount: 1, partnerCount: 0,
+        highlights: ['Alpe d\'Huez hairpins', 'Col du Galibier', 'Croix de Fer'],
+        stats: { routes: 15, dur: '5-10 Days', diff: 'Expert', season: 'Summer', price: 'High', group: '2-12' },
+        conditions: { roads: 'Pristine mountain asphalt', water: 'Available at mountain huts', bikeShops: 'Bourg d\'Oisans', rental: 'Best in France', specialRisks: 'Variable mountain weather, altitude' },
+        zones: [
+          { id: 'alps-bourg', name: 'Bourg d\'Oisans Valley', character: 'Base of the big climbs.', difficulty: 'expert', bestFor: ['climbers'], routeIds: ['alps-huez', 'alps-galibier'] }
+        ],
+        bases: [
+          { id: 'base-bourg', name: 'Bourg d\'Oisans', character: 'Cycling village entirely dedicated to the sport.', bestFor: 'Pro atmosphere, instant access to climbs.', accessibleZoneIds: ['alps-bourg'], partnerIds: [], nearestAirportIATA: 'LYS', transferKm: 120 }
+        ],
+        deepDive: null
+      },
+      {
+        id: 'dolomites-alta-badia', regionId: 'dolomites-region', name: 'Alta Badia',
+        country: 'Italy', continent: 'Europe', lat: 46.55, lng: 11.87, color: '#EF4444',
+        tagline: 'The heart of the Sella Ronda',
+        character: 'Incredible alpine passes interwoven with rich Ladin culture, luxury mountain lodges, and world-class culinary experiences.',
+        desc: 'Corvara and the surrounding villages provide immediate access to the Maratona dles Dolomites passes.',
+        image: 'https://images.unsplash.com/photo-1546200299-46fdb89a5840?w=1600&q=85',
+        images: ['https://images.unsplash.com/photo-1546200299-46fdb89a5840?w=800'],
+        flag: '🇮🇹', airportIATA: ['VCE', 'TSF'], season: { start: 6, end: 9, peakStart: 7, peakEnd: 8, peak: [7, 8], monthly: [ {month:1, heatmapIntensity: 0}, {month:2, heatmapIntensity: 0}, {month:3, heatmapIntensity: 0}, {month:4, heatmapIntensity: 0}, {month:5, heatmapIntensity: 0.4}, {month:6, heatmapIntensity: 0.9}, {month:7, heatmapIntensity: 1.0}, {month:8, heatmapIntensity: 1.0}, {month:9, heatmapIntensity: 0.8}, {month:10, heatmapIntensity: 0.2}, {month:11, heatmapIntensity: 0}, {month:12, heatmapIntensity: 0} ] }, routeCount: 1, partnerCount: 0,
+        highlights: ['Sella Ronda', 'Passo Giau', 'Tre Cime di Lavaredo'],
+        stats: { routes: 12, dur: '4-7 Days', diff: 'Expert', season: 'Summer', price: 'Luxury', group: '2-8' },
+        conditions: { roads: 'Very good, some frost heave', water: 'Abundant fountains', bikeShops: 'Corvara', rental: 'High-end road bikes', specialRisks: 'Thunderstorms, motorbikes on passes' },
+        zones: [
+          { id: 'dolo-sella', name: 'Sella Ronda', character: 'The legendary four passes.', difficulty: 'expert', bestFor: ['climbers', 'scenery lovers'], routeIds: ['dolo-sella-ronda', 'dolo-giau'] }
+        ],
+        bases: [
+          { id: 'base-corvara', name: 'Corvara', character: 'Ladin mountain luxury.', bestFor: 'Foodies, climbers, luxury.', accessibleZoneIds: ['dolo-sella'], partnerIds: [], nearestAirportIATA: 'VCE', transferKm: 160 }
+        ],
+        deepDive: null
+      }
+,
       // ── FUERTEVENTURA ──
       {
         id: 'fuerteventura', name: 'Fuerteventura', country: 'Spain', continent: 'Europe', flag: '\u{1F1EA}\u{1F1F8}',
@@ -948,6 +1012,37 @@
        ROUTE DATABASE — 16 routes across destinations
        ═══════════════════════════════════════════ */
     var ROUTE_DATABASE = [
+      {
+        id: 'alps-huez', destinationId: 'alps-huezdor', name: "Alpe d'Huez Classic",
+        shortDesc: 'The famous 21 switchbacks of cycling lore.',
+        type: 'road', stages: [], distance: 13.8, elevationGain: 1120, maxGradient: 13, avgGradient: 8.1,
+        difficulty: 5, sceneryRating: 4, trafficLevel: 3, surfaceType: 'asphalt', surfaceCondition: 5,
+        season: { start: 6, end: 9, peakStart: 7, peakEnd: 8 },
+        flag: '🇫🇷', country: 'France', region: 'French Alps', image: 'https://images.unsplash.com/photo-1549491763-70678fc53036?w=1600&q=85',
+        bestDirection: 'Up', wind: 'Minor', weather: 'Variable',
+        elevationProfile: [0,20,40,60,80,100],
+        strava: { komTime: '37m 15s', avgTime: '1h 10m', segmentCount: 21 },
+        encyclopedia: 'The 21 hairpins of Alpe d\'Huez are arguably the most famous piece of road in professional cycling. Every corner tells a story, named after past stage winners.\n\nStarting in Le Bourg-d\'Oisans, the climb slaps you immediately. The first few kilometers average over 10%, serving as a cruel wake-up call before settling into a steady rhythm of 8-9%.\n\nAs you pass La Garde and Huez village, the views widen over the valley. The final hairpins, affectionately known as \'Dutch Corner\', are steeped in Tour de France lore. Reaching the summit isn\'t just a physical achievement; it\'s a pilgrimage.',
+        confidence: { waterFrequency: 'Every 5km', phoneSignal: 'Perfect', nearestBikeShop: 'Bourg', surfaceBreakdown: '100% smooth Tarmac', emergencyContacts: '112', offlineMapAvailable: true },
+        localTips: ['Pace yourself on the steep first 3 bends.', 'Look for the photographers at corner 5.'],
+        waterStops: [], accessibleFromBases: ['base-bourg'], effortCategory: 'full-day-hard'
+      },
+      {
+        id: 'dolo-sella-ronda', destinationId: 'dolomites-alta-badia', name: 'Sella Ronda',
+        shortDesc: 'Four spectacular passes circling the Sella Massif.',
+        type: 'road', stages: [], distance: 54.0, elevationGain: 1650, maxGradient: 11, avgGradient: 6.8,
+        difficulty: 4, sceneryRating: 5, trafficLevel: 4, surfaceType: 'asphalt', surfaceCondition: 4,
+        season: { start: 6, end: 9, peakStart: 7, peakEnd: 8 },
+        flag: '🇮🇹', country: 'Italy', region: 'Dolomites', image: 'https://images.unsplash.com/photo-1546200299-46fdb89a5840?w=1600&q=85',
+        bestDirection: 'Anti-clockwise', wind: 'Minor', weather: 'Variable',
+        elevationProfile: [0,50,10,60,20,100],
+        strava: { komTime: '1h 55m', avgTime: '3h 30m', segmentCount: 14 },
+        encyclopedia: 'To ride the Sella Ronda is to experience the Dolomites in their purest, most concentrated form. Circling the magnificent Gruppo del Sella, you\'ll tackle four interconnected passes: Campolongo, Pordoi, Sella, and Gardena.\n\nStarting from Corvara, the initial climb over Passo Campolongo serves as a warm-up. But the real challenge begins on the long, sweeping switchbacks of Passo Pordoi.\n\nAt the summit of Passo Sella, you\'ll be dwarfed by vertical rock faces that glow pink in the afternoon light. It\'s a rollercoaster of jaw-dropping descents and steady alpine climbs that exemplifies world-class grand fondo riding.',
+        confidence: { waterFrequency: 'Every village', phoneSignal: 'Good', nearestBikeShop: 'Corvara', surfaceBreakdown: '100% mountain asphalt', emergencyContacts: '112', offlineMapAvailable: true },
+        localTips: ['Start early to beat the motorbikes.', 'Stop for strudel at Passo Pordoi.'],
+        waterStops: [], accessibleFromBases: ['base-bourg'], effortCategory: 'full-day-hard'
+      }
+,
       // ── FUERTEVENTURA (3 routes) ──
       {
         id: 'fuerte-betancuria', destinationId: 'fuerteventura', name: 'Betancuria Loop', subtitle: 'The island\'s defining climb through volcanic valleys',
@@ -2206,22 +2301,22 @@
         globeScene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.7 })));
 
         // Earth sphere
-        var earthGeo = new THREE.SphereGeometry(1, 64, 64);
+        var earthGeo = new THREE.SphereGeometry(1, 128, 128);
         var procTexture = new THREE.CanvasTexture(createEarthCanvas());
         var earthMat = new THREE.MeshPhongMaterial({ map: procTexture, bumpScale: 0.03, specular: new THREE.Color(0x111122), shininess: 15 });
         var earthMesh = new THREE.Mesh(earthGeo, earthMat);
         globeGroup.add(earthMesh);
 
-        // NASA Blue Marble upgrade
+        // High-Res Dark Luxury Texture Upgrade
         var texLoader = new THREE.TextureLoader();
-        texLoader.load('https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg',
+        texLoader.load('https://unpkg.com/three-globe/example/img/earth-dark.jpg',
           function (tex) { earthMat.map = tex; earthMat.needsUpdate = true; }, undefined, function () { });
-        texLoader.load('https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png',
+        texLoader.load('https://unpkg.com/three-globe/example/img/earth-topology.png',
           function (tex) { earthMat.bumpMap = tex; earthMat.needsUpdate = true; }, undefined, function () { });
 
         // Cloud layer
-        var cloudMat = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, depthWrite: false });
-        globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(1.01, 48, 48), cloudMat));
+        var cloudMat = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.12, depthWrite: false }); // opacity slightly up for better dark contrast
+        globeGroup.add(new THREE.Mesh(new THREE.SphereGeometry(1.01, 128, 128), cloudMat));
 
         // Atmosphere glow
         var atmosMat = new THREE.ShaderMaterial({
@@ -2231,7 +2326,7 @@
           side: THREE.BackSide,
           transparent: true
         });
-        globeScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.15, 48, 48), atmosMat));
+        globeScene.add(new THREE.Mesh(new THREE.SphereGeometry(1.15, 128, 128), atmosMat));
 
         // Lights
         globeScene.add(new THREE.AmbientLight(0x333344, 1.5));
@@ -2846,6 +2941,38 @@
 
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // Phase 5: Live Weather/Wind API
+      if (dest && dest.lat && dest.lng) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + dest.lat + '&longitude=' + dest.lng + '&current_weather=true')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (!data.current_weather) throw new Error('No weather data');
+            var w = data.current_weather;
+            var wCode = w.weathercode;
+            var desc = "Clear";
+            if (wCode >= 1 && wCode <= 3) desc = "Partly Cloudy";
+            else if (wCode >= 41 && wCode <= 48) desc = "Fog";
+            else if (wCode >= 51 && wCode <= 67) desc = "Rain";
+            else if (wCode >= 71 && wCode <= 77) desc = "Snow";
+            else if (wCode >= 80) desc = "Storm";
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.temperature + '°C</span> · ' + desc;
+            
+            // Convert wind direction degrees to compass
+            var val = Math.floor((w.winddirection / 22.5) + 0.5);
+            var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+            var compass = arr[(val % 16)];
+            if (elWind) elWind.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.windspeed + ' km/h</span> · ' + compass;
+          })
+          .catch(function() {
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = route.weather || 'Unavailable';
+            if (elWind) elWind.innerHTML = route.wind || 'Unavailable';
+          });
+      }
       overlay.scrollTop = 0;
     }
 
@@ -2921,6 +3048,38 @@
 
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // Phase 5: Live Weather/Wind API
+      if (dest && dest.lat && dest.lng) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + dest.lat + '&longitude=' + dest.lng + '&current_weather=true')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (!data.current_weather) throw new Error('No weather data');
+            var w = data.current_weather;
+            var wCode = w.weathercode;
+            var desc = "Clear";
+            if (wCode >= 1 && wCode <= 3) desc = "Partly Cloudy";
+            else if (wCode >= 41 && wCode <= 48) desc = "Fog";
+            else if (wCode >= 51 && wCode <= 67) desc = "Rain";
+            else if (wCode >= 71 && wCode <= 77) desc = "Snow";
+            else if (wCode >= 80) desc = "Storm";
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.temperature + '°C</span> · ' + desc;
+            
+            // Convert wind direction degrees to compass
+            var val = Math.floor((w.winddirection / 22.5) + 0.5);
+            var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+            var compass = arr[(val % 16)];
+            if (elWind) elWind.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.windspeed + ' km/h</span> · ' + compass;
+          })
+          .catch(function() {
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = route.weather || 'Unavailable';
+            if (elWind) elWind.innerHTML = route.wind || 'Unavailable';
+          });
+      }
       overlay.scrollTop = 0;
     }
 
@@ -2992,7 +3151,102 @@
        ROUTE ENCYCLOPEDIA — Rendering + Filtering
        ═══════════════════════════════════════════ */
     var routeFilterState = { type: 'all', dest: 'all', maxDiff: 5, maxDist: 200, sort: 'featured', month: null };
+    
     var comparedRoutes = [];
+    var itineraryRoutes = [];
+
+    window.toggleItbRoute = function(id) {
+      var idx = itineraryRoutes.indexOf(id);
+      if (idx > -1) {
+        itineraryRoutes.splice(idx, 1);
+      } else {
+        itineraryRoutes.push(id);
+      }
+      renderItineraryDrawer();
+      if (typeof renderRouteCards === 'function') renderRouteCards();
+      
+      // Update modal button if open
+      var modalBtn = document.getElementById('rdItbBtn');
+      if (modalBtn && modalBtn.dataset.id === id) {
+        if (itineraryRoutes.indexOf(id) > -1) {
+          modalBtn.classList.add('added');
+          modalBtn.innerHTML = '✓ Added to Set';
+        } else {
+          modalBtn.classList.remove('added');
+          modalBtn.innerHTML = '+ Add Stage';
+        }
+      }
+    };
+
+    window.clearItinerary = function() {
+      itineraryRoutes = [];
+      renderItineraryDrawer();
+      if (typeof renderRouteCards === 'function') renderRouteCards();
+      document.getElementById('itbDrawer').classList.remove('active');
+    };
+
+    window.removeItbRoute = function(id) {
+      var idx = itineraryRoutes.indexOf(id);
+      if (idx > -1) itineraryRoutes.splice(idx, 1);
+      renderItineraryDrawer();
+      if (typeof renderRouteCards === 'function') renderRouteCards();
+    };
+
+    window.saveItinerary = function() {
+      alert("Itinerary saved! (Mock Action: In Phase 6, this pairs with user accounts to save to DB.)");
+      document.getElementById('itbDrawer').classList.remove('active');
+    };
+
+    window.renderItineraryDrawer = function() {
+      var countEl = document.getElementById('itbCount');
+      var bodyEl = document.getElementById('itbDrawerBody');
+      var footEl = document.getElementById('itbDrawerFooter');
+      var drawer = document.getElementById('itbDrawer');
+      var distEl = document.getElementById('itbTotalDist');
+      var elevEl = document.getElementById('itbTotalElev');
+      
+      if (!countEl || !bodyEl || !footEl) return;
+      
+      countEl.textContent = itineraryRoutes.length;
+      
+      if (itineraryRoutes.length === 0) {
+        bodyEl.innerHTML = '<div class="itb-empty">Select routes to build a custom multi-day trip.</div>';
+        footEl.style.display = 'none';
+        return;
+      }
+      
+      // Show drawer automatically when first route added
+      if (itineraryRoutes.length > 0 && !drawer.classList.contains('active')) {
+         drawer.classList.add('active');
+      }
+      
+      var html = '';
+      var totalDist = 0;
+      var totalElev = 0;
+      
+      itineraryRoutes.forEach(function(rId, index) {
+        var route = findById(ROUTE_DATABASE, rId);
+        if(!route) return;
+        totalDist += route.distance;
+        totalElev += route.elevationGain;
+        
+        html += '<div class="itb-item">' +
+                '<div style="font-family:\\\'Bebas Neue\\\',sans-serif;color:var(--gold);font-size:1.2rem;width:20px;">' + (index+1) + '</div>' + 
+                '<img src="' + route.image + '" class="itb-item-img">' +
+                '<div class="itb-item-info">' +
+                '<div class="itb-item-name">' + route.name + '</div>' +
+                '<div class="itb-item-stats">' + route.distance + 'km • ' + route.elevationGain + 'm ↑</div>' +
+                '</div>' +
+                '<button class="itb-item-remove" title="Remove stage" onclick="removeItbRoute(\'' + route.id + '\')">✕</button>' +
+                '</div>';
+      });
+      
+      bodyEl.innerHTML = html;
+      footEl.style.display = 'block';
+      distEl.textContent = Math.round(totalDist) + ' km';
+      elevEl.textContent = Math.round(totalElev) + ' m ↑';
+    };
+
 
     // getRoutePartners() defined in app.js
 
@@ -3004,6 +3258,10 @@
       var partners = getRoutePartners(route);
       var hotels = partners.filter(function (p) { return p.category === 'hotel'; }).length;
       var isCompared = comparedRoutes.indexOf(route.id) > -1;
+        var isItb = itineraryRoutes.indexOf(route.id) > -1;
+        var itbBtn = '<button class="rc-itb-btn' + (isItb ? ' added' : '') + '" onclick="event.stopPropagation();toggleItbRoute(\'' + route.id + '\')" title="Add to Itinerary">' + 
+                     (isItb ? '✓' : '+') + '</button>';
+
       var delay = idx % 4;
       return '<div class="route-card reveal' + (delay ? ' reveal-delay-' + delay : '') + '" data-type="' + route.type + '" data-id="' + route.id + '">' +
         '<div class="route-card-img">' +
@@ -3015,7 +3273,7 @@
         (route.effortCategory ? '<span class="rbadge rbadge-effort">' + effortLabel(route.effortCategory) + '</span>' : '') +
         (routeFilterState.month ? '<span class="rbadge rbadge-season' + (isRoutePeakInMonth(route, routeFilterState.month) ? ' rbadge-peak' : '') + '">' + (isRoutePeakInMonth(route, routeFilterState.month) ? 'Peak' : 'Open') + '</span>' : '') +
         '</div>' +
-        '<label class="re-compare-cb' + (isCompared ? ' active' : '') + '" onclick="event.stopPropagation();toggleCompareRoute(\'' + route.id + '\')">' +
+        itbBtn + '<label class="re-compare-cb' + (isCompared ? ' active' : '') + '" onclick="event.stopPropagation();toggleCompareRoute(\'' + route.id + '\')">' +
         '<input type="checkbox"' + (isCompared ? ' checked' : '') + ' aria-label="Compare ' + route.name + '"> Compare' +
         '</label>' +
         '</div>' +
@@ -3226,8 +3484,8 @@
       html += '<div class="rd-section"><h2 class="rd-section-title">Route Intelligence</h2>' +
         '<div class="rd-intel-grid">' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Best Direction</div><div class="rd-intel-val">' + route.bestDirection + '</div></div>' +
-        '<div class="rd-intel-item"><div class="rd-intel-label">Wind</div><div class="rd-intel-val">' + route.wind + '</div></div>' +
-        '<div class="rd-intel-item"><div class="rd-intel-label">Weather</div><div class="rd-intel-val">' + route.weather + '</div></div>' +
+        '<div class="rd-intel-item"><div class="rd-intel-label">Live Weather</div><div class="rd-intel-val" id="live-weather-' + route.id + '"><span style="opacity:0.5">Fetching...</span></div></div>' +
+        '<div class="rd-intel-item"><div class="rd-intel-label">Live Wind</div><div class="rd-intel-val" id="live-wind-' + route.id + '"><span style="opacity:0.5">Fetching...</span></div></div>' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Surface</div><div class="rd-intel-val" style="text-transform:capitalize">' + route.surfaceType + ' — Condition ' + route.surfaceCondition + '/5</div></div>' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Traffic</div><div class="rd-intel-val">' + trafficDot(route.trafficLevel) + ' Level ' + route.trafficLevel + '/5</div></div>' +
         '<div class="rd-intel-item"><div class="rd-intel-label">Season</div><div class="rd-intel-val">' + seasonRangeWithPeak(route.season) + '</div></div>' +
@@ -3237,12 +3495,25 @@
       html += buildConfidenceSection(route);
       // Strava
       if (route.strava) {
-        html += '<div class="rd-section"><h2 class="rd-section-title">Strava Data</h2>' +
-          '<div class="rd-intel-grid">' +
+        var stravaHtml = '';
+        if (window.isStravaConnected) {
+          stravaHtml = '<div class="rd-intel-grid">' +
           '<div class="rd-intel-item"><div class="rd-intel-label">KOM Time</div><div class="rd-intel-val">' + route.strava.komTime + '</div></div>' +
           '<div class="rd-intel-item"><div class="rd-intel-label">Average Time</div><div class="rd-intel-val">' + route.strava.avgTime + '</div></div>' +
-          '<div class="rd-intel-item"><div class="rd-intel-label">Segments</div><div class="rd-intel-val">' + route.strava.segmentCount + ' segments</div></div>' +
-          '</div></div>';
+          '<div class="rd-intel-item"><div class="rd-intel-label">Your Est. Time</div><div class="rd-intel-val" style="color:#fc4c02;font-weight:700">' + (route.strava.estTime || '1h 45m') + ' based on FTP</div></div>' +
+          '<div class="rd-intel-item" style="grid-column:1/-1;margin-top:0.5rem"><div style="background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:1rem;display:flex;align-items:center;justify-content:center;color:#666;height:120px;text-align:center"><p><strong style="color:#fc4c02">Strava Embed</strong><br>Segment Data Mock</p></div></div>' +
+          '</div>';
+        } else {
+          stravaHtml = '<div class="strava-connect-promo" style="background:rgba(252, 76, 2, 0.05);border:1px solid rgba(252, 76, 2, 0.2);padding:1.5rem;border-radius:8px;text-align:center;">' +
+          '<svg viewBox="0 0 24 24" fill="#fc4c02" width="24" height="24" style="margin-bottom:0.5rem">' +
+          '<path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>' +
+          '<div style="color:#fc4c02;font-weight:600;margin-bottom:0.5rem;font-size:1.1rem">Unlock Personalised Estimates</div>' +
+          '<p style="font-size:0.9rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;line-height:1.4">Connect Strava to see your estimated time, matched segments, and friend leaderboards for this route.</p>' +
+          '<button onclick="toggleStravaAuth()" class="btn btn-primary" style="background:#fc4c02;color:#fff;border:none">Connect with Strava</button>' +
+          '</div>';
+        }
+        
+        html += '<div class="rd-section"><h2 class="rd-section-title">Strava Data</h2>' + stravaHtml + '</div>';
       }
       // Water stops
       if (route.waterStops && route.waterStops.length) {
@@ -3275,6 +3546,10 @@
         });
         html += '</div></div>';
       }
+      
+      // Interactive Map
+      html += '<div class="rd-section"><h2 class="rd-section-title">Interactive Map</h2>' +
+        '<div id="rd-interactive-map" style="width:100%; height:400px; border-radius:12px; background:#111; margin-top:1rem; position:relative; overflow:hidden; z-index:100"></div></div>';
       // Partners sidebar
       if (partners.length) {
         html += '<div class="rd-section"><h2 class="rd-section-title">Partners in ' + route.region + '</h2><div class="rd-partners-grid">';
@@ -3292,6 +3567,31 @@
         });
         html += '</div></div>';
       }
+      // Reviews & Community Mockup
+      var mockReviews = [
+        { name: "Sarah J.", role: "Expedition Rider", stars: 5, date: "Oct 2025", text: "Incredible climb! The wind at the top was brutal, but the pavement is butter smooth. Stop at the cafe at km 40." },
+        { name: "Marko T.", role: "Local Guide", stars: 4, date: "Sep 2025", text: "A classic test piece. Make sure you bring enough water because the middle section has zero shade." }
+      ];
+      html += '<div class="rd-section"><h2 class="rd-section-title">Community Reviews</h2><div class="rd-reviews-list">';
+      mockReviews.forEach(function(r) {
+         html += '<div class="rd-review-card">' +
+                 '<div class="rd-rv-header">' +
+                 '<div class="rd-rv-avatar">' + r.name.charAt(0) + '</div>' +
+                 '<div class="rd-rv-meta"><strong>' + r.name + '</strong><span>' + r.role + ' &middot; ' + r.date + '</span></div>' +
+                 '<div class="rd-rv-stars">★★★★' + (r.stars === 5 ? '★' : '☆') + '</div>' +
+                 '</div>' +
+                 '<p class="rd-rv-text">' + r.text + '</p>' +
+                 '</div>';
+      });
+      html += '<div class="rd-review-form">' +
+              '<h4>Log Your Ride</h4>' +
+              '<p>Ridden this route? Share your conditions, time, and tips with the community.</p>' +
+              '<div class="rd-rv-stars-input"><span>Rate: </span> ☆☆☆☆☆</div>' +
+              '<textarea placeholder="Write your review..."></textarea>' +
+              '<button class="btn btn-secondary" onclick="alert(\'Review submitted! (Phase 6 DB Hook)\')">Post Review</button>' +
+              '</div>';
+      html += '</div></div>';
+
       // CTA
       html += '<div class="rd-cta-bar">' +
         '<a href="#trip-builder" class="btn btn-primary" onclick="closeRouteDetail()">Build Trip with This Route →</a>' +
@@ -3301,6 +3601,68 @@
       modal.classList.add('active');
       modal.scrollTop = 0;
       document.body.style.overflow = 'hidden';
+      
+      // Phase 5: Live Weather/Wind API
+      if (dest && dest.lat && dest.lng) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + dest.lat + '&longitude=' + dest.lng + '&current_weather=true')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (!data.current_weather) throw new Error('No weather data');
+            var w = data.current_weather;
+            var wCode = w.weathercode;
+            var desc = "Clear";
+            if (wCode >= 1 && wCode <= 3) desc = "Partly Cloudy";
+            else if (wCode >= 41 && wCode <= 48) desc = "Fog";
+            else if (wCode >= 51 && wCode <= 67) desc = "Rain";
+            else if (wCode >= 71 && wCode <= 77) desc = "Snow";
+            else if (wCode >= 80) desc = "Storm";
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.temperature + '°C</span> · ' + desc;
+            
+            // Convert wind direction degrees to compass
+            var val = Math.floor((w.winddirection / 22.5) + 0.5);
+            var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+            var compass = arr[(val % 16)];
+            if (elWind) elWind.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.windspeed + ' km/h</span> · ' + compass;
+          })
+          .catch(function() {
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = route.weather || 'Unavailable';
+            if (elWind) elWind.innerHTML = route.wind || 'Unavailable';
+          });
+      }
+
+      // Initialize Leaflet Map
+      setTimeout(function() {
+        if (window.L && document.getElementById('rd-interactive-map')) {
+          var destLat = dest && dest.lat ? dest.lat : 0;
+          var destLng = dest && dest.lng ? dest.lng : 0;
+          
+          var map = L.map('rd-interactive-map').setView([destLat, destLng], 10);
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+          }).addTo(map);
+          
+          var markerHtml = '<div style="background:var(--ember);width:16px;height:16px;border-radius:50%;border:2px solid var(--chalk);box-shadow:0 0 10px rgba(232,73,29,0.5)"></div>';
+          var customIcon = L.divIcon({ className: '', html: markerHtml, iconSize: [16, 16], iconAnchor: [8, 8] });
+          L.marker([destLat, destLng], {icon: customIcon}).addTo(map);
+
+          // Mock polyline around the destination center
+          var latlngs = [
+            [destLat, destLng],
+            [destLat + 0.05, destLng + 0.05],
+            [destLat + 0.08, destLng - 0.02],
+            [destLat + 0.12, destLng + 0.04]
+          ];
+          var polyline = L.polyline(latlngs, {color: '#e8491d', weight: 4, opacity: 0.8}).addTo(map);
+          map.fitBounds(polyline.getBounds(), {padding: [30, 30]});
+        }
+      }, 420); // Wait for modal slide animation (400ms)
+
       // Elevation profile hover
       setTimeout(function () {
         var tooltip = document.getElementById('rdEpTooltip');
@@ -3412,6 +3774,38 @@
       icon.innerHTML = msg.icon;
       gate.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // Phase 5: Live Weather/Wind API
+      if (dest && dest.lat && dest.lng) {
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=' + dest.lat + '&longitude=' + dest.lng + '&current_weather=true')
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (!data.current_weather) throw new Error('No weather data');
+            var w = data.current_weather;
+            var wCode = w.weathercode;
+            var desc = "Clear";
+            if (wCode >= 1 && wCode <= 3) desc = "Partly Cloudy";
+            else if (wCode >= 41 && wCode <= 48) desc = "Fog";
+            else if (wCode >= 51 && wCode <= 67) desc = "Rain";
+            else if (wCode >= 71 && wCode <= 77) desc = "Snow";
+            else if (wCode >= 80) desc = "Storm";
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.temperature + '°C</span> · ' + desc;
+            
+            // Convert wind direction degrees to compass
+            var val = Math.floor((w.winddirection / 22.5) + 0.5);
+            var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+            var compass = arr[(val % 16)];
+            if (elWind) elWind.innerHTML = '<span style="color:#FFF;font-weight:700">' + w.windspeed + ' km/h</span> · ' + compass;
+          })
+          .catch(function() {
+            var elWeather = document.getElementById('live-weather-' + route.id);
+            var elWind = document.getElementById('live-wind-' + route.id);
+            if (elWeather) elWeather.innerHTML = route.weather || 'Unavailable';
+            if (elWind) elWind.innerHTML = route.wind || 'Unavailable';
+          });
+      }
     }
 
     function closeFmGate() {
@@ -3524,6 +3918,7 @@
     }
 
     function startTripFromBase(destId, baseId) {
+      cfgResetBooking();
       var dest = DESTINATION_BY_ID[destId];
       if (!dest || dest.routeCount === 0) return;
       var base = dest.bases ? dest.bases.find(function (b) { return b.id === baseId; }) : null;

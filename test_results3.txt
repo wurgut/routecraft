@@ -1,0 +1,225 @@
+
+> test:legacy
+> node tests/pricing.test.js && node tests/dates.test.js && node tests/flights.test.js && node tests/data-integrity.test.js
+
+cfgCalcPricing
+  ✓ Empty trip = 0 total
+  ✓ Single hotel for 7 nights
+  ✓ Multiple hotels summed
+  ✓ Flight with bike fee
+  ✓ Flight without bike fee defaults to 0
+  ✓ Null flight adds nothing
+  ✓ Shuttles added to subtotal
+  ✓ Guide cost capped at 5 days for long trips
+  ✓ Guide uses actual nights when <= 5
+  ✓ Bike rental uses full nights
+  ✓ Addons added flat (not per night)
+  ✓ Member discount is 10% rounded
+  ✓ Golden Key mode adds 15% premium
+  ✓ Standard mode has no Golden Key premium
+  ✓ Full trip: hotel + flight + guide + rental + addon
+  ✓ Zero nights: accommodation and rental are 0
+
+16 passed, 0 failed
+formatDateForKiwi
+  ✓ Basic YYYY-MM-DD to DD/MM/YYYY
+  ✓ Padded single-digit month and day
+  ✓ December 31st
+  ✓ January 1st
+  ✓ Empty string returns empty
+  ✓ Null returns empty
+  ✓ Undefined returns empty
+
+addDays
+  ✓ Add 7 days within same month
+  ✓ Add 1 day
+  ✓ Month rollover: July 28 + 5 = August 2
+  ✓ Year rollover: Dec 28 + 5 = Jan 2
+  ✓ Leap year: Feb 28 + 1 in 2024
+  ✓ Leap year: Feb 29 + 1 in 2024
+  ✓ Non-leap year: Feb 28 + 1 in 2026
+  ✓ Zero days returns same date
+  ✓ Negative days: go back 5 days
+  ✓ Negative days across month boundary
+  ✓ Negative days across year boundary
+  ✓ Large forward jump: 365 days
+
+19 passed, 0 failed
+flights.handler — API key validation
+  ✓ Missing API key returns 502
+
+flights.handler — type=locations
+  ✓ Invalid type returns 400
+  ✓ Missing term returns 400
+  ✓ Term too short returns 400
+  ✓ Valid locations search returns mapped cities
+  ✓ Empty locations response returns empty array
+  ✓ Location with missing country handled
+
+flights.handler — type=search
+  ✓ Missing fly_from returns 400
+  ✓ Missing fly_to returns 400
+  ✓ Missing date_from returns 400
+  ✓ Valid search returns mapped flights
+  ✓ Multi-segment flight counts stops correctly
+  ✓ Empty search results handled
+
+flights.handler — error handling
+  ✓ Kiwi API error returns 502
+  ✓ Response includes CORS and cache headers
+  ✓ No query params returns 400
+  ✓ Null queryStringParameters handled
+
+17 passed, 0 failed
+BIKE_FEES data integrity
+  ✓ BIKE_FEES object loaded
+  ✓ __default entry exists
+  ✓ All entries have fee (number >= 0)
+  ✓ All entries have policy (non-empty string)
+  ✓ All entries have maxKg (number > 0)
+  ✓ Airline codes are uppercase IATA (2-3 chars)
+  ✓ No duplicate airline codes
+
+REGIONS data integrity
+  ✓ REGIONS array loaded with 13 entries
+  ✓ All regions have required fields
+  ✓ All region IDs are unique
+  ✓ All region subGeoIds reference valid destination IDs
+
+DESTINATIONS data integrity
+  ✓ DESTINATIONS array loaded with 13 entries
+  ✗ All destinations have required fields: alps-huezdor missing highlights
+  ✓ All destination IDs are unique
+  ✓ All airportIATA are arrays with valid 3-letter codes
+  ✗ All destinations have season object with start/end/peak/monthly: alps-huezdor.season.start not a number
+  ✓ All destinations have valid regionId
+  ✓ Expected destination IDs present
+  ✓ Destinations with routeCount > 0 have zones and bases
+  ✓ Deep dive destinations have routeIds in deepDive
+
+ROUTE_DATABASE data integrity
+  ✓ ROUTE_DATABASE array loaded with 18 entries
+  ✓ All routes have required fields
+  ✓ All route destinationIds reference valid destinations
+  ✓ All route IDs are unique
+  ✓ All routes have valid confidence object
+  ✓ All routes have valid effortCategory
+  ✓ All accessibleFromBases reference valid base IDs
+
+Hierarchy integrity
+  ✓ Every destination is referenced by exactly one region
+  ✓ Route counts match actual routes per destination
+
+Seasonal intensity & globe
+  ✓ getRegionHeatmap returns peak intensity for Canary Islands in winter
+  ✓ getRegionHeatmap returns zero for Carpathians in winter
+  ✓ getRegionHeatmap returns peak for Carpathians in summer
+  ✓ getRegionHeatmap returns value for all regions in all months
+  ✓ All regions have fields needed for L2 overlay
+  ✓ All regions have socialProof with ridersLastMonth
+
+Phase 2: Calendar override & seasonality
+  ✓ getRawHeatmap returns average across all months
+  ✓ getRawHeatmap returns 0 for unknown region
+  ✓ getEffectiveIntensity uses seasonal when globeSeasonality is true
+  ✓ getEffectiveIntensity uses raw when globeSeasonality is false
+  ✓ intensityToMarkerProps returns correct structure
+  ✓ intensityToMarkerProps scales monotonically with intensity
+  ✓ intensityToMarkerProps edge cases: 0 and 1
+  ✓ globeMarkers array is initialized
+  ✓ globeMonth defaults to current month
+  ✓ setGlobeMonth updates globeMonth
+  ✓ toggleGlobeSeasonality updates globeSeasonality
+
+Phase 3: L2 Region View helpers
+  ✓ seasonLabel returns correct labels at all thresholds
+  ✓ seasonColor returns correct colors at all thresholds
+  ✓ seasonLabelShort returns short labels
+  ✓ seasonLabel and seasonLabelShort agree on thresholds
+  ✓ buildOverlayHero includes required CSS classes and data
+  ✓ buildStatBar renders all stats with labels and values
+  ✓ buildStatBar omits color style when not specified
+  ✓ navigateToDestination is a function
+
+Phase 4: L3 Sub-geography sections
+  ✓ buildZonesSection renders zone cards for destinations with zones
+  ✓ buildZonesSection returns empty string for destinations without zones
+  ✓ buildBasesSection renders base cards for destinations with bases
+  ✓ buildBasesSection returns empty string for destinations without bases
+  ✓ buildConditionsSection renders conditions for destinations with conditions
+  ✓ buildConditionsSection returns empty string for destinations without conditions
+  ✓ buildDestSeasonBar renders 12 month cells
+  ✓ buildDeepDive renders all sections for deep dive destinations
+  ✓ buildDeepDive returns empty string for non-deep-dive destinations
+  ✓ zoneDifficultyColor maps difficulty strings to correct colors
+  ✓ All destinations with routeCount > 0 produce non-empty zones and conditions
+  ✓ All destinations produce valid season bar or empty string
+
+Phase 5: L4 Routes & Base View
+  ✓ effortLabel maps all known categories correctly
+  ✓ effortLabel returns empty string for null/undefined
+  ✓ effortLabel falls back to raw value for unknown categories
+  ✓ All routes have a valid effortCategory with a mapped label
+  ✓ buildConfidenceSection renders all confidence fields
+  ✓ buildConfidenceSection returns empty for routes without confidence
+  ✓ Zone cards include route links for zones with routeIds
+  ✓ All route confidence objects are complete
+
+Phase 6: Quick Ideas
+  ✓ generateQuickIdeas returns array of 11 ideas for any month
+  ✓ generateQuickIdeas sorts rideable-first then by intensity descending
+  ✓ generateQuickIdeas items have all required fields
+  ✓ Peak destinations rank first for their peak months
+  ✓ generateQuickIdeas includes race events in reason when matching
+  ✓ generateQuickIdeas labels match seasonLabelShort
+  ✓ generateQuickIdeas includes destinations with routeCount 0
+  ✓ Deep dive destinations have enriched costHint
+
+cfgGetBikeFee fallback behavior
+  ✓ Known airline returns specific fee
+  ✓ Unknown airline falls back to __default
+  ✓ Empty string falls back to __default
+
+Phase 7: Base Camp Booking Flow
+  ✓ getPartnersForDest returns correct partners for dest+category
+  ✓ getPartnersForDest with baseId sorts base-matched partners first
+  ✓ getPartnersForDest with empty partnerIds still returns all dest partners
+  ✓ getPartnersForDest without category returns all categories
+  ✓ startTripFromBase sets destination and selectedBase in state
+  ✓ startTripFromBase with invalid base sets dest but null base
+  ✓ startTripFromBase silently aborts for destinations with no routes
+  ✓ Base camp cards include CTA button for destinations with routes
+  ✓ Base camp cards show partner count when partners exist
+  ✓ All base partnerIds reference valid partners in PARTNERS_DATABASE
+  ✓ All bases have valid nearestAirportIATA matching destination airports
+
+Phase 8: Section Migration & Cleanup
+  ✓ renderDeepDive is no longer defined (legacy function removed)
+  ✓ buildDeepDive still renders for all deep dive destinations
+  ✓ buildDeepDive returns empty for destinations without deepDive
+
+Phase 9: Seasonal Engagement
+  ✓ isRouteRideableInMonth: simple range (Jun-Oct) — Jul is rideable, Dec is not
+  ✓ isRouteRideableInMonth: wrap-around range (Nov-Mar) — Jan is rideable, Jun is not
+  ✓ isRouteRideableInMonth: edge months (start and end) are both rideable
+  ✓ isRoutePeakInMonth: peak month returns true, open-but-not-peak returns false
+  ✓ isRoutePeakInMonth: closed month is never peak even if in peak array
+  ✓ seasonRangeStr formats season range correctly
+  ✓ seasonRangeWithPeak includes peak months
+  ✓ getFilteredRoutes with month set filters out closed routes
+  ✓ getFilteredRoutes with month null returns all routes (backward compat)
+  ✓ generateQuickIdeas returns rideableCount field
+  ✓ generateQuickIdeas sorts destinations with 0 rideable routes below those with rideable routes
+  ✓ renderRouteCard includes seasonal badge when month filter is active
+  ✓ cfgSmartDateDefault sets peak season dates for summer destination (Romania)
+  ✓ cfgSmartDateDefault sets peak season dates for southern hemisphere destination (cape-town)
+
+Phase 10: Transitions & Polish
+  ✓ _savedScrollY variable is initialized for scroll position management
+  ✓ openRouteDetail saves scroll position before opening
+  ✓ closeRouteDetail restores scroll position (function is callable)
+  ✓ navigateToDestination uses 420ms delay matching CSS transition duration
+  ✓ cfgRefreshUI is callable (configurator step management)
+  ✓ Route results count element has aria-live attribute in HTML
+
+117 passed, 2 failed

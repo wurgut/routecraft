@@ -594,3 +594,67 @@ function renderSubGeoDeepDive(dest) {
   container.innerHTML = html;
 }
 
+
+// Strava Mock OAuth Integration
+window.isStravaConnected = false;
+
+window.toggleStravaAuth = function() {
+    var btn = document.getElementById('navStravaBtn');
+    if (!window.isStravaConnected) {
+        // Simulate OAuth flow
+        var originalText = btn.innerHTML;
+        btn.innerHTML = 'Connecting...';
+        btn.style.opacity = '0.7';
+        
+        setTimeout(function() {
+            window.isStravaConnected = true;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg> Connected';
+            btn.classList.add('connected');
+            btn.style.opacity = '1';
+            
+            // Re-render any open route details if they exist
+            var rdModal = document.getElementById('rdModal');
+            if (rdModal && rdModal.classList.contains('active')) {
+                // Find currently open route (simple mock hack)
+                var currentRouteName = document.querySelector('.rd-hero-title').textContent.trim();
+                if (window.ROUTE_DATABASE) {
+                    var route = window.ROUTE_DATABASE.find(r => r.name.toUpperCase() === currentRouteName.toUpperCase() || r.name === currentRouteName);
+                    if (route && window.openRouteDetail) {
+                        window.openRouteDetail(route.id);
+                    }
+                }
+            }
+            
+            // Add a small toast notification
+            var toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#111;border:1px solid #333;border-left:4px solid #fc4c02;color:#fff;padding:1rem;border-radius:4px;z-index:9999;font-family:inherit;box-shadow:0 10px 30px rgba(0,0,0,0.5);opacity:0;transition:opacity 0.3s ease';
+            toast.innerHTML = '<div style="font-weight:600;margin-bottom:4px;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;color:#fc4c02">Strava Connected</div><div style="font-size:0.85rem;color:rgba(255,255,255,0.7)">Your FTP profile has been synced.</div>';
+            document.body.appendChild(toast);
+            
+            // Trigger reflow and show
+            requestAnimationFrame(() => toast.style.opacity = '1');
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+            
+        }, 1500);
+    } else {
+        // Disconnect
+        window.isStravaConnected = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg> Connect Strava';
+        btn.classList.remove('connected');
+        
+        var rdModal = document.getElementById('rdModal');
+        if (rdModal && rdModal.classList.contains('active')) {
+            var currentRouteName = document.querySelector('.rd-hero-title').textContent.trim();
+            if (window.ROUTE_DATABASE) {
+                var route = window.ROUTE_DATABASE.find(r => r.name.toUpperCase() === currentRouteName.toUpperCase() || r.name === currentRouteName);
+                if (route && window.openRouteDetail) {
+                    window.openRouteDetail(route.id);
+                }
+            }
+        }
+    }
+}
