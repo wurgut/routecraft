@@ -679,7 +679,15 @@
             { month: 12, tempRange: [4, 12],  daylight: 9.5,  wind: 'light-tramontana', heatmapIntensity: 0.1 }
           ]
         },
-        conditions: null, zones: [], bases: [], deepDive: null
+        conditions: { roads: 'Top tier asphalt', water: 'Frequent', bikeShops: 'Best in Europe', rental: 'Abundant', specialRisks: 'None' },
+        zones: [
+          { id: 'girona-rocacorba', name: 'Rocacorba', character: 'The legendary test climb for pros.', difficulty: 'expert', bestFor: ['pros', 'climbers'], routeIds: [] },
+          { id: 'girona-coast', name: 'Costa Brava', character: 'Stunning coastal rolling roads.', difficulty: 'intermediate', bestFor: ['all-rounders'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'girona-city', name: 'Girona Old Town', character: 'Medieval city with unmatched cycling cafe culture.', bestFor: 'Pro atmosphere, amazing food, central access.', accessibleZoneIds: ['girona-rocacorba', 'girona-coast'], partnerIds: [], nearestAirportIATA: 'GRO', transferKm: 15 }
+        ],
+        deepDive: null
       },
       // ── CAPE TOWN (globe-only, no routes yet) ──
       {
@@ -715,7 +723,16 @@
             { month: 12, tempRange: [15, 27], daylight: 14.5, wind: 'strong-SE', heatmapIntensity: 0.85 }
           ]
         },
-        conditions: null, zones: [], bases: [], deepDive: null
+        conditions: { roads: 'Top tier asphalt', water: 'Frequent', bikeShops: 'Best in Europe', rental: 'Abundant', specialRisks: 'None' },
+        zones: [
+          { id: 'capetown-peninsula', name: 'Cape Peninsula', character: 'Iconic coastal loop around the Cape of Good Hope, including Chapman\'s Peak.', difficulty: 'intermediate', bestFor: ['scenic riders', 'all-rounders'], routeIds: [] },
+          { id: 'capetown-winelands', name: 'Cape Winelands', character: 'Rolling hills through vineyards with incredible food and wine stops.', difficulty: 'easy-moderate', bestFor: ['gourmets', 'social riders'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'camps-bay', name: 'Camps Bay', character: 'Upscale beach suburb at the foot of the Twelve Apostles.', bestFor: 'Luxury seekers, beach lovers.', accessibleZoneIds: ['capetown-peninsula'], partnerIds: [], nearestAirportIATA: 'CPT', transferKm: 25 },
+          { id: 'stellenbosch', name: 'Stellenbosch', character: 'Historic university town surrounded by famous wineries.', bestFor: 'Wine enthusiasts, gravel riders.', accessibleZoneIds: ['capetown-winelands'], partnerIds: [], nearestAirportIATA: 'CPT', transferKm: 35 }
+        ],
+        deepDive: null
       },
       // ── COLOMBIA (globe-only, no routes yet) ──
       {
@@ -751,7 +768,15 @@
             { month: 12, tempRange: [15, 27], daylight: 12.0, wind: 'light', heatmapIntensity: 0.7 }
           ]
         },
-        conditions: null, zones: [], bases: [], deepDive: null
+        conditions: { roads: 'Mixed, some rough asphalt', water: 'Available in towns', bikeShops: 'Medellin only', rental: 'Limited', specialRisks: 'Extreme altitude, rain' },
+        zones: [
+          { id: 'colombia-letras', name: 'Alto de Letras', character: 'One of the longest climbs in the world.', difficulty: 'expert', bestFor: ['climbers', 'altitude training'], routeIds: [] },
+          { id: 'colombia-medellin', name: 'Medellin Hills', character: 'Steep lush climbs out of the city.', difficulty: 'advanced', bestFor: ['base training'], routeIds: [] }
+        ],
+        bases: [
+          { id: 'medellin-poblado', name: 'El Poblado, Medellin', character: 'Upscale district, gateway to Andes.', bestFor: 'Digital nomads, pros.', accessibleZoneIds: ['colombia-medellin', 'colombia-letras'], partnerIds: [], nearestAirportIATA: 'MDE', transferKm: 30 }
+        ],
+        deepDive: null
       }
     ];
 
@@ -1929,7 +1954,7 @@
 
     function navigateToDestination(destId) {
       closeExperience();
-      setTimeout(function () { openExperience(destId); }, 300);
+      setTimeout(function () { openSubGeo(destId); }, 300);
     }
 
     function repaintGlobeMarkers(animate) {

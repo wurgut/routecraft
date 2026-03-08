@@ -333,3 +333,258 @@ if (typeof module !== 'undefined' && module.exports) {
     cfgCalcPricing: cfgCalcPricing
   };
 }
+
+
+
+/* ═══════════════════════════════════════════
+   SUB-GEOGRAPHY (LEVEL 3 / LEVEL 4) LOGIC
+   ═══════════════════════════════════════════ */
+
+let currentSubGeoDest = null;
+
+window.openSubGeo = function(destId) {
+  const dest = typeof DESTINATION_BY_ID !== 'undefined' ? DESTINATION_BY_ID[destId] : findById(DESTINATIONS, destId);
+  if (!dest) return;
+  
+  currentSubGeoDest = dest;
+  const region = typeof REGION_BY_ID !== 'undefined' ? REGION_BY_ID[dest.regionId] : findById(REGIONS, dest.regionId);
+  
+  // Populate Header
+  document.getElementById('subgeo-region-name').textContent = region ? region.name.toUpperCase() : 'REGION';
+  document.getElementById('subgeo-name').textContent = dest.name;
+  document.getElementById('subgeo-desc').textContent = dest.shortDesc || dest.description || '';
+  
+  // Build Stats
+  const routes = ROUTE_DATABASE.filter(r => r.destinationId === dest.id);
+  const totalBases = dest.bases ? dest.bases.length : 0;
+  
+  let statsHTML = `
+    <div class="sg-stat">
+      <div class="sg-stat-val">${routes.length}</div>
+      <div class="sg-stat-lbl">Curated Routes</div>
+    </div>
+    <div class="sg-stat">
+      <div class="sg-stat-val">${totalBases}</div>
+      <div class="sg-stat-lbl">Base Camps</div>
+    </div>
+  `;
+  document.getElementById('subgeo-stats').innerHTML = statsHTML;
+  
+  // Render sub-tabs content
+  renderSubGeoZones(dest);
+  renderSubGeoBases(dest, routes);
+  renderSubGeoDeepDive(dest);
+  
+  // Show overlay (and hide experience overlay if open)
+  const expOverlay = document.getElementById('experience-overlay');
+  if (expOverlay && expOverlay.classList.contains('active')) {
+    // Keep it open, just overlay SubGeo on top
+  }
+  
+  const sgOverlay = document.getElementById('subgeo-view');
+  if (sgOverlay) {
+    sgOverlay.classList.add('active');
+    // Default to zones tab
+    switchSubGeoTab('zones');
+  }
+};
+
+window.closeSubGeo = function() {
+  const sgOverlay = document.getElementById('subgeo-view');
+  if (sgOverlay) {
+    sgOverlay.classList.remove('active');
+  }
+};
+
+window.switchSubGeoTab = function(tabId) {
+  // Update Buttons
+  document.querySelectorAll('.sg-tab').forEach(btn => {
+    if (btn.dataset.tab === tabId) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+  
+  // Update Content
+  document.querySelectorAll('.sg-tab-content').forEach(content => {
+    if (content.id === 'sg-tab-' + tabId) content.classList.add('active');
+    else content.classList.remove('active');
+  });
+};
+
+function renderSubGeoZones(dest) {
+  const list = document.getElementById('sg-zones-list');
+  const mapContainer = document.getElementById('sg-zones-map');
+  if (!list) return;
+  
+  if (!dest.zones || dest.zones.length === 0) {
+    list.innerHTML = `<div style="color:rgba(255,255,255,0.4); padding:1rem 0;">No zones defined for this destination.</div>`;
+    if (mapContainer) mapContainer.innerHTML = '';
+    return;
+  }
+  
+  list.innerHTML = dest.zones.map(z => `
+    <div class="sg-zone-card" onclick="switchSubGeoTab('bases')">
+      <div class="sg-zone-header">
+        <div class="sg-zone-title">${z.name}</div>
+      </div>
+      <div class="sg-zone-desc">${z.description || ''}</div>
+      <div class="sg-zone-tags">
+        ${(z.bestFor ? (Array.isArray(z.bestFor) ? z.bestFor : z.bestFor.split(',')).map(t => `<span class="sg-zone-tag">${t.trim()}</span>`).join('') : '')}
+      </div>
+    </div>
+  `).join('');
+
+  if (mapContainer) {
+    let markersHtml = '';
+    const positions = [
+      {x: 60, y: 70}, {x: 140, y: 60}, {x: 100, y: 130}, {x: 50, y: 150}, {x: 160, y: 120}
+    ];
+    dest.zones.forEach((z, i) => {
+      const pos = positions[i % positions.length];
+      markersHtml += `
+        <g class="sg-map-marker" transform="translate(${pos.x}, ${pos.y})" style="cursor:pointer;" onclick="switchSubGeoTab('bases')">
+          <circle cx="0" cy="0" r="3" fill="#c9a96e"></circle>
+          <circle cx="0" cy="0" r="8" fill="none" stroke="#c9a96e" stroke-width="0.5" opacity="0.6">
+            <animate attributeName="r" values="3;16" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.8;0" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="8" y="3" fill="#e8e4dd" font-size="7" font-family="'DM Sans', sans-serif" letter-spacing="0.5" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${z.name.toUpperCase()}</text>
+        </g>
+      `;
+    });
+    
+    mapContainer.innerHTML = `
+      <div class="sg-map-interactive" style="width:100%; height:100%; position:relative; background:rgba(10,10,10,0.5); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 40px rgba(0,0,0,0.5);">
+        <svg viewBox="0 0 200 200" width="100%" height="100%" style="display:block;">
+          <!-- Topographic contour lines -->
+          <path d="M-20,40 Q50,10 120,60 T220,50" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="0.5"/>
+          <path d="M-20,60 Q60,30 130,80 T220,70" fill="none" stroke="rgba(201,169,110,0.1)" stroke-width="0.5"/>
+          <path d="M-20,80 Q70,50 140,100 T220,90" fill="none" stroke="rgba(201,169,110,0.15)" stroke-width="0.5"/>
+          <path d="M-20,100 Q80,70 150,120 T220,110" fill="none" stroke="rgba(201,169,110,0.1)" stroke-width="0.5"/>
+          <path d="M-20,120 Q90,90 160,140 T220,130" fill="none" stroke="rgba(201,169,110,0.05)" stroke-width="0.5"/>
+          
+          <path d="M40,-20 Q80,50 30,120 T60,220" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/>
+          <path d="M60,-20 Q100,50 50,120 T80,220" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+          <path d="M80,-20 Q120,50 70,120 T100,220" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/>
+          
+          <!-- Route connections representing the sub-geography -->
+          <path d="M60,70 L140,60 L100,130 Z" fill="rgba(201,169,110,0.02)" stroke="rgba(201,169,110,0.15)" stroke-width="0.5" stroke-dasharray="2 2"/>
+          <path d="M60,70 L50,150 L100,130" fill="none" stroke="rgba(201,169,110,0.15)" stroke-width="0.5" stroke-dasharray="2 2"/>
+          
+          ${markersHtml}
+        </svg>
+        <div class="sg-map-overlay-text" style="position:absolute; bottom:12px; right:12px; font-size:8px; letter-spacing:2px; color:rgba(201,169,110,0.5); text-transform:uppercase; font-family:'DM Sans', sans-serif;">
+          Conceptual Zone Map
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderSubGeoBases(dest, routes) {
+  const sidebar = document.getElementById('sg-bases-list');
+  const routeDisplay = document.getElementById('sg-routes-display');
+  if (!sidebar || !routeDisplay) return;
+  
+  if (!dest.bases || dest.bases.length === 0) {
+    sidebar.innerHTML = `<div style="color:rgba(255,255,255,0.4); padding:1rem 0;">No bases defined.</div>`;
+    return;
+  }
+  
+  sidebar.innerHTML = dest.bases.map((b, i) => `
+    <div class="sg-base-card" id="sg-base-btn-${b.id}" onclick="selectSubGeoBase('${b.id}')">
+      <div class="sg-base-name">${b.name}</div>
+      <div class="sg-base-char">${b.character || ''}</div>
+      <div class="sg-base-meta">
+        <span>${routes.filter(r => r.accessibleFromBases && r.accessibleFromBases.includes(b.id)).length} routes</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.selectSubGeoBase = function(baseId) {
+  // Update active state in sidebar
+  document.querySelectorAll('.sg-base-card').forEach(card => card.classList.remove('active'));
+  const activeBtn = document.getElementById('sg-base-btn-' + baseId);
+  if (activeBtn) activeBtn.classList.add('active');
+  
+  // Collect routes for this base
+  const allDestRoutes = ROUTE_DATABASE.filter(r => r.destinationId === currentSubGeoDest.id);
+  const baseRoutes = allDestRoutes.filter(r => r.accessibleFromBases && r.accessibleFromBases.includes(baseId));
+  
+  const display = document.getElementById('sg-routes-display');
+  
+  if (baseRoutes.length === 0) {
+    display.innerHTML = `
+      <div class="sg-empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" width="48" height="48"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <p>No curated routes are linked to this base camp yet.</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Group routes by effort (Level 4 UX)
+  const groups = {
+    'Easy / Recovery': baseRoutes.filter(r => ['half-day-easy', 'full-day-easy'].includes(r.effortCategory)),
+    'Solid Day Out': baseRoutes.filter(r => ['half-day-hard', 'full-day-mod'].includes(r.effortCategory)),
+    'Epic Challenges': baseRoutes.filter(r => ['full-day-hard'].includes(r.effortCategory))
+  };
+  
+  // Any routes that did not match the strictly defined categories drop into a fallback group
+  const coveredIds = Object.values(groups).flat().map(r => r.id);
+  const others = baseRoutes.filter(r => !coveredIds.includes(r.id));
+  if (others.length > 0) groups['Other Routes'] = others;
+  
+  let html = '';
+  Object.keys(groups).forEach(groupName => {
+    const rList = groups[groupName];
+    if (rList.length === 0) return;
+    
+    html += `
+      <div class="sg-route-group">
+        <div class="sg-route-group-title">
+          <span>${groupName}</span>
+          <span style="font-size:0.6em; color:rgba(255,255,255,0.3); font-family: 'DM Sans', sans-serif;">${rList.length} routes</span>
+        </div>
+        ${rList.map(r => `
+          <div class="sg-route-card-mini" onclick="openRouteDetail('${r.id}')">
+            <div class="sg-route-mini-img">
+              <img src="${r.image}" loading="lazy" alt="${r.name}">
+            </div>
+            <div class="sg-route-mini-body">
+              <div class="sg-route-mini-title">${r.name} <span>${r.type || 'ROAD'}</span></div>
+              <div class="sg-route-mini-stats">
+                <div class="sg-route-mini-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg> ${r.distance}km</div>
+                <div class="sg-route-mini-stat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg> ${r.elevationGain}m</div>
+                <div class="sg-route-mini-stat">${difficultyBar(r.difficulty)}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  });
+  
+  display.innerHTML = html;
+}
+
+function renderSubGeoDeepDive(dest) {
+  const container = document.getElementById('sg-deepdive-content');
+  if (!container) return;
+  
+  if (!dest.deepDive) {
+    container.innerHTML = `<p style="color:rgba(255,255,255,0.4);">No deep dive available for this location.</p>`;
+    return;
+  }
+  
+  let html = `<p class="sg-deepdive-p" style="font-size:1.1rem; color:var(--chalk);">${dest.deepDive.intro}</p>`;
+  
+  if (dest.deepDive.paragraphs) {
+    dest.deepDive.paragraphs.forEach(p => {
+      html += `<p class="sg-deepdive-p">${p}</p>`;
+    });
+  }
+  
+  container.innerHTML = html;
+}
+

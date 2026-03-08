@@ -564,7 +564,7 @@ test('buildZonesSection renders zone cards for destinations with zones', functio
 });
 
 test('buildZonesSection returns empty string for destinations without zones', function () {
-  assert.strictEqual(buildZonesSection(girona), '');
+  assert.strictEqual(buildZonesSection({ id: 'empty' }), '');
 });
 
 test('buildBasesSection renders base cards for destinations with bases', function () {
@@ -577,7 +577,7 @@ test('buildBasesSection renders base cards for destinations with bases', functio
 });
 
 test('buildBasesSection returns empty string for destinations without bases', function () {
-  assert.strictEqual(buildBasesSection(girona), '');
+  assert.strictEqual(buildBasesSection({ id: 'empty' }), '');
 });
 
 test('buildConditionsSection renders conditions for destinations with conditions', function () {
@@ -589,7 +589,7 @@ test('buildConditionsSection renders conditions for destinations with conditions
 });
 
 test('buildConditionsSection returns empty string for destinations without conditions', function () {
-  assert.strictEqual(buildConditionsSection(girona), '');
+  assert.strictEqual(buildConditionsSection({ id: 'empty' }), '');
 });
 
 test('buildDestSeasonBar renders 12 month cells', function () {
