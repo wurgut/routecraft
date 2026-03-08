@@ -490,15 +490,21 @@ function renderSubGeoBases(dest, routes) {
     return;
   }
   
-  sidebar.innerHTML = dest.bases.map((b, i) => `
-    <div class="sg-base-card" id="sg-base-btn-${b.id}" onclick="selectSubGeoBase('${b.id}')">
-      <div class="sg-base-name">${b.name}</div>
-      <div class="sg-base-char">${b.character || ''}</div>
-      <div class="sg-base-meta">
-        <span>${routes.filter(r => r.accessibleFromBases && r.accessibleFromBases.includes(b.id)).length} routes</span>
+  sidebar.innerHTML = dest.bases.map((b, i) => {
+    const baseRoutes = routes.filter(r => r.accessibleFromBases && r.accessibleFromBases.includes(b.id));
+    return `
+      <div class="sg-base-card" id="sg-base-btn-${b.id}" onclick="selectSubGeoBase('${b.id}')">
+        <div class="sg-base-name">${b.name}</div>
+        <div class="sg-base-char">${b.character || ''}</div>
+        <div class="sg-base-meta">
+          <span>${baseRoutes.length} routes</span>
+        </div>
+        ${(baseRoutes.length > 0 ? `
+          <button class="base-card-cta" onclick="event.stopPropagation(); closeSubGeo(); document.getElementById('trip-builder').scrollIntoView({behavior:'smooth'}); setTimeout(function(){startTripFromBase('${dest.id}','${b.id}')}, 400)">Plan Trip from Here &rarr;</button>
+        ` : '')}
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 window.selectSubGeoBase = function(baseId) {
