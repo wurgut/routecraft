@@ -61,7 +61,7 @@
       <a href="#home">Destinations</a>
       <a href="#routes">Routes</a>
       <a href="#trip-builder">Configurator</a>
-      <a href="#itinerary" onclick="event.preventDefault(); document.getElementById('itbDrawer').classList.toggle('active');">Trip Builder</a>
+
       <a href="#calendar">Races</a>
       <a href="#checklist">Checklist</a>
       <a href="#membership" class="nav-membership">Membership</a>
@@ -337,24 +337,6 @@
   </div>
 
   
-  <!-- ═══════ ITINERARY BUILDER DRAWER ═══════ -->
-  <div class="itb-drawer" id="itbDrawer">
-    <div class="itb-drawer-header">
-      <span class="itb-drawer-title">Multi-Day Itinerary (<span id="itbCount">0</span>)</span>
-      <button class="itb-drawer-close" onclick="clearItinerary()">✕ Clear</button>
-    </div>
-    <div class="itb-drawer-body" id="itbDrawerBody">
-      <div class="itb-empty">Select routes to build a custom multi-day trip.</div>
-    </div>
-    <div class="itb-drawer-footer" id="itbDrawerFooter" style="display:none;">
-      <div class="itb-stats-summary">
-        <div>Total: <span id="itbTotalDist" style="color:var(--gold)">0 km</span></div>
-        <div><span id="itbTotalElev" style="color:var(--ember)">0 m ↑</span></div>
-      </div>
-      <button class="btn btn-primary" style="width:100%" onclick="saveItinerary()">Save Itinerary</button>
-    </div>
-  </div>
-
   <!-- ═══════ FREEMIUM GATE MODAL ═══════ -->
   <div class="fm-gate" id="fmGate">
     <div class="fm-gate-inner">

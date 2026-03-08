@@ -3153,29 +3153,33 @@
     var routeFilterState = { type: 'all', dest: 'all', maxDiff: 5, maxDist: 200, sort: 'featured', month: null };
     
     var comparedRoutes = [];
-    var itineraryRoutes = [];
 
     window.toggleItbRoute = function(id) {
-      var idx = itineraryRoutes.indexOf(id);
-      if (idx > -1) {
-        itineraryRoutes.splice(idx, 1);
-      } else {
-        itineraryRoutes.push(id);
-      }
-      renderItineraryDrawer();
-      if (typeof renderRouteCards === 'function') renderRouteCards();
+      // Unify with the existing Configurator
+      var route = findById(ROUTE_DATABASE, id);
+      if(!route) return;
       
-      // Update modal button if open
-      var modalBtn = document.getElementById('rdItbBtn');
-      if (modalBtn && modalBtn.dataset.id === id) {
-        if (itineraryRoutes.indexOf(id) > -1) {
-          modalBtn.classList.add('added');
-          modalBtn.innerHTML = '✓ Added to Set';
-        } else {
-          modalBtn.classList.remove('added');
-          modalBtn.innerHTML = '+ Add Stage';
-        }
+      // Select the destination in the Configurator if it's not already
+      if (CONFIGURATOR_STATE.destination !== route.destinationId) {
+         cfgSelectDestination(route.destinationId);
       }
+      
+      // Add the route to the configuration state
+      if (CONFIGURATOR_STATE.routes.indexOf(id) === -1) {
+         CONFIGURATOR_STATE.routes.push(id);
+      }
+      
+      // Close route modal 
+      closeRouteDetail();
+      
+      // Scroll to configurator and open the 'Routes' step
+      var tb = document.getElementById('trip-builder');
+      if (tb) tb.scrollIntoView({behavior: 'smooth'});
+      
+      setTimeout(function(){
+         cfgSetStep(3); // Step 3 is typically Route Selection
+         cfgRenderState();
+      }, 500);
     };
 
     window.clearItinerary = function() {
@@ -3258,9 +3262,11 @@
       var partners = getRoutePartners(route);
       var hotels = partners.filter(function (p) { return p.category === 'hotel'; }).length;
       var isCompared = comparedRoutes.indexOf(route.id) > -1;
-        var isItb = itineraryRoutes.indexOf(route.id) > -1;
-        var itbBtn = '<button class="rc-itb-btn' + (isItb ? ' added' : '') + '" onclick="event.stopPropagation();toggleItbRoute(\'' + route.id + '\')" title="Add to Itinerary">' + 
-                     (isItb ? '✓' : '+') + '</button>';
+      
+      // Phase 5: Check if Route is already in Configurator
+      var isItb = typeof CONFIGURATOR_STATE !== 'undefined' && CONFIGURATOR_STATE && CONFIGURATOR_STATE.routes ? CONFIGURATOR_STATE.routes.indexOf(route.id) > -1 : false;
+      var itbBtn = '<button class="rc-itb-btn' + (isItb ? ' added' : '') + '" onclick="event.stopPropagation();toggleItbRoute(\'' + route.id + '\')" title="Add to Itinerary">' + 
+                   (isItb ? '✓' : '+') + '</button>';
 
       var delay = idx % 4;
       return '<div class="route-card reveal' + (delay ? ' reveal-delay-' + delay : '') + '" data-type="' + route.type + '" data-id="' + route.id + '">' +
@@ -3436,6 +3442,9 @@
         (dest ? '<span class="exp-breadcrumb-link" onclick="closeRouteDetail();setTimeout(function(){openExperience(\'' + dest.id + '\')},420)">' + dest.name + '</span><span class="exp-breadcrumb-sep">\u203A</span>' : '') +
         '<span class="exp-breadcrumb-current">' + route.name + '</span>' +
         '</div>';
+      // Phase 5: Check if Route is already in Configurator
+      var isItb = CONFIGURATOR_STATE && CONFIGURATOR_STATE.routes ? CONFIGURATOR_STATE.routes.indexOf(route.id) > -1 : false;
+
       // Build modal HTML
       var html = breadcrumb +
         '<button class="rd-close" onclick="closeRouteDetail()" aria-label="Close route detail">&times;</button>' +
@@ -3594,7 +3603,7 @@
 
       // CTA
       html += '<div class="rd-cta-bar">' +
-        '<a href="#trip-builder" class="btn btn-primary" onclick="closeRouteDetail()">Build Trip with This Route →</a>' +
+        '<button class="btn btn-primary" onclick="toggleItbRoute(\'' + route.id + '\')">Build Trip with This Route →</button>' +
         '<button class="btn btn-ghost" onclick="toggleCompareRoute(\'' + route.id + '\');closeRouteDetail()">Add to Comparison</button>' +
         '</div>';
       inner.innerHTML = html;
