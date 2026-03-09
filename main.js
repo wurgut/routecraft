@@ -23,8 +23,7 @@
         socialProof: { ridersLastMonth: 9500, period: 'July 2025' },
         image: 'https://images.unsplash.com/photo-1546200299-46fdb89a5840?w=1600&q=85',
         subGeoIds: ['dolomites-alta-badia']
-      }
-,
+      },
       {
         id: 'canary-islands', name: 'Canary Islands', country: 'Spain', continent: 'Europe',
         lat: 28.1, lng: -15.4, color: '#e8491d',
@@ -193,8 +192,7 @@
           { id: 'base-corvara', name: 'Corvara', character: 'Ladin mountain luxury.', bestFor: 'Foodies, climbers, luxury.', accessibleZoneIds: ['dolo-sella'], partnerIds: [], nearestAirportIATA: 'VCE', transferKm: 160 }
         ],
         deepDive: null
-      }
-,
+      },
       // ── FUERTEVENTURA ──
       {
         id: 'fuerteventura', name: 'Fuerteventura', country: 'Spain', continent: 'Europe', flag: '\u{1F1EA}\u{1F1F8}',
@@ -1041,8 +1039,7 @@
         confidence: { waterFrequency: 'Every village', phoneSignal: 'Good', nearestBikeShop: 'Corvara', surfaceBreakdown: '100% mountain asphalt', emergencyContacts: '112', offlineMapAvailable: true },
         localTips: ['Start early to beat the motorbikes.', 'Stop for strudel at Passo Pordoi.'],
         waterStops: [], accessibleFromBases: ['base-bourg'], effortCategory: 'full-day-hard'
-      }
-,
+      },
       // ── FUERTEVENTURA (3 routes) ──
       {
         id: 'fuerte-betancuria', destinationId: 'fuerteventura', name: 'Betancuria Loop', subtitle: 'The island\'s defining climb through volcanic valleys',

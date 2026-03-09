@@ -1,0 +1,90 @@
+
+> test:legacy
+> node tests/pricing.test.js && node tests/dates.test.js && node tests/flights.test.js && node tests/data-integrity.test.js
+
+cfgCalcPricing
+  ✓ Empty trip = 0 total
+  ✓ Single hotel for 7 nights
+  ✓ Multiple hotels summed
+  ✓ Flight with bike fee
+  ✓ Flight without bike fee defaults to 0
+  ✓ Null flight adds nothing
+  ✓ Shuttles added to subtotal
+  ✓ Guide cost capped at 5 days for long trips
+  ✓ Guide uses actual nights when <= 5
+  ✓ Bike rental uses full nights
+  ✓ Addons added flat (not per night)
+  ✓ Member discount is 10% rounded
+  ✓ Golden Key mode adds 15% premium
+  ✓ Standard mode has no Golden Key premium
+  ✓ Full trip: hotel + flight + guide + rental + addon
+  ✓ Zero nights: accommodation and rental are 0
+
+16 passed, 0 failed
+formatDateForKiwi
+  ✓ Basic YYYY-MM-DD to DD/MM/YYYY
+  ✓ Padded single-digit month and day
+  ✓ December 31st
+  ✓ January 1st
+  ✓ Empty string returns empty
+  ✓ Null returns empty
+  ✓ Undefined returns empty
+
+addDays
+  ✓ Add 7 days within same month
+  ✓ Add 1 day
+  ✓ Month rollover: July 28 + 5 = August 2
+  ✓ Year rollover: Dec 28 + 5 = Jan 2
+  ✓ Leap year: Feb 28 + 1 in 2024
+  ✓ Leap year: Feb 29 + 1 in 2024
+  ✓ Non-leap year: Feb 28 + 1 in 2026
+  ✓ Zero days returns same date
+  ✓ Negative days: go back 5 days
+  ✓ Negative days across month boundary
+  ✓ Negative days across year boundary
+  ✓ Large forward jump: 365 days
+
+19 passed, 0 failed
+flights.handler — API key validation
+  ✓ Missing API key returns 502
+
+flights.handler — type=locations
+  ✓ Invalid type returns 400
+  ✓ Missing term returns 400
+  ✓ Term too short returns 400
+  ✓ Valid locations search returns mapped cities
+  ✓ Empty locations response returns empty array
+  ✓ Location with missing country handled
+
+flights.handler — type=search
+  ✓ Missing fly_from returns 400
+  ✓ Missing fly_to returns 400
+  ✓ Missing date_from returns 400
+  ✓ Valid search returns mapped flights
+  ✓ Multi-segment flight counts stops correctly
+  ✓ Empty search results handled
+
+flights.handler — error handling
+  ✓ Kiwi API error returns 502
+  ✓ Response includes CORS and cache headers
+  ✓ No query params returns 400
+  ✓ Null queryStringParameters handled
+
+17 passed, 0 failed
+evalmachine.<anonymous>:3265
+        var isItb = itineraryRoutes.indexOf(route.id) > -1;
+                    ^
+
+ReferenceError: itineraryRoutes is not defined
+    at renderRouteCard (evalmachine.<anonymous>:3265:21)
+    at evalmachine.<anonymous>:3311:60
+    at Array.map (<anonymous>)
+    at renderRouteCards (evalmachine.<anonymous>:3311:31)
+    at evalmachine.<anonymous>:4916:5
+    at Script.runInContext (node:vm:149:12)
+    at Object.runInContext (node:vm:301:6)
+    at Object.<anonymous> (C:\Users\dragos\routecraft\tests\data-integrity.test.js:58:4)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+
+Node.js v22.20.0

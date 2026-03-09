@@ -1,0 +1,48 @@
+﻿node : C:\Users\dragos
+\routecraft\main.js:52
+2
+At line:1 char:1
++ node -c main.js 
+2>&1 | Out-File 
+-Encoding utf8 
+syntax_error2.txt
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (C:\Users\d   
+ ragos\routecraft\    
+main.js:522:Strin    
+g) [], RemoteExce    
+ption
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+        highlights: 
+['Mount Teide 
+(2,320m) continuous 
+ascent', 'Masca 
+Valley hairpins', 
+'Anaga rural park's 
+ancient laurel 
+forests', 'Pro-level 
+altitude training', 
+'Perfect winter 
+tarmac'],
+                      
+                      
+                      
+                      
+                  ^
+
+SyntaxError: 
+Unexpected identifier 
+'s'
+    at wrapSafe (node:
+internal/modules/cjs/l
+oader:1638:18)
+    at checkSyntax (no
+de:internal/main/check
+_syntax:78:3)
+
+Node.js v22.20.0
