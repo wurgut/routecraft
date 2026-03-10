@@ -595,66 +595,147 @@ function renderSubGeoDeepDive(dest) {
 }
 
 
-// Strava Mock OAuth Integration
+// Real Strava OAuth Integration (Phase 6)
+// Client ID is safe to expose (it's public); client_secret lives only in the Netlify function.
+var STRAVA_CLIENT_ID = '142893'; // Replace with your real Strava app Client ID
+var STRAVA_REDIRECT_URI = window.location.origin + '/strava-callback.html';
+var STRAVA_AUTH_URL = 'https://www.strava.com/oauth/authorize';
+
 window.isStravaConnected = false;
+window.stravaAthlete = null;
+
+// Check localStorage on page load for existing Strava session
+(function initStrava() {
+    try {
+        var saved = localStorage.getItem('strava_auth');
+        if (!saved) return;
+        var auth = JSON.parse(saved);
+        if (!auth || !auth.access_token) return;
+
+        // Check if token is expired
+        var now = Math.floor(Date.now() / 1000);
+        if (auth.expires_at && auth.expires_at < now) {
+            // Token expired — try to refresh
+            if (auth.refresh_token) {
+                refreshStravaToken(auth.refresh_token);
+            } else {
+                localStorage.removeItem('strava_auth');
+            }
+            return;
+        }
+
+        // Token is valid — restore connected state
+        window.isStravaConnected = true;
+        window.stravaAthlete = auth.athlete || null;
+        updateStravaButton(true);
+    } catch (e) {
+        console.warn('Strava init error:', e);
+        localStorage.removeItem('strava_auth');
+    }
+})();
+
+function refreshStravaToken(refreshToken) {
+    fetch('/.netlify/functions/strava?action=refresh&refresh_token=' + encodeURIComponent(refreshToken))
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.access_token) {
+                var saved = JSON.parse(localStorage.getItem('strava_auth') || '{}');
+                saved.access_token = data.access_token;
+                saved.refresh_token = data.refresh_token;
+                saved.expires_at = data.expires_at;
+                localStorage.setItem('strava_auth', JSON.stringify(saved));
+                window.isStravaConnected = true;
+                updateStravaButton(true);
+            } else {
+                localStorage.removeItem('strava_auth');
+            }
+        })
+        .catch(function() {
+            localStorage.removeItem('strava_auth');
+        });
+}
+
+function updateStravaButton(connected) {
+    var btn = document.getElementById('navStravaBtn');
+    if (!btn) return;
+    var athleteName = window.stravaAthlete ? window.stravaAthlete.firstname : '';
+    if (connected) {
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>' + (athleteName ? athleteName : 'Connected');
+        btn.classList.add('connected');
+    } else {
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg> Connect Strava';
+        btn.classList.remove('connected');
+    }
+}
 
 window.toggleStravaAuth = function() {
-    var btn = document.getElementById('navStravaBtn');
     if (!window.isStravaConnected) {
-        // Simulate OAuth flow
-        var originalText = btn.innerHTML;
-        btn.innerHTML = 'Connecting...';
-        btn.style.opacity = '0.7';
-        
-        setTimeout(function() {
-            window.isStravaConnected = true;
-            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg> Connected';
-            btn.classList.add('connected');
-            btn.style.opacity = '1';
-            
-            // Re-render any open route details if they exist
-            var rdModal = document.getElementById('rdModal');
-            if (rdModal && rdModal.classList.contains('active')) {
-                // Find currently open route (simple mock hack)
-                var currentRouteName = document.querySelector('.rd-hero-title').textContent.trim();
-                if (window.ROUTE_DATABASE) {
-                    var route = window.ROUTE_DATABASE.find(r => r.name.toUpperCase() === currentRouteName.toUpperCase() || r.name === currentRouteName);
-                    if (route && window.openRouteDetail) {
-                        window.openRouteDetail(route.id);
-                    }
-                }
-            }
-            
-            // Add a small toast notification
-            var toast = document.createElement('div');
-            toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#111;border:1px solid #333;border-left:4px solid #fc4c02;color:#fff;padding:1rem;border-radius:4px;z-index:9999;font-family:inherit;box-shadow:0 10px 30px rgba(0,0,0,0.5);opacity:0;transition:opacity 0.3s ease';
-            toast.innerHTML = '<div style="font-weight:600;margin-bottom:4px;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;color:#fc4c02">Strava Connected</div><div style="font-size:0.85rem;color:rgba(255,255,255,0.7)">Your FTP profile has been synced.</div>';
-            document.body.appendChild(toast);
-            
-            // Trigger reflow and show
-            requestAnimationFrame(() => toast.style.opacity = '1');
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-            
-        }, 1500);
+        // Real OAuth: redirect to Strava
+        var authUrl = STRAVA_AUTH_URL +
+            '?client_id=' + STRAVA_CLIENT_ID +
+            '&redirect_uri=' + encodeURIComponent(STRAVA_REDIRECT_URI) +
+            '&response_type=code' +
+            '&scope=read,activity:read' +
+            '&approval_prompt=auto';
+        window.location.href = authUrl;
     } else {
         // Disconnect
         window.isStravaConnected = false;
-        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right:6px"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg> Connect Strava';
-        btn.classList.remove('connected');
-        
+        window.stravaAthlete = null;
+        localStorage.removeItem('strava_auth');
+        updateStravaButton(false);
+
+        // Re-render any open route detail
         var rdModal = document.getElementById('rdModal');
         if (rdModal && rdModal.classList.contains('active')) {
-            var currentRouteName = document.querySelector('.rd-hero-title').textContent.trim();
-            if (window.ROUTE_DATABASE) {
-                var route = window.ROUTE_DATABASE.find(r => r.name.toUpperCase() === currentRouteName.toUpperCase() || r.name === currentRouteName);
+            var currentRouteName = document.querySelector('.rd-hero-title');
+            if (currentRouteName && window.ROUTE_DATABASE) {
+                var routeName = currentRouteName.textContent.trim();
+                var route = window.ROUTE_DATABASE.find(r => r.name.toUpperCase() === routeName.toUpperCase() || r.name === routeName);
                 if (route && window.openRouteDetail) {
                     window.openRouteDetail(route.id);
                 }
             }
         }
+
+        // Toast
+        var toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#111;border:1px solid #333;border-left:4px solid #666;color:#fff;padding:1rem;border-radius:4px;z-index:9999;font-family:inherit;box-shadow:0 10px 30px rgba(0,0,0,0.5);opacity:0;transition:opacity 0.3s ease';
+        toast.innerHTML = '<div style="font-size:0.9rem;color:rgba(255,255,255,0.7)">Strava disconnected.</div>';
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => toast.style.opacity = '1');
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
     }
+}
+
+// Helper: get current Strava FTP for route time estimation
+window.getStravaFTP = function() {
+    if (!window.isStravaConnected || !window.stravaAthlete) return null;
+    return window.stravaAthlete.ftp || null;
+}
+
+// Helper: estimate completion time based on FTP and route stats
+// Uses simplified power-to-speed model: speed_kmh ≈ FTP * efficiency_factor
+// Then adjusts for climbing: extra time = elevationGain / climbRate
+window.estimateRouteTime = function(route) {
+    var ftp = window.getStravaFTP();
+    if (!ftp || !route) return null;
+
+    // Flat speed estimate (km/h) from FTP
+    // Rough model: ~0.12 km/h per watt on flat (accounts for aero, rolling resistance)
+    var flatSpeed = ftp * 0.12;
+    if (flatSpeed < 15) flatSpeed = 15; // Floor
+
+    // Base time from distance
+    var baseHours = route.distance / flatSpeed;
+
+    // Climbing penalty: ~400m/h vertical ascent rate for trained rider
+    var climbRate = 400;
+    var climbHours = (route.elevationGain || 0) / climbRate;
+
+    var totalMinutes = Math.round((baseHours + climbHours) * 60);
+    var hours = Math.floor(totalMinutes / 60);
+    var mins = totalMinutes % 60;
+
+    return hours + 'h ' + (mins < 10 ? '0' : '') + mins + 'm';
 }

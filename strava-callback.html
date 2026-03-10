@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connecting Strava… — RouteCraft</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      text-align: center;
+      max-width: 400px;
+      padding: 3rem 2rem;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid #333;
+      border-top-color: #fc4c02;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+    .error { color: #ef4444; margin-top: 1rem; font-size: 0.85rem; }
+    .success { color: #22c55e; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="spinner" id="spinner"></div>
+    <h1 id="title">Connecting to Strava…</h1>
+    <p id="subtitle">Exchanging authorization token</p>
+    <div id="error" class="error" style="display:none"></div>
+  </div>
+
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var error = params.get('error');
+
+      if (error || !code) {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('title').textContent = 'Authorization Denied';
+        document.getElementById('subtitle').textContent = error || 'No authorization code received.';
+        document.getElementById('title').className = 'error';
+        setTimeout(function() { window.location.href = '/'; }, 3000);
+        return;
+      }
+
+      // Exchange the code for tokens via our Netlify function
+      fetch('/.netlify/functions/strava?action=exchange&code=' + encodeURIComponent(code))
+        .then(function(res) {
+          if (!res.ok) throw new Error('Token exchange failed (HTTP ' + res.status + ')');
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data.access_token) throw new Error('No access token in response');
+
+          // Store in localStorage
+          var stravaData = {
+            access_token: data.access_token,
+            refresh_token: data.refresh_token,
+            expires_at: data.expires_at,
+            athlete: data.athlete
+          };
+          localStorage.setItem('strava_auth', JSON.stringify(stravaData));
+
+          // Show success
+          document.getElementById('spinner').style.display = 'none';
+          var name = data.athlete ? (data.athlete.firstname + ' ' + data.athlete.lastname) : 'Athlete';
+          document.getElementById('title').textContent = 'Welcome, ' + name + '!';
+          document.getElementById('title').className = 'success';
+          document.getElementById('subtitle').textContent = 'Redirecting back to RouteCraft…';
+
+          // Redirect back to main app
+          setTimeout(function() { window.location.href = '/'; }, 1500);
+        })
+        .catch(function(err) {
+          document.getElementById('spinner').style.display = 'none';
+          document.getElementById('title').textContent = 'Connection Failed';
+          document.getElementById('title').className = '';
+          document.getElementById('subtitle').textContent = '';
+          document.getElementById('error').style.display = 'block';
+          document.getElementById('error').textContent = err.message;
+          setTimeout(function() { window.location.href = '/'; }, 4000);
+        });
+    })();
+  </script>
+</body>
+</html>

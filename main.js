@@ -3503,18 +3503,30 @@
       if (route.strava) {
         var stravaHtml = '';
         if (window.isStravaConnected) {
-          stravaHtml = '<div class="rd-intel-grid">' +
+          var estTime = window.estimateRouteTime ? window.estimateRouteTime(route) : null;
+          var ftp = window.getStravaFTP ? window.getStravaFTP() : null;
+          var athlete = window.stravaAthlete;
+          var athleteBadge = '';
+          if (athlete) {
+            var profileImg = athlete.profile ? '<img src="' + athlete.profile + '" style="width:28px;height:28px;border-radius:50%;margin-right:8px;border:2px solid #fc4c02" alt="">' : '';
+            athleteBadge = '<div style="display:flex;align-items:center;padding:0.75rem 1rem;background:rgba(252,76,2,0.08);border:1px solid rgba(252,76,2,0.2);border-radius:6px;margin-bottom:1rem">' +
+              profileImg +
+              '<span style="color:#fc4c02;font-weight:600;font-size:0.85rem">' + athlete.firstname + ' ' + (athlete.lastname || '') + '</span>' +
+              (ftp ? '<span style="margin-left:auto;color:rgba(255,255,255,0.5);font-size:0.8rem">FTP: ' + ftp + 'W</span>' : '') +
+              '</div>';
+          }
+          stravaHtml = athleteBadge + '<div class="rd-intel-grid">' +
           '<div class="rd-intel-item"><div class="rd-intel-label">KOM Time</div><div class="rd-intel-val">' + route.strava.komTime + '</div></div>' +
           '<div class="rd-intel-item"><div class="rd-intel-label">Average Time</div><div class="rd-intel-val">' + route.strava.avgTime + '</div></div>' +
-          '<div class="rd-intel-item"><div class="rd-intel-label">Your Est. Time</div><div class="rd-intel-val" style="color:#fc4c02;font-weight:700">' + (route.strava.estTime || '1h 45m') + ' based on FTP</div></div>' +
-          '<div class="rd-intel-item" style="grid-column:1/-1;margin-top:0.5rem"><div style="background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:1rem;display:flex;align-items:center;justify-content:center;color:#666;height:120px;text-align:center"><p><strong style="color:#fc4c02">Strava Embed</strong><br>Segment Data Mock</p></div></div>' +
+          '<div class="rd-intel-item"><div class="rd-intel-label">Your Est. Time</div><div class="rd-intel-val" style="color:#fc4c02;font-weight:700">' + (estTime || 'Set FTP in Strava') + (ftp ? ' (FTP ' + ftp + 'W)' : '') + '</div></div>' +
+          '<div class="rd-intel-item"><div class="rd-intel-label">Segments</div><div class="rd-intel-val">' + route.strava.segmentCount + ' matched</div></div>' +
           '</div>';
         } else {
           stravaHtml = '<div class="strava-connect-promo" style="background:rgba(252, 76, 2, 0.05);border:1px solid rgba(252, 76, 2, 0.2);padding:1.5rem;border-radius:8px;text-align:center;">' +
           '<svg viewBox="0 0 24 24" fill="#fc4c02" width="24" height="24" style="margin-bottom:0.5rem">' +
           '<path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"></path></svg>' +
           '<div style="color:#fc4c02;font-weight:600;margin-bottom:0.5rem;font-size:1.1rem">Unlock Personalised Estimates</div>' +
-          '<p style="font-size:0.9rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;line-height:1.4">Connect Strava to see your estimated time, matched segments, and friend leaderboards for this route.</p>' +
+          '<p style="font-size:0.9rem;color:rgba(255,255,255,0.6);margin-bottom:1.5rem;line-height:1.4">Connect Strava to see your estimated time based on your FTP, matched segments, and friend leaderboards for this route.</p>' +
           '<button onclick="toggleStravaAuth()" class="btn btn-primary" style="background:#fc4c02;color:#fff;border:none">Connect with Strava</button>' +
           '</div>';
         }
