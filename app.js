@@ -597,7 +597,7 @@ function renderSubGeoDeepDive(dest) {
 
 // Real Strava OAuth Integration (Phase 6)
 // Client ID is safe to expose (it's public); client_secret lives only in the Netlify function.
-var STRAVA_CLIENT_ID = '142893'; // Replace with your real Strava app Client ID
+var STRAVA_CLIENT_ID = '210243';
 var STRAVA_REDIRECT_URI = window.location.origin + '/strava-callback.html';
 var STRAVA_AUTH_URL = 'https://www.strava.com/oauth/authorize';
 
