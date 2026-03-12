@@ -2538,7 +2538,7 @@
 
     // --- GLOBE SEASONAL LOGIC & QUICK IDEAS ---
     window.flyToRegionAndOpen = function (id) {
-      document.getElementById('world-tours').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
       var reg = REGION_BY_ID[id];
       if (reg) {
          flyTo(reg);
