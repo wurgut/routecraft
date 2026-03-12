@@ -158,7 +158,7 @@
       align-items: center
     }
 
-    .nav-links a {
+    .nav-links a:not(.nav-cta):not(.nav-membership) {
       color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
       font-size: .7rem;
@@ -171,12 +171,12 @@
       padding: .2rem 0
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
+    .nav-links a:not(.nav-cta):not(.nav-membership):hover,
+    .nav-links a:not(.nav-cta):not(.nav-membership).active {
       color: var(--chalk)
     }
 
-    .nav-links a::after {
+    .nav-links a:not(.nav-cta):not(.nav-membership)::after {
       content: '';
       position: absolute;
       bottom: -2px;
@@ -188,84 +188,58 @@
       border-radius: 1px
     }
 
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
+    .nav-links a:not(.nav-cta):not(.nav-membership):hover::after,
+    .nav-links a:not(.nav-cta):not(.nav-membership).active::after {
       width: 100%
     }
 
+    /* ── Nav action buttons (shared base) ── */
+    .nav-cta,
+    .nav-membership,
+    .nav-strava {
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 0.5rem 1.15rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      line-height: 1
+    }
+
+    /* List Property — solid CTA */
     .nav-cta {
-      background: linear-gradient(135deg, #e8491d 0%, #d13d12 50%, #c43510 100%) !important;
-      color: #fff !important;
-      padding: .55rem 1.4rem;
-      border-radius: var(--radius-sm);
-      font-weight: 600 !important;
-      font-size: 0.82rem;
-      letter-spacing: 0.5px;
-      transition: all .35s var(--ease-out) !important;
-      border: none;
-      box-shadow: 0 2px 12px rgba(232, 73, 29, 0.25), inset 0 1px 0 rgba(255,255,255,0.15);
-      position: relative;
-      overflow: hidden
-    }
-
-    .nav-cta::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%; width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-      transition: left .5s ease
-    }
-
-    .nav-cta:hover::before {
-      left: 100%
+      background: var(--ember);
+      color: #fff;
+      border: 1px solid var(--ember);
+      box-shadow: 0 2px 8px rgba(232, 73, 29, 0.3)
     }
 
     .nav-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(232, 73, 29, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)
-    }
-
-    .nav-cta::after {
-      display: none !important
-    }
-
-    .nav-membership {
-      background: rgba(201, 168, 76, 0.06) !important;
-      border: 1px solid rgba(201, 168, 76, 0.4) !important;
-      color: var(--gold) !important;
-      padding: .5rem 1.2rem;
-      border-radius: var(--radius-sm);
-      font-weight: 600 !important;
-      font-size: 0.82rem;
-      letter-spacing: 0.5px;
-      transition: all .35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 0 0 rgba(201, 168, 76, 0)
-    }
-
-    .nav-membership::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), transparent 60%);
-      opacity: 0;
-      transition: opacity .3s ease
-    }
-
-    .nav-membership:hover {
-      background: rgba(201, 168, 76, 0.1) !important;
-      border-color: rgba(201, 168, 76, 0.7) !important;
-      box-shadow: 0 0 20px rgba(201, 168, 76, 0.12);
+      background: #d13d12;
+      border-color: #d13d12;
+      box-shadow: 0 4px 16px rgba(232, 73, 29, 0.4);
       transform: translateY(-1px)
     }
 
-    .nav-membership:hover::before {
-      opacity: 1
+    /* Membership — gold outline */
+    .nav-membership {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid rgba(201, 168, 76, 0.5)
     }
 
-    .nav-membership::after {
-      display: none !important
+    .nav-membership:hover {
+      background: rgba(201, 168, 76, 0.1);
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(201, 168, 76, 0.15);
+      transform: translateY(-1px)
     }
 
     /* ═══════════════════════════════════════════
@@ -8060,29 +8034,22 @@ textarea:focus-visible,
 
 
 /* Strava Integration */
+/* Connect Strava — orange outline */
 .nav-strava {
     background: transparent;
     color: #fc4c02;
-    border: 1px solid rgba(252, 76, 2, 0.5);
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
+    border: 1px solid rgba(252, 76, 2, 0.5)
 }
 .nav-strava:hover {
-    background: #fc4c02;
-    color: #fff;
+    background: rgba(252, 76, 2, 0.1);
+    border-color: #fc4c02;
+    box-shadow: 0 0 16px rgba(252, 76, 2, 0.15);
+    transform: translateY(-1px)
 }
 .nav-strava.connected {
     background: rgba(252, 76, 2, 0.1);
     color: #fc4c02;
-    border-color: rgba(252, 76, 2, 0.3);
+    border-color: rgba(252, 76, 2, 0.3)
 }
 
 
